@@ -24,6 +24,11 @@ export default function AppTabs() {
         <NativeTabs.Trigger.Label>Đầu mối</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="storefront" md="storefront" />
       </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="account">
+        <NativeTabs.Trigger.Label>Của tôi</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="person.crop.circle" md="account_circle" />
+      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }

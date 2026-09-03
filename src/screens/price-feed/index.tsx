@@ -5,16 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, Spacing } from '@/constants/theme';
-import { COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
-import type { Commodity, PriceObservation } from '@/types/domain';
+import { COMMODITIES, latestObservation } from '@/data/mock-data';
 import { formatPricePerUnit } from '@/utils/format-price';
 import { CONFIDENCE_LABEL } from '@/utils/price-confidence';
-
-function latestObservation(commodity: Commodity): PriceObservation | undefined {
-  return PRICE_OBSERVATIONS.filter((observation) => observation.commodity === commodity).sort(
-    (a, b) => b.observedAt.localeCompare(a.observedAt),
-  )[0];
-}
 
 export function PriceFeed() {
   const rows = COMMODITIES.map((commodity) => ({

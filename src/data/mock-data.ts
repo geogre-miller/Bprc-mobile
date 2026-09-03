@@ -5,6 +5,12 @@
  */
 import type { BuyerProfile, BuyingDemand, Commodity, PriceObservation } from '@/types/domain';
 
+export function latestObservation(commodity: Commodity): PriceObservation | undefined {
+  return PRICE_OBSERVATIONS.filter((observation) => observation.commodity === commodity).sort(
+    (a, b) => b.observedAt.localeCompare(a.observedAt),
+  )[0];
+}
+
 export const COMMODITIES: { id: Commodity; label: string }[] = [
   { id: 'coffee', label: 'Cà phê' },
   { id: 'pepper', label: 'Hồ tiêu' },

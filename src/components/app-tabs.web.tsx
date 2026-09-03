@@ -27,6 +27,9 @@ export default function AppTabs() {
           <TabTrigger name="buyers" href="/buyers" asChild>
             <TabButton>Đầu mối</TabButton>
           </TabTrigger>
+          <TabTrigger name="account" href="/account" asChild>
+            <TabButton>Của tôi</TabButton>
+          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>

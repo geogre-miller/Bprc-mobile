@@ -15,6 +15,10 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="commodity/[id]" options={{ headerShown: true, title: 'Giá nông sản' }} />
         <Stack.Screen name="buyer/[id]" options={{ headerShown: true, title: 'Đầu mối thu mua' }} />
+        <Stack.Screen name="inventory" options={{ headerShown: true, title: 'Nông sản đang có' }} />
+        <Stack.Screen name="alerts" options={{ headerShown: true, title: 'Báo giá mục tiêu' }} />
+        <Stack.Screen name="journal" options={{ headerShown: true, title: 'Nhật ký bán hàng' }} />
+        <Stack.Screen name="demands" options={{ headerShown: true, title: 'Đang cần mua' }} />
         <Stack.Screen name="onboarding" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
     </ThemeProvider>
