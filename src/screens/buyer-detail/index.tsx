@@ -1,13 +1,26 @@
+import { useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { BUYERS, BUYING_DEMANDS, COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
+import { usePersistedState } from '@/hooks/use-persisted-state';
+import type { BuyerFeedback } from '@/types/domain';
 import { formatPricePerUnit, formatVnd } from '@/utils/format-price';
+
+const FEEDBACK_CRITERIA = [
+  { key: 'priceMatched', label: 'Giá đúng như báo' },
+  { key: 'weighingClear', label: 'Cân đo minh bạch' },
+  { key: 'paymentReliable', label: 'Thanh toán đúng hẹn' },
+] as const;
 
 export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const buyer = BUYERS.find((item) => item.id === buyerId);
+  const [allFeedback, setAllFeedback, isLoaded] = usePersistedState<BuyerFeedback[]>('buyer-feedback', []);
+  const [draft, setDraft] = useState({ priceMatched: true, weighingClear: true, paymentReliable: true });
+
+  if (!isLoaded) return null;
 
   if (!buyer) {
     return (
@@ -21,6 +34,20 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
     (observation) => observation.buyerId === buyer.id,
   );
   const demands = BUYING_DEMANDS.filter((demand) => demand.buyerId === buyer.id);
+  const feedback = allFeedback.filter((item) => item.buyerId === buyer.id);
+
+  const submitFeedback = (criteria: { priceMatched: boolean; weighingClear: boolean; paymentReliable: boolean }) => {
+    setAllFeedback((current) => [
+      {
+        id: String(Date.now()),
+        buyerId: buyer.id,
+        farmerId: 'me',
+        ...criteria,
+        createdAt: new Date().toISOString(),
+      },
+      ...current,
+    ]);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
@@ -78,6 +105,36 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
           ))}
         </>
       )}
+
+      <ThemedText type="subtitle" style={styles.sectionTitle}>
+        Đánh giá từ nông dân
+      </ThemedText>
+      {feedback.length === 0 ? (
+        <ThemedText themeColor="textSecondary">Chưa có đánh giá nào.</ThemedText>
+      ) : (
+        FEEDBACK_CRITERIA.map(({ key, label }) => {
+          const positive = feedback.filter((item) => item[key]).length;
+          return (
+            <ThemedText key={key} type="small" themeColor="textSecondary">
+              {label}: {positive}/{feedback.length}
+            </ThemedText>
+          );
+        })
+      )}
+
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <ThemedText type="smallBold">Đánh giá đầu mối này</ThemedText>
+        {FEEDBACK_CRITERIA.map(({ key, label }) => (
+          <Pressable key={key} onPress={() => setDraft((current) => ({ ...current, [key]: !current[key] }))}>
+            <ThemedText type="small">
+              {draft[key] ? '✓' : '✗'} {label}
+            </ThemedText>
+          </Pressable>
+        ))}
+        <Pressable onPress={() => submitFeedback(draft)}>
+          <ThemedText type="linkPrimary">Gửi đánh giá</ThemedText>
+        </Pressable>
+      </ThemedView>
     </ScrollView>
   );
 }

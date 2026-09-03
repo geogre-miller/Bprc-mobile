@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import { BUYERS, COMMODITIES } from '@/data/mock-data';
+import { BUYERS, COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
 import type { Commodity, SellingJournalEntry } from '@/types/domain';
@@ -22,6 +22,9 @@ export function SellingJournal() {
     const parsedQuantity = Number(quantity);
     const parsedPrice = Number(actualPrice);
     if (!parsedQuantity || !parsedPrice) return;
+    const quotedPricePerUnit = buyerId
+      ? PRICE_OBSERVATIONS.find((o) => o.buyerId === buyerId && o.commodity === commodity)?.pricePerUnit
+      : undefined;
     setEntries((current) => [
       {
         id: String(Date.now()),
@@ -30,6 +33,7 @@ export function SellingJournal() {
         quantity: parsedQuantity,
         unit: 'kg',
         buyerId,
+        quotedPricePerUnit,
         actualPricePerUnit: parsedPrice,
         soldAt: new Date().toISOString(),
       },
@@ -84,6 +88,13 @@ export function SellingJournal() {
                 {formatVnd(entry.actualPricePerUnit)}/{entry.unit}
                 {buyer ? ` · ${buyer.name}` : ''}
               </ThemedText>
+              {entry.quotedPricePerUnit != null && (
+                <ThemedText type="small" themeColor="textSecondary">
+                  Báo giá {formatVnd(entry.quotedPricePerUnit)} ·{' '}
+                  {entry.actualPricePerUnit >= entry.quotedPricePerUnit ? '+' : ''}
+                  {formatVnd(entry.actualPricePerUnit - entry.quotedPricePerUnit)}
+                </ThemedText>
+              )}
               <ThemedText type="small" themeColor="textSecondary">
                 {new Date(entry.soldAt).toLocaleDateString('vi-VN')}
               </ThemedText>

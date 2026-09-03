@@ -109,3 +109,27 @@ export interface SellingJournalEntry {
   actualPricePerUnit: number;
   soldAt: string;
 }
+
+/** Farmer's posted intent to sell, used to find and compare matching buyers. */
+export interface SellingIntent {
+  id: string;
+  farmerId: string;
+  commodity: Commodity;
+  quantity: number;
+  unit: Unit;
+  desiredPricePerUnit?: number;
+  qualityNote?: string;
+  createdAt: string;
+}
+
+/** Farmer's structured feedback on a buyer after dealing with them, feeding reputation. */
+export interface BuyerFeedback {
+  id: string;
+  buyerId: string;
+  farmerId: string;
+  priceMatched: boolean;
+  weighingClear: boolean;
+  paymentReliable: boolean;
+  note?: string;
+  createdAt: string;
+}
