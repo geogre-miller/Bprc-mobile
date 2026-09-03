@@ -41,3 +41,7 @@ example
 # generated native folders
 /ios
 /android
+
+# local Claude Code plugin state
+.claude/.headroom_wrap_marker.json
+.claude/settings.local.json
