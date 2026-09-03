@@ -11,6 +11,11 @@ const MENU_ITEMS = [
   { href: '/alerts', label: 'Báo giá mục tiêu', description: 'Nhận biết khi giá đạt mức mong muốn' },
   { href: '/journal', label: 'Nhật ký bán hàng', description: 'Lịch sử các lần bán và giá thực nhận' },
   { href: '/demands', label: 'Đang cần mua', description: 'Nhu cầu thu mua từ các đầu mối gần bạn' },
+  {
+    href: '/buyer-dashboard',
+    label: 'Kênh đầu mối thu mua',
+    description: 'Dành cho đầu mối: đăng giá và nhu cầu thu mua',
+  },
 ] as const;
 
 export function Account() {
