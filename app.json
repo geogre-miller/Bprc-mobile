@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "BprcMobile",
-    "slug": "bprc-mobile",
+    "slug": "bprice",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bd39f03b-32d6-4ee0-a581-04ea598a1953"
+      }
+    },
+    "owner": "geogremiller"
   }
 }
