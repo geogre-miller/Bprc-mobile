@@ -17,13 +17,13 @@ Use your context for task interpretation, architecture, design analysis, risk, s
 
 ## Gathering context
 
-Use `codegraph_explore` to locate and understand code before delegating. One call yields the relevant symbols' source, the call paths between them, and a blast-radius summary, which is what the packet's `REPO_FACTS` and `TARGET.files` need. Do not read whole screens or fan out with `grep` and `Glob` to orient yourself. Read files directly only for unindexed sources (`DESIGN.md`, `package.json`, `app.json`) or a file you will edit yourself. If `.codegraph/` is missing, tell the user to run `codegraph init` rather than falling back to bulk reads. Run any shell command you do need through `rtk` (`rtk git status`, `rtk diff`, `rtk read`, `rtk tree`) so command output does not consume the context you need for the packet.
+When `.codegraph/` is present and current, use `codegraph_explore` to locate and understand code before delegating. One call should provide the relevant symbols, call paths, and blast-radius facts for `REPO_FACTS` and `TARGET.files`. If the index is missing, stale, or does not cover the target, use narrow `Read`, `Grep`, or `Glob` queries limited to likely files; do not block the task or bulk-read the repository. Use `rtk` for verbose shell output when it is available, otherwise run the narrow raw command.
 
 When the change touches a symbol other screens share, get a risk verdict with `impact({target, direction: "upstream", summaryOnly: true})` before writing the packet, and record it in the packet's `RISK` field so the worker inherits the judgment instead of re-deriving it. Warn the user before proceeding when the verdict is HIGH or CRITICAL. Treat `risk: UNKNOWN` as unresolved rather than safe: an empty caller set can mean the walk could not answer, so confirm by other means. Use CodeGraph for the source and GitNexus only for the verdict.
 
 ## Multi-step work
 
-For work spanning several screens, routes, or a migration, invoke `superpowers:writing-plans` first and keep the plan as the sequence of record. A task packet is the contract for one delegation, not a plan for many. Use `superpowers:executing-plans` to work through it, one packet per step.
+For work spanning several screens, routes, or a migration, write a concise ordered plan before delegating. Keep it as the sequence of record and issue one task packet per independently verifiable step.
 
 ## Delegation policy
 

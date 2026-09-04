@@ -1,11 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "enabledPlugins": {
-    "expo@claude-plugins-official": true,
-    "stitch-build@google-labs-code-stitch-skills": true,
-    "stitch-design@google-labs-code-stitch-skills": true,
-    "stitch-utilities@google-labs-code-stitch-skills": true,
+    "expo@claude-plugins-official": false,
+    "stitch-build@google-labs-code-stitch-skills": false,
+    "stitch-design@google-labs-code-stitch-skills": false,
+    "stitch-utilities@google-labs-code-stitch-skills": false,
     "playwright@claude-plugins-official": true
+  },
+  "skillOverrides": {
+    "gitnexus-cli": "user-invocable-only",
+    "gitnexus-debugging": "user-invocable-only",
+    "gitnexus-exploring": "user-invocable-only",
+    "gitnexus-guide": "user-invocable-only",
+    "gitnexus-impact-analysis": "user-invocable-only",
+    "gitnexus-refactoring": "user-invocable-only"
   },
   "hooks": {
     "PreToolUse": [

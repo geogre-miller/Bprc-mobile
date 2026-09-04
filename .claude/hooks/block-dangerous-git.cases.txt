@@ -22,3 +22,15 @@ BLOCK	rtk git push origin main
 BLOCK	rtk git reset --hard HEAD~1
 ALLOW	rtk git status
 ALLOW	rtk git log --grep push
+BLOCK	/usr/bin/git push origin main
+BLOCK	command git push origin main
+BLOCK	env git push origin main
+BLOCK	env GIT_CONFIG_NOSYSTEM=1 git push origin main
+BLOCK	sudo git reset --hard HEAD
+BLOCK	git restore --source=HEAD --worktree --staged .
+BLOCK	git checkout -- :/
+ALLOW	echo "/usr/bin/git push origin main"
+ALLOW	sudo git status
+ALLOW	env FOO=bar git log --oneline
+ALLOW	command git checkout feature/workflow
+ALLOW	/usr/bin/git restore src/app/index.tsx

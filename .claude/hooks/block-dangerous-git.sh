@@ -1,21 +1,22 @@
 #!/bin/bash
-# Blocks destructive Git operations. Patterns are anchored to a real `git`
-# invocation (start of line, or after ; | & && || $( ` ), optionally wrapped by
-# the `rtk` output proxy, so that read-only commands mentioning the same words,
-# such as `git log --grep push`, pass.
+# Defense-in-depth for common direct and wrapped destructive Git invocations.
+# This is not a shell parser; Claude's permission policy remains the primary gate.
 
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
 
-GIT="(^|[;&|(\`]|&&|\|\||\\\$\()[[:space:]]*(rtk[[:space:]]+)?git([[:space:]]+-[^[:space:]]+([[:space:]]+[^-[:space:]]+)?)*[[:space:]]+"
+BOUNDARY="(^|[;&|(\`]|&&|\|\||\\\$\()[[:space:]]*"
+WRAPPERS="((command|sudo)[[:space:]]+|env([[:space:]]+(-[^[:space:]]+|[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]+))*[[:space:]]+)*"
+GIT_EXEC="(rtk[[:space:]]+)?([^[:space:];|&()]*/)?git"
+GIT="${BOUNDARY}${WRAPPERS}${GIT_EXEC}([[:space:]]+-[^[:space:]]+([[:space:]]+[^-[:space:]]+)?)*[[:space:]]+"
 
 DANGEROUS_PATTERNS=(
   "${GIT}push"
   "${GIT}reset([[:space:]]|$).*--hard"
   "${GIT}clean([[:space:]]|$).*-[a-zA-Z]*f"
   "${GIT}branch([[:space:]]|$).*-D"
-  "${GIT}checkout([[:space:]]+--)?[[:space:]]+\.([[:space:]]|$)"
-  "${GIT}restore([[:space:]]+--)?[[:space:]]+\.([[:space:]]|$)"
+  "${GIT}checkout[[:space:]]+([^;&|[:space:]]+[[:space:]]+)*(\.|:/)([[:space:]]|$)"
+  "${GIT}restore[[:space:]]+([^;&|[:space:]]+[[:space:]]+)*(\.|:/)([[:space:]]|$)"
   "${GIT}(push|branch|tag)([[:space:]]|$).*--force"
 )
 

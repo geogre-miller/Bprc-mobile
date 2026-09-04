@@ -25,7 +25,7 @@ Expand past the named files only when blocked by a concrete dependency.
 
 ## Expo API facts
 
-Confirm Expo and Expo Router API surface with `mcp__expo__search_documentation, mcp__gitnexus__impact` and `mcp__expo__read_documentation` for SDK 57 before writing code against an API you have not verified in this repository. Do not rely on recalled Expo APIs.
+Confirm Expo and Expo Router API surface with `mcp__expo__search_documentation` and `mcp__expo__read_documentation` for SDK 57 before writing code against an API you have not verified in this repository. If those tools are unavailable, consult the exact SDK 57 page on `docs.expo.dev`. Do not rely on recalled Expo APIs.
 
 Preserve unrelated working-tree changes. Keep route files thin, follow repository conventions, and use the existing design system. Implement the smallest complete change inside `ALLOWED_SCOPE`.
 
