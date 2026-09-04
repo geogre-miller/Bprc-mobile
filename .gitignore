@@ -25,6 +25,7 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+.playwright-mcp/
 
 # macOS
 .DS_Store
@@ -41,6 +42,10 @@ example
 # generated native folders
 /ios
 /android
+
+# local code-intelligence indexes
+.codegraph/
+.gitnexus/
 
 # local Claude Code plugin state
 .claude/.headroom_wrap_marker.json
