@@ -1,0 +1,24 @@
+BLOCK	git push origin main
+BLOCK	git push --force-with-lease
+BLOCK	git reset --hard HEAD~1
+BLOCK	git clean -fd
+BLOCK	git clean -f
+BLOCK	git branch -D feat
+BLOCK	git checkout .
+BLOCK	git checkout -- .
+BLOCK	git restore .
+BLOCK	npm test && git push
+BLOCK	git -C /repo push
+ALLOW	git log --grep push
+ALLOW	echo "how to git push"
+ALLOW	git status
+ALLOW	git checkout -b feature
+ALLOW	git restore src/app/index.tsx
+ALLOW	git reset HEAD src/x.ts
+ALLOW	grep -r "reset --hard" docs/
+ALLOW	git branch -d merged
+ALLOW	npm run lint
+BLOCK	rtk git push origin main
+BLOCK	rtk git reset --hard HEAD~1
+ALLOW	rtk git status
+ALLOW	rtk git log --grep push
