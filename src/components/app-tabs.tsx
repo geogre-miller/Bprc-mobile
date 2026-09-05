@@ -20,6 +20,11 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
+      <NativeTabs.Trigger name="market">
+        <NativeTabs.Trigger.Label>Thị trường</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="chart.line.uptrend.xyaxis" md="trending_up" />
+      </NativeTabs.Trigger>
+
       <NativeTabs.Trigger name="buyers">
         <NativeTabs.Trigger.Label>Đầu mối</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="storefront" md="storefront" />
