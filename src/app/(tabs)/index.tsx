@@ -1,5 +1,5 @@
-import { PriceFeed } from '@/screens/price-feed';
+import { HomeDashboard } from '@/screens/home-dashboard';
 
 export default function HomeScreen() {
-  return <PriceFeed />;
+  return <HomeDashboard />;
 }

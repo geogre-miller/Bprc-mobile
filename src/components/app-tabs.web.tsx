@@ -22,7 +22,7 @@ export default function AppTabs() {
       <TabList asChild>
         <CustomTabList>
           <TabTrigger name="home" href="/" asChild>
-            <TabButton>Giá cả</TabButton>
+            <TabButton>Tổng quan</TabButton>
           </TabTrigger>
           <TabTrigger name="buyers" href="/buyers" asChild>
             <TabButton>Đầu mối</TabButton>

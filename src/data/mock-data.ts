@@ -5,10 +5,19 @@
  */
 import type { BuyerProfile, BuyingDemand, Commodity, PriceObservation } from '@/types/domain';
 
+function observationsByRecency(commodity: Commodity): PriceObservation[] {
+  return PRICE_OBSERVATIONS.filter((observation) => observation.commodity === commodity).sort((a, b) =>
+    b.observedAt.localeCompare(a.observedAt),
+  );
+}
+
 export function latestObservation(commodity: Commodity): PriceObservation | undefined {
-  return PRICE_OBSERVATIONS.filter((observation) => observation.commodity === commodity).sort(
-    (a, b) => b.observedAt.localeCompare(a.observedAt),
-  )[0];
+  return observationsByRecency(commodity)[0];
+}
+
+/** Second-most-recent observation, used to derive today's price trend. */
+export function previousObservation(commodity: Commodity): PriceObservation | undefined {
+  return observationsByRecency(commodity)[1];
 }
 
 export const COMMODITIES: { id: Commodity; label: string }[] = [
@@ -80,6 +89,47 @@ export const PRICE_OBSERVATIONS: PriceObservation[] = [
     unit: 'kg',
     source: 'public_reference',
     observedAt: '2026-09-03T02:00:00Z',
+    confidence: 'high',
+  },
+  {
+    id: 'p7',
+    commodity: 'pepper',
+    kind: 'reference_market',
+    pricePerUnit: 156000,
+    unit: 'kg',
+    source: 'public_reference',
+    observedAt: '2026-09-01T02:00:00Z',
+    confidence: 'should_confirm',
+  },
+  {
+    id: 'p8',
+    commodity: 'cassava',
+    kind: 'buyer_quoted',
+    pricePerUnit: 2470,
+    unit: 'kg',
+    source: 'verified_buyer',
+    buyerId: 'b2',
+    observedAt: '2026-09-02T05:00:00Z',
+    confidence: 'recently_verified',
+  },
+  {
+    id: 'p9',
+    commodity: 'rubber',
+    kind: 'reference_market',
+    pricePerUnit: 388000,
+    unit: 'kg',
+    source: 'public_reference',
+    observedAt: '2026-08-28T02:00:00Z',
+    confidence: 'outdated',
+  },
+  {
+    id: 'p10',
+    commodity: 'cashew',
+    kind: 'reference_market',
+    pricePerUnit: 40200,
+    unit: 'kg',
+    source: 'public_reference',
+    observedAt: '2026-09-01T02:00:00Z',
     confidence: 'high',
   },
 ];
