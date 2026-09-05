@@ -12,7 +12,7 @@ export const Colors = {
   light: {
     text: '#1F2421',
     textSecondary: '#6B7280',
-    background: '#F7F6F2',
+    background: '#F6FBF5',
     backgroundElement: '#FFFFFF',
     backgroundSelected: '#EFECE6',
     border: '#E2E0D8',

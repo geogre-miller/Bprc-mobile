@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { BottomTabInset, Radius, Spacing } from '@/constants/theme';
+import { BottomTabInset, Colors, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon } from '@/screens/home-dashboard/icons';
 
@@ -22,7 +22,7 @@ type SortKey = 'featured' | 'name' | 'price';
 type SheetKind = 'product' | 'region' | 'advanced';
 
 const SCREEN_COLORS = {
-  background: '#F6FBF5',
+  background: Colors.light.background,
   surface: '#FFFFFF',
   surfaceLow: '#F0F5F0',
   surfaceHigh: '#E5E9E4',

@@ -320,7 +320,7 @@ The palette is engineered for high daylight contrast and calm utility. It couple
 
 ### Core Canvas &amp; Surfaces
 
-- **Canvas `#F7F6F2`):** Warm oat neutral providing a low-strain, paper-like foundation.
+- **Canvas `#F6FBF5`):** Pale sage neutral providing a low-strain, paper-like foundation.
 
 - **Surface Elevation `#FFFFFF`):** Crisp white for structured data cards, table ledgers, and modal sheets.
 
@@ -380,7 +380,7 @@ The layout is built around a predictable mobile vertical rhythm, adhering to a 4
 
 Visual hierarchy is communicated through tactile surface differentiation, tonal containment, and crisp low-contrast borders. Deep dropshadows and soft blurred multi-tier elevations are omitted to prevent visual murkiness under outdoor brightness.
 
-- **Level 0 (Canvas):** Warm oat neutral `#F7F6F2`). The foundational plane on which all components sit.
+- **Level 0 (Canvas):** Pale sage neutral `#F6FBF5`). The foundational plane on which all components sit.
 
 - **Level 1 (Card / Ledger Surface):** Pure opaque white `#FFFFFF`) with a `1px` continuous border of `#E2E0D8`. Zero blur shadow by default `box-shadow: none`).
 

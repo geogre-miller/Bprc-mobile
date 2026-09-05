@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BottomTabInset, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 import { AdvisoryTip } from './advisory-tip';
 import { BuyerInquiryCard } from './buyer-inquiry-card';
@@ -13,11 +14,12 @@ import { PriceTracker } from './price-tracker';
 import { useDashboardData } from './use-dashboard-data';
 
 export function HomeDashboard() {
+  const theme = useTheme();
   const data = useDashboardData();
   if (!data) return null;
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]} edges={['top']}>
       <DashboardHeader />
       <ScrollView contentContainerStyle={styles.content}>
         <GreetingSection now={data.now} updatedLabel={data.updatedLabel} />
