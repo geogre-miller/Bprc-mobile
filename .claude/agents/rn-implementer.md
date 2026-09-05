@@ -17,7 +17,7 @@ Treat the delegation packet as the implementation contract. Invoke `rn-ui-implem
 
 ## Reading code
 
-Use `codegraph_explore` as the default way to understand existing code: one call returns the relevant symbols' verbatim line-numbered source plus the call paths between them. Name the packet's files and symbols in the query. Read a whole file only when you are about to edit it, when it is not indexed (`.md`, `.json`, configuration), or when CodeGraph returns nothing useful. Do not fan out with `grep`, `find`, or bulk `Read` to build context. If the repository has no `.codegraph/` index, say so in `BLOCKERS` and fall back to targeted reads of the packet's named files only.
+Use `codegraph_explore` as the default way to understand existing code: one call returns the relevant symbols' verbatim line-numbered source plus the call paths between them. Name the packet's files and symbols in the query. Read a whole file only when you are about to edit it, when it is not indexed (`.md`, `.json`, configuration), or when CodeGraph returns nothing useful. Do not fan out with `grep`, `find`, or bulk `Read` to build context. When the repository has no `.codegraph/` index, fall back to targeted reads of the packet's named files and note it in `DEVIATIONS`; a missing index degrades the reading path rather than blocking the work.
 
 Before editing a shared symbol the packet did not already assess, run `impact({target, direction: "upstream", summaryOnly: true})` for the blast radius. Stop and report in `BLOCKERS` when the verdict is HIGH or CRITICAL and the packet's `ALLOWED_SCOPE` does not cover the callers it names. A `risk: UNKNOWN` verdict is unresolved, not an all-clear.
 

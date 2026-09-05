@@ -6,7 +6,7 @@ description: Implement bounded UI and interaction work in this Expo Router app f
 # React Native implementation
 
 1. Confirm the task's allowed scope and inspect current changes in those files.
-2. Understand the named route, screen, parent layout, and reusable primitives with `codegraph_explore`, naming those files and symbols in one query. Read a file in full only to edit it, or when CodeGraph does not index it. Never bulk-read or grep the tree for orientation.
+2. Understand the named route, screen, parent layout, and reusable primitives with `codegraph_explore`, naming those files and symbols in one query. Read a file in full only to edit it, or when CodeGraph does not index it. Avoid bulk reads or tree-wide grep for orientation; when no index is available, read only the files the task names.
 3. Map the specification onto existing `StyleSheet`, theme, typography, routing, and persistence patterns.
 4. Implement the smallest complete change. Keep route adapters thin and preserve platform-specific files.
 5. Check safe-area ownership, scroll and keyboard reachability, touch targets, list virtualization, states, and light/dark semantic colors where applicable.
