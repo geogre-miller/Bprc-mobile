@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { Pressable, StyleSheet } from 'react-native';
 
+import { getPriceTrendDirection, PriceAmount, PriceChangePercent } from '@/components/price-presentation';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Radius } from '@/constants/theme';
@@ -37,8 +38,9 @@ const COMMODITY_TINT: Record<Commodity, 'pending' | 'primary' | 'accent' | 'text
 /** One ledger-aligned commodity card: glyph and name left, price and delta flush right. */
 export function CommodityPriceRow({ row }: { row: PriceRow }) {
   const theme = useTheme();
-  const flat = row.changePercent == null || row.changePercent === 0;
-  const trendColor = flat ? theme.textSecondary : row.changePercent! > 0 ? theme.gain : theme.loss;
+  const trendDirection = getPriceTrendDirection(row.changePercent);
+  const flat = trendDirection === 'flat';
+  const trendColor = flat ? theme.textSecondary : trendDirection === 'up' ? theme.gain : theme.loss;
 
   return (
     <Link href={{ pathname: '/commodity/[id]', params: { id: row.id } }} asChild>
@@ -75,24 +77,25 @@ export function CommodityPriceRow({ row }: { row: PriceRow }) {
           <ThemedView type="backgroundElement" style={styles.figures}>
             {row.latest && (
               <ThemedView type="backgroundElement" style={styles.priceRow}>
-                <ThemedText type="numericLg">{formatAmount(row.latest.pricePerUnit)}</ThemedText>
-                <ThemedText type="bodySm" themeColor="textSecondary">
-                  {' '}
-                  ₫/{row.latest.unit}
-                </ThemedText>
+                <PriceAmount amount={row.latest.pricePerUnit} unit={row.latest.unit} />
               </ThemedView>
             )}
             <ThemedView type="backgroundElement" style={styles.changeRow}>
               {!flat && (
-                <Icon name={row.changePercent! > 0 ? 'arrow_upward' : 'arrow_downward'} size={12} color={trendColor} />
+                <Icon
+                  name={trendDirection === 'up' ? 'arrow_upward' : 'arrow_downward'}
+                  size={12}
+                  color={trendColor}
+                />
               )}
-              <ThemedText type="labelSm" style={{ color: trendColor }}>
-                {flat
-                  ? '0,0% (Đứng giá)'
-                  : `${row.changePercent! > 0 ? '+' : ''}${row.changePercent!.toFixed(1)}% (${
-                      row.changeAmount! > 0 ? '+' : ''
-                    }${formatVnd(row.changeAmount!)})`}
-              </ThemedText>
+              <PriceChangePercent
+                changePercent={row.changePercent}
+                flatLabel="0,0% (Đứng giá)"
+                suffix={
+                  !flat ? ` (${row.changeAmount! > 0 ? '+' : ''}${formatVnd(row.changeAmount!)})` : undefined
+                }
+                style={{ color: trendColor }}
+              />
             </ThemedView>
           </ThemedView>
         </ThemedView>

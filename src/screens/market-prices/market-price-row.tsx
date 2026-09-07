@@ -1,18 +1,20 @@
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import {
+  formatPriceAmount,
+  getPriceTrendDirection,
+  PriceAmount,
+  PriceChangePercent,
+} from '@/components/price-presentation';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Radius, Spacing } from '@/constants/theme';
 import { Icon } from '@/screens/home-dashboard/icons';
 
-function formatMarketAmount(amount: number) {
-  return amount.toLocaleString('en-US');
-}
-
 export type MarketPriceRowData = {
   id: string;
-  /** Existing commodity route, when this design row has a detail screen in the app. */
+  /** Canonical commodity ID when the market row uses a more specific variant ID. */
   href?: string;
   label: string;
   detail: string;
@@ -25,8 +27,9 @@ export type MarketPriceRowData = {
 
 /** A compact, high-density ledger row matching the Stitch 5/4/3 column split. */
 export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
-  const flat = row.changePercent === 0;
-  const rising = row.changePercent > 0;
+  const trendDirection = getPriceTrendDirection(row.changePercent);
+  const flat = trendDirection === 'flat';
+  const rising = trendDirection === 'up';
   const trendColor = flat ? '#717973' : rising ? '#2C694E' : '#BA1A1A';
   const pillBackground = flat ? '#DFE4DF' : rising ? '#AEEECB' : '#FFDAD6';
   const trendIcon = flat ? 'swap_vert' : rising ? 'trending_up' : 'trending_down';
@@ -44,7 +47,7 @@ export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
   const content = (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${row.label}, ${formatMarketAmount(row.price)} đồng một ki-lô-gam`}
+      accessibilityLabel={`${row.label}, ${formatPriceAmount(row.price, 'en-US')} đồng một ki-lô-gam`}
       accessibilityHint="Mở chi tiết mặt hàng"
       onPress={openCommodityDetail}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
@@ -68,21 +71,21 @@ export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
       </ThemedView>
 
       <ThemedView type="backgroundElement" style={styles.figures}>
-        <ThemedText type="numericLg" style={[styles.price, { color: '#181D1A' }]}>
-          {formatMarketAmount(row.price)}
-        </ThemedText>
+        <PriceAmount amount={row.price} locale="en-US" amountStyle={[styles.price, { color: '#181D1A' }]} />
         <ThemedText type="bodySm" style={{ color: trendColor }}>
           {flat || row.changeAmount == null
             ? 'Ngang giá'
-            : `${rising ? '+' : ''}${formatMarketAmount(row.changeAmount)} ₫`}
+            : `${rising ? '+' : ''}${formatPriceAmount(row.changeAmount, 'en-US')} ₫`}
         </ThemedText>
       </ThemedView>
 
       <ThemedView type="backgroundElement" style={styles.trend}>
         <View style={[styles.pill, { backgroundColor: pillBackground }]}>
-          <ThemedText type="labelSm" style={[styles.pillText, { color: trendColor }]}>
-            {flat ? '0.0%' : `${rising ? '+' : ''}${row.changePercent.toFixed(1)}%`}
-          </ThemedText>
+          <PriceChangePercent
+            changePercent={row.changePercent}
+            flatLabel="0.0%"
+            style={[styles.pillText, { color: trendColor }]}
+          />
         </View>
         <Icon name={trendIcon} size={20} color={trendColor} />
       </ThemedView>
