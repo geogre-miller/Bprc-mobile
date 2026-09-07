@@ -35,6 +35,21 @@ const ICONS = {
   psychology: { ios: 'brain.head.profile', other: 'psychology' },
   notification_important: { ios: 'bell.badge.fill', other: 'notification_important' },
   psychiatry: { ios: 'circle.hexagongrid.fill', other: 'psychiatry' },
+  arrow_back: { ios: 'arrow.left', other: 'arrow_back' },
+  share: { ios: 'square.and.arrow.up', other: 'share' },
+  add_alert: { ios: 'bell.badge', other: 'add_alert' },
+  pin_drop: { ios: 'mappin.and.ellipse', other: 'pin_drop' },
+  schedule: { ios: 'clock', other: 'schedule' },
+  star: { ios: 'star.fill', other: 'star' },
+  verified: { ios: 'checkmark.seal.fill', other: 'verified' },
+  scale: { ios: 'scalemass.fill', other: 'scale' },
+  local_shipping: { ios: 'truck.box.fill', other: 'local_shipping' },
+  payments: { ios: 'banknote.fill', other: 'payments' },
+  chat: { ios: 'message.fill', other: 'chat' },
+  store: { ios: 'building.2.fill', other: 'store' },
+  receipt_long: { ios: 'doc.text.fill', other: 'receipt_long' },
+  inventory_2: { ios: 'shippingbox.fill', other: 'inventory_2' },
+  home: { ios: 'house.fill', other: 'home' },
 } as const;
 
 export type IconName = keyof typeof ICONS;
