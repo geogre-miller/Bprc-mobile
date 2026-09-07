@@ -14,8 +14,16 @@ const PRICE_KIND_LABEL = {
   confirmed_transaction: 'Giá giao dịch thực tế',
 } as const;
 
-export function CommodityDetail({ commodity }: { commodity?: Commodity }) {
-  const label = COMMODITIES.find((item) => item.id === commodity)?.label ?? commodity;
+export function CommodityDetail({
+  commodity,
+  commodityLabel,
+  currentPrice,
+}: {
+  commodity?: Commodity;
+  commodityLabel?: string;
+  currentPrice?: number;
+}) {
+  const label = commodityLabel ?? COMMODITIES.find((item) => item.id === commodity)?.label ?? commodity;
   const observations = PRICE_OBSERVATIONS.filter((observation) => observation.commodity === commodity).sort(
     (a, b) => b.observedAt.localeCompare(a.observedAt),
   );
@@ -25,6 +33,17 @@ export function CommodityDetail({ commodity }: { commodity?: Commodity }) {
       <ThemedText type="title" style={styles.title}>
         {label}
       </ThemedText>
+
+      {currentPrice != null && (
+        <ThemedView type="backgroundElement" style={styles.card}>
+          <ThemedText type="small" themeColor="textSecondary">
+            Giá thị trường đang chọn
+          </ThemedText>
+          <ThemedText type="subtitle" style={styles.price}>
+            {formatPricePerUnit(currentPrice, 'kg')}
+          </ThemedText>
+        </ThemedView>
+      )}
 
       {observations.length === 0 && (
         <ThemedText themeColor="textSecondary">Chưa có dữ liệu giá cho mặt hàng này.</ThemedText>

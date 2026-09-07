@@ -31,11 +31,22 @@ export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
   const pillBackground = flat ? '#DFE4DF' : rising ? '#AEEECB' : '#FFDAD6';
   const trendIcon = flat ? 'swap_vert' : rising ? 'trending_up' : 'trending_down';
 
+  const openCommodityDetail = () =>
+    router.push({
+      pathname: '/commodity/[id]',
+      params: {
+        id: row.href ?? row.id,
+        label: row.label,
+        price: String(row.price),
+      },
+    });
+
   const content = (
     <Pressable
-      accessibilityRole={row.href ? 'button' : undefined}
+      accessibilityRole="button"
       accessibilityLabel={`${row.label}, ${formatMarketAmount(row.price)} đồng một ki-lô-gam`}
-      onPress={row.href ? () => router.push({ pathname: '/commodity/[id]', params: { id: row.href! } }) : undefined}
+      accessibilityHint="Mở chi tiết mặt hàng"
+      onPress={openCommodityDetail}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
       <ThemedView type="backgroundElement" style={styles.name}>
         <ThemedText type="titleMd" numberOfLines={1} style={[styles.label, { color: '#012D1D' }]}>
