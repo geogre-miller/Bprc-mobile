@@ -60,6 +60,13 @@ const ICONS = {
   menu_book: { ios: 'book.fill', other: 'menu_book' },
   policy: { ios: 'checkmark.shield.fill', other: 'policy' },
   logout: { ios: 'rectangle.portrait.and.arrow.right', other: 'logout' },
+  price_change: { ios: 'chart.line.uptrend.xyaxis', other: 'price_change' },
+  history: { ios: 'clock.arrow.circlepath', other: 'history' },
+  shopping_bag: { ios: 'bag.fill', other: 'shopping_bag' },
+  warehouse: { ios: 'building.2.fill', other: 'warehouse' },
+  verified_user: { ios: 'checkmark.shield.fill', other: 'verified_user' },
+  water_drop: { ios: 'drop.fill', other: 'water_drop' },
+  send: { ios: 'paperplane.fill', other: 'send' },
 } as const;
 
 export type IconName = keyof typeof ICONS;
