@@ -7,31 +7,53 @@ import {
   TabListProps,
 } from 'expo-router/ui';
 import { SymbolView } from 'expo-symbols';
-import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
+import { Pressable, useColorScheme, useWindowDimensions, View, StyleSheet } from 'react-native';
 
 import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
+import { Icon, type IconName } from '@/screens/home-dashboard/icons';
+
+type TabButtonProps = TabTriggerSlotProps & {
+  compact?: boolean;
+  iconName?: IconName;
+};
+
+type CustomTabListProps = TabListProps & {
+  compact?: boolean;
+};
 
 export default function AppTabs() {
+  const { width } = useWindowDimensions();
+  const compact = width <= 600;
+
   return (
     <Tabs>
-      <TabSlot style={{ height: '100%' }} />
+      <TabSlot style={[styles.tabSlot, compact && styles.compactTabSlot]} />
       <TabList asChild>
-        <CustomTabList>
+        <CustomTabList compact={compact}>
           <TabTrigger name="home" href="/" asChild>
-            <TabButton>Tổng quan</TabButton>
+            <TabButton compact={compact} iconName="home">
+              Tổng quan
+            </TabButton>
           </TabTrigger>
           <TabTrigger name="market" href="/market" asChild>
-            <TabButton>Thị trường</TabButton>
+            <TabButton compact={compact} iconName="trending_up">
+              Thị trường
+            </TabButton>
           </TabTrigger>
           <TabTrigger name="buyers" href="/buyers" asChild>
-            <TabButton>Đầu mối</TabButton>
+            <TabButton compact={compact} iconName="storefront">
+              Đầu mối
+            </TabButton>
           </TabTrigger>
           <TabTrigger name="account" href="/account" asChild>
-            <TabButton>Của tôi</TabButton>
+            <TabButton compact={compact} iconName="person">
+              Của tôi
+            </TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>
@@ -39,13 +61,23 @@ export default function AppTabs() {
   );
 }
 
-export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+export function TabButton({ children, isFocused, compact = false, iconName, ...props }: TabButtonProps) {
+  const theme = useTheme();
+
   return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable
+      {...props}
+      style={({ pressed }) => [compact && styles.compactTabButton, pressed && styles.pressed]}>
       <ThemedView
         type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
-        style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
+        style={[styles.tabButtonView, compact && styles.compactTabButtonView]}>
+        {compact && iconName && (
+          <Icon name={iconName} size={18} color={isFocused ? theme.primary : theme.textSecondary} />
+        )}
+        <ThemedText
+          type="small"
+          themeColor={isFocused ? (compact ? 'primary' : 'text') : 'textSecondary'}
+          style={compact && styles.compactTabLabel}>
           {children}
         </ThemedText>
       </ThemedView>
@@ -53,35 +85,47 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
   );
 }
 
-export function CustomTabList(props: TabListProps) {
+export function CustomTabList({ compact = false, ...props }: CustomTabListProps) {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
 
   return (
-    <View {...props} style={styles.tabListContainer}>
-      <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        <ThemedText type="smallBold" style={styles.brandText}>
-          Rẫy Giá
-        </ThemedText>
+    <View {...props} style={[styles.tabListContainer, compact && styles.compactTabListContainer]}>
+      <ThemedView
+        type="backgroundElement"
+        style={[styles.innerContainer, compact && styles.compactInnerContainer]}>
+        {!compact && (
+          <ThemedText type="smallBold" style={styles.brandText}>
+            Rẫy Giá
+          </ThemedText>
+        )}
 
         {props.children}
 
-        <ExternalLink href="https://docs.expo.dev" asChild>
-          <Pressable style={styles.externalPressable}>
-            <ThemedText type="link">Docs</ThemedText>
-            <SymbolView
-              tintColor={colors.text}
-              name={{ ios: 'arrow.up.right.square', web: 'link' }}
-              size={12}
-            />
-          </Pressable>
-        </ExternalLink>
+        {!compact && (
+          <ExternalLink href="https://docs.expo.dev" asChild>
+            <Pressable style={styles.externalPressable}>
+              <ThemedText type="link">Docs</ThemedText>
+              <SymbolView
+                tintColor={colors.text}
+                name={{ ios: 'arrow.up.right.square', web: 'link' }}
+                size={12}
+              />
+            </Pressable>
+          </ExternalLink>
+        )}
       </ThemedView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  tabSlot: {
+    height: '100%',
+  },
+  compactTabSlot: {
+    paddingBottom: 64,
+  },
   tabListContainer: {
     position: 'absolute',
     width: '100%',
@@ -89,6 +133,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  compactTabListContainer: {
+    bottom: 0,
+    height: 64,
+    padding: 0,
   },
   innerContainer: {
     paddingVertical: Spacing.two,
@@ -100,6 +149,17 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     maxWidth: MaxContentWidth,
   },
+  compactInnerContainer: {
+    width: '100%',
+    maxWidth: 430,
+    height: 64,
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.two,
+    borderRadius: 0,
+    gap: 0,
+    flexGrow: 0,
+    justifyContent: 'space-around',
+  },
   brandText: {
     marginRight: 'auto',
   },
@@ -110,6 +170,28 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
+  },
+  compactTabButton: {
+    flex: 1,
+    minWidth: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  compactTabButtonView: {
+    width: '100%',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 2,
+  },
+  compactTabLabel: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   externalPressable: {
     flexDirection: 'row',

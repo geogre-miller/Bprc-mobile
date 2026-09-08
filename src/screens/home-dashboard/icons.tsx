@@ -50,6 +50,16 @@ const ICONS = {
   receipt_long: { ios: 'doc.text.fill', other: 'receipt_long' },
   inventory_2: { ios: 'shippingbox.fill', other: 'inventory_2' },
   home: { ios: 'house.fill', other: 'home' },
+  nature_people: { ios: 'person.3.fill', other: 'nature_people' },
+  place: { ios: 'mappin.and.ellipse', other: 'place' },
+  shield: { ios: 'shield.fill', other: 'shield' },
+  account_balance: { ios: 'building.columns.fill', other: 'account_balance' },
+  task_alt: { ios: 'checkmark.circle.fill', other: 'task_alt' },
+  notifications_active: { ios: 'bell.badge.fill', other: 'notifications_active' },
+  support_agent: { ios: 'headphones', other: 'support_agent' },
+  menu_book: { ios: 'book.fill', other: 'menu_book' },
+  policy: { ios: 'checkmark.shield.fill', other: 'policy' },
+  logout: { ios: 'rectangle.portrait.and.arrow.right', other: 'logout' },
 } as const;
 
 export type IconName = keyof typeof ICONS;
