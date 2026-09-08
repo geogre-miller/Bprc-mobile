@@ -1,5 +1,7 @@
 # Bprc Mobile
 
+When implementing a mobile screen from Stitch, a screenshot, or generated design code—especially with subagents—read and follow `STITCH_UI_AGENT_WORKFLOW.md` before inspecting the design or editing code.
+
 ## Architecture
 
 - This is an Expo SDK 57 React Native app using TypeScript and Expo Router typed routes.

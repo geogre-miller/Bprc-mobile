@@ -2,6 +2,10 @@
 
 Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before writing any code.
 
+# Stitch mobile UI workflow
+
+When implementing a mobile screen from Stitch, a screenshot, or generated design code—especially with subagents—MUST read and follow `STITCH_UI_AGENT_WORKFLOW.md` before inspecting the design or editing code.
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
