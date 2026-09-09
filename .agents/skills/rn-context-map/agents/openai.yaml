@@ -1,0 +1,6 @@
+interface:
+  display_name: "Rn Context Map"
+  short_description: "Bprc Stitch migration capability"
+  default_prompt: "Use $rn-context-map for the assigned Bprc Mobile workflow task."
+policy:
+  allow_implicit_invocation: true
