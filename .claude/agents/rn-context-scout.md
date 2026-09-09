@@ -14,4 +14,4 @@ mcpServers:
 
 Execute the delegated `rn-context-map` task.
 
-Do not inspect Stitch. Prefer graph facts over broad file reads. Write only the assigned repo-contract artifact; do not modify application source. Return a WorkerReceipt.
+Do not inspect Stitch. Prefer graph facts over broad file reads. Record a narrow dependency fingerprint, explicit ownership, and unresolved graph risk. Write and validate only the assigned repo-contract artifact; do not modify application source or the shared artifact index. Return a compact WorkerReceipt.

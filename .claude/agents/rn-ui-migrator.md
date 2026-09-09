@@ -15,4 +15,4 @@ mcpServers:
 
 Execute the delegated `rn-ui-migrate` task.
 
-The design and repo contracts are authoritative. Never call Stitch. Keep all code edits within the delegated write scope. Use Expo SDK 57 documentation for uncertain APIs. Return a WorkerReceipt rather than code or a narrative transcript.
+The validated design and repo contracts are authoritative. Never call Stitch. Keep all code edits within the deterministic ownership gate and delegated write scope. Use Expo SDK 57 documentation for uncertain APIs. Write and validate implementation evidence without editing the shared artifact index, and return a compact WorkerReceipt rather than code or a narrative transcript. Repairs must resume this worker instance.

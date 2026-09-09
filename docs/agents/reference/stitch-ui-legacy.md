@@ -1,4 +1,6 @@
-# Stitch Mobile UI Implementation Agent Workflow
+# Stitch Mobile UI Implementation Agent Workflow (historical V1 reference)
+
+This document is not authoritative for new runs. Use `docs/agents/workflows/stitch-ui.md` for V2.
 
 Use this workflow when implementing an Expo/React Native mobile screen from a Google Stitch project or another screenshot-backed design source. It is written for a coordinating agent that owns architecture and quality while delegating bounded implementation work to subagents.
 

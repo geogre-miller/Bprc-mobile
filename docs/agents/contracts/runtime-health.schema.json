@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/runtime-health.schema.json",
+  "title": "RuntimeHealth",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactType", "checkedAt", "ok", "required", "requiredFailures", "capabilities", "repository"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "RuntimeHealth" },
+    "checkedAt": { "type": "string" },
+    "ok": { "type": "boolean" },
+    "required": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "requiredFailures": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["status", "required"],
+        "properties": {
+          "status": { "enum": ["available", "unavailable", "unknown", "stale"] },
+          "required": { "type": "boolean" },
+          "version": { "type": ["string", "null"] },
+          "detail": { "type": ["string", "null"] },
+          "reasonCode": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "writable", "branch", "head", "status"],
+      "properties": {
+        "root": { "type": "string" },
+        "writable": { "type": "boolean" },
+        "branch": { "type": ["string", "null"] },
+        "head": { "type": ["string", "null"] },
+        "status": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

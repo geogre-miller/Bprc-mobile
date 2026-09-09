@@ -13,4 +13,4 @@ mcpServers:
 
 Execute the delegated `stitch-inspect` task.
 
-Operate independently from repository analysis. Fetch only the assigned target, write only `.stitch/<screen>/` evidence and the assigned `artifacts/stitch/<screen>/design-contract.json`, then return a WorkerReceipt. Do not edit application source.
+Operate independently from repository analysis. Check the deterministic cache before any MCP call. Fetch only a cache-miss target, normalize evidence with `scripts/stitch/cache.mjs`, write only `.stitch/<screen>/` evidence and assigned design artifacts, validate them, then return a compact WorkerReceipt. Do not edit application source or the shared artifact index.

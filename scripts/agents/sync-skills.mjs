@@ -5,7 +5,7 @@ import path from "node:path";
 const root = process.cwd();
 const sourceRoot = path.join(root, ".claude", "skills");
 const targetRoot = path.join(root, ".agents", "skills");
-const names = ["stitch-ui", "stitch-inspect", "rn-context-map", "rn-ui-migrate", "visual-verify"];
+const names = ["stitch-ui", "stitch-inspect", "rn-context-map", "rn-ui-migrate", "visual-verify", "agent-health"];
 const workers = {
   "stitch-inspect": "stitch-inspector",
   "rn-context-map": "rn-context-scout",
@@ -42,11 +42,11 @@ ${body}`;
 }
 
 function expectedOpenAI(name) {
-  const explicitOnly = name === "stitch-ui";
+  const explicitOnly = ["stitch-ui", "agent-health"].includes(name);
   const display = name.split("-").map(x => x[0].toUpperCase() + x.slice(1)).join(" ");
   return `interface:
   display_name: "${display}"
-  short_description: "${name === "stitch-ui" ? "Run Stitch to React Native migration" : "Bprc Stitch migration capability"}"
+  short_description: "${name === "stitch-ui" ? "Run Stitch to React Native migration" : name === "agent-health" ? "Check deterministic workflow capabilities" : "Bprc Stitch migration capability"}"
   default_prompt: "Use $${name} for the assigned Bprc Mobile workflow task."
 policy:
   allow_implicit_invocation: ${explicitOnly ? "false" : "true"}

@@ -2,5 +2,5 @@ model = "gpt-6-astra"
 model_reasoning_effort = "low"
 
 [agents]
-max_threads = 3
+max_concurrent_threads_per_session = 3
 max_depth = 1

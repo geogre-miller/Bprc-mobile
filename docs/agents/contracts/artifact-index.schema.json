@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/artifact-index.schema.json",
+  "title": "ArtifactIndex",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactType", "screen", "updatedAt", "artifacts", "fingerprints"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "ArtifactIndex" },
+    "screen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "projectId", "screenId"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "projectId": { "type": "string", "minLength": 1 },
+        "screenId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "updatedAt": { "type": "string" },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceManifest", "designContract", "repoContract", "implementation", "verification", "referenceScreenshot", "actualScreenshot", "comparison"],
+      "properties": {
+        "sourceManifest": { "type": ["string", "null"] },
+        "designContract": { "type": ["string", "null"] },
+        "designContractDiff": { "type": ["string", "null"] },
+        "repoContract": { "type": ["string", "null"] },
+        "implementation": { "type": ["string", "null"] },
+        "verification": { "type": ["string", "null"] },
+        "referenceScreenshot": { "type": ["string", "null"] },
+        "actualScreenshot": { "type": ["string", "null"] },
+        "comparison": { "type": ["string", "null"] },
+        "captureMetadata": { "type": ["string", "null"] },
+        "diffMetadata": { "type": ["string", "null"] }
+      }
+    },
+    "fingerprints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stitch", "repository"],
+      "properties": {
+        "stitch": { "type": ["string", "null"] },
+        "repository": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

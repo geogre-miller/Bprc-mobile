@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Health"
+  short_description: "Check deterministic workflow capabilities"
+  default_prompt: "Use $agent-health for the assigned Bprc Mobile workflow task."
+policy:
+  allow_implicit_invocation: false

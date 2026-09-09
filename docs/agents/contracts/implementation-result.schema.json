@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/implementation-result.schema.json",
+  "title": "ImplementationResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactType", "status", "changedFiles", "checks", "deviations", "blockers"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "ImplementationResult" },
+    "generatedAt": { "type": "string" },
+    "status": { "enum": ["done", "partial", "blocked", "failed"] },
+    "changedFiles": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "status"],
+        "properties": {
+          "command": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["pass", "fail", "baseline-failure", "skipped"] },
+          "evidence": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "deviations": { "type": "array", "items": { "type": "string" } },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "reasonCodes": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+  }
+}

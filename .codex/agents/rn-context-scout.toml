@@ -5,5 +5,9 @@ model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Read `.agents/skills/rn-context-map/SKILL.md` and follow the Worker capability instructions directly; do not invoke `$rn-context-map` recursively.
-Prefer CodeGraph/GitNexus and targeted reads. Do not inspect Stitch or edit application source. Write only the assigned repo-contract artifact and return only a WorkerReceipt.
+Prefer CodeGraph/GitNexus and targeted reads. Do not inspect Stitch or edit application source. Record narrow dependency freshness, explicit ownership, and unresolved risk. Validate the assigned repo-contract, do not edit the shared artifact index, and return only a compact WorkerReceipt.
 """
+
+[mcp_servers.stitch]
+url = "https://stitch.googleapis.com/mcp"
+enabled = false

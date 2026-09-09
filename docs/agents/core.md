@@ -21,12 +21,24 @@ This file contains durable repository rules shared by Claude Code and Codex. Kee
 - Workers read artifact paths directly when they need detailed state.
 - Prefer one bounded source owner for implementation. Parallelize independent read-heavy discovery first.
 - Do not make an agent rediscover facts already recorded in an authoritative contract.
+- Prefer deterministic health, cache, fingerprint, schema-validation, ownership, scheduling, and visual-evidence scripts over model interpretation of command prose.
+- Keep only the screen artifact-index path and compact WorkerReceipts in orchestrator context.
+
+## Shell output and RTK
+
+- Use RTK when available only for command forms documented by the installed RTK version, especially supported Git, file inspection/search, diff, and test-runner commands.
+- Do not blindly prepend `rtk`, run both RTK and raw commands by default, or double-prefix a command when a Claude/Codex auto-rewrite integration is active.
+- Claude Code and Codex RTK integrations are installed independently; detect the active runtime integration instead of assuming the other runtime configured it.
+- Fall back to the raw command when RTK is absent. Use raw output when exact, unfiltered evidence is needed to diagnose a failure.
+- RTK is output compression, not code intelligence: keep CodeGraph for architecture/flow queries and GitNexus for impact/change analysis.
 
 ## Code intelligence
 
 When `.codegraph/` is current, use CodeGraph first to locate relevant symbols and execution paths. Fall back to narrow `Read`, `Grep`, or `Glob` when the index is unavailable, stale, or does not cover the target.
 
 Before changing a shared or broadly reused symbol, use GitNexus impact analysis. Treat `HIGH`/`CRITICAL` as escalation conditions. Treat `UNKNOWN`, partial, or truncated results as unresolved and confirm with targeted source inspection.
+
+If GitNexus is unavailable, use targeted import/reference inspection as the fallback and record `UNKNOWN_RISK` until the evidence resolves the relevant write scope. The tool itself is optional; unresolved architectural risk is not.
 
 Before committing code changes, run GitNexus change analysis. A partial or truncated result is not a clean gate.
 
@@ -61,4 +73,8 @@ Manual workflow entry:
 - Claude Code: `/stitch-ui <target>`
 - Codex: `$stitch-ui <target>`
 
-The legacy `STITCH_UI_AGENT_WORKFLOW.md` is historical reference only and must not be loaded as a prerequisite for new work.
+Deterministic runtime diagnostics:
+- Claude Code: `/agent-health [--require <capability>]`
+- Codex: `$agent-health [--require <capability>]`
+
+The legacy `docs/agents/reference/stitch-ui-legacy.md` is historical reference only and must not be loaded as a prerequisite for new work.

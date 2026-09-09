@@ -11,7 +11,8 @@ For the assigned screen/task:
 1. Do not inspect or reinterpret Stitch.
 2. Use CodeGraph first when its index is current; otherwise use targeted source reads.
 3. Locate route, screen owner, parent layout/safe-area ownership, reusable primitives, theme/typography, icons/fonts, state/data patterns, and similar implementation patterns.
-4. Use GitNexus impact analysis for shared symbols. Treat HIGH/CRITICAL as escalation and UNKNOWN/partial/truncated as unresolved.
-5. Define explicit `writeScope`, `forbiddenScope`, shared edits, risk, and narrow verification commands.
-6. Write `repo-contract.json` matching `docs/agents/contracts/repo-contract.schema.json`.
-7. Return only a WorkerReceipt. Return artifact paths, not source excerpts or analysis transcripts.
+4. Use GitNexus impact analysis for shared symbols. If unavailable, use targeted import/reference evidence and record `UNKNOWN_RISK` until resolved. Treat HIGH/CRITICAL as escalation and UNKNOWN/partial/truncated as unresolved.
+5. Define explicit non-empty `writeScope`, `forbiddenScope`, serialized shared registry edits, risk, and narrow verification commands.
+6. Record only repository files whose content materially supports the contract in `repository.dependencies`; compute their fingerprint with `repo-fingerprint.mjs`.
+7. Write and validate the V2 `repo-contract.json` and WorkerReceipt. Do not edit the shared `index.json`; the serialized completion gate updates it.
+8. Return only the compact WorkerReceipt. Return artifact paths, not source excerpts or analysis transcripts.

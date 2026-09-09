@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/design-contract-diff.schema.json",
+  "title": "DesignContractDiff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactType", "fromFingerprint", "toFingerprint", "changed"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "DesignContractDiff" },
+    "fromFingerprint": { "type": "string", "minLength": 1 },
+    "toFingerprint": { "type": "string", "minLength": 1 },
+    "changed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "from", "to"],
+        "properties": { "path": { "type": "string", "minLength": 1 }, "from": {}, "to": {} }
+      }
+    },
+    "truncated": { "type": "boolean" }
+  }
+}

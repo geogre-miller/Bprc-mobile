@@ -1,77 +1,86 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/design-contract.schema.json",
   "title": "DesignContract",
   "type": "object",
   "additionalProperties": true,
-  "required": [
-    "screen",
-    "layout",
-    "components",
-    "interactions",
-    "uncertainties"
-  ],
+  "required": ["schemaVersion", "artifactType", "sourceFingerprint", "screen", "layout", "components", "interactions", "reference", "uncertainties"],
   "properties": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "DesignContract" },
+    "sourceFingerprint": { "type": "string", "minLength": 16 },
+    "generatedAt": { "type": "string" },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": ["string", "null"] }
+      }
+    },
     "screen": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "additionalProperties": true,
+      "required": ["id", "name", "slug"],
       "properties": {
-        "name": {
-          "type": "string"
-        },
-        "viewportWidth": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "referenceHeight": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "viewportWidth": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "referenceHeight": { "type": ["number", "null"], "exclusiveMinimum": 0 }
       }
     },
-    "layout": {
-      "type": "object"
-    },
-    "typography": {
-      "type": "object"
-    },
-    "colors": {
-      "type": "object"
-    },
-    "components": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "assets": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "interactions": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "responsive": {
-      "type": "object"
-    },
+    "layout": { "type": "object" },
+    "typography": { "type": "object" },
+    "colors": { "type": "object" },
+    "components": { "type": "array", "items": { "type": "object" } },
+    "assets": { "type": "array", "items": { "type": "object" } },
+    "interactions": { "type": "array", "items": { "type": ["string", "object"] } },
+    "responsive": { "type": "object" },
     "reference": {
-      "type": "object"
-    },
-    "uncertainties": {
-      "type": "array",
-      "items": {
-        "type": "string"
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["screenshotPath", "manifestPath"],
+      "properties": {
+        "screenshotPath": { "type": "string", "minLength": 1 },
+        "htmlPath": { "type": ["string", "null"] },
+        "manifestPath": { "type": "string", "minLength": 1 }
       }
-    }
+    },
+    "verificationHints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "route": { "type": ["string", "null"] },
+        "referenceViewport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "deviceScaleFactor": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "interactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "action", "expectedState"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "action": { "type": "string", "minLength": 1 },
+              "expectedState": { "type": "string", "minLength": 1 },
+              "testId": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "keyTestIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "uncertainties": { "type": "array", "items": { "type": "string" } },
+    "uncertaintiesAccepted": { "type": "boolean" }
   }
 }
