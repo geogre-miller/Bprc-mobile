@@ -1,0 +1,192 @@
+{
+  "$schema": "https://bprc.local/agents/repo-contract.schema.json",
+  "schemaVersion": 2,
+  "artifactType": "RepoContract",
+  "generatedAt": "2026-09-09T07:34:14.300Z",
+  "route": "/inventory",
+  "screenOwner": "src/screens/inventory/index.tsx",
+  "architecture": {
+    "framework": "Expo SDK 57, React Native, TypeScript, Expo Router",
+    "routeAdapter": "src/app/inventory.tsx",
+    "routeStatus": "existing functional screen; not a placeholder",
+    "navigation": "RootLayout registers inventory in the native Stack with headerShown true and title Nông sản đang có; it is outside the (tabs) group",
+    "implementationBoundary": "Keep screen behavior in src/screens/inventory/index.tsx; the route adapter remains thin"
+  },
+  "layout": {
+    "parentOwner": "src/app/_layout.tsx owns the Stack and native Inventory header",
+    "safeArea": "The native Stack header owns top chrome. Inventory currently renders a ScrollView without SafeAreaView or useSafeAreaInsets; any sticky action or bottom padding needed by the migration belongs in the screen owner",
+    "scrolling": "Use the existing vertical ScrollView for the bounded inventory form/list; preserve contentContainerStyle spacing and ensure any new bottom action remains reachable",
+    "tabs": "The Inventory route does not use the bottom AppTabs shell"
+  },
+  "patterns": {
+    "primitives": "ThemedText, ThemedView, Pressable, ScrollView, TextInput, and StyleSheet are already used by the owner",
+    "theme": "useTheme reads semantic Colors; Spacing, Radius, Fonts, BottomTabInset, and MaxContentWidth live in src/constants/theme.ts",
+    "typography": "ThemedText supports title, subtitle, small, smallBold, headlineSm, titleMd, bodySm, labelMd, labelSm, numericLg, numericHero, link, and linkPrimary; DESIGN.md defines Manrope/Public Sans roles while the runtime theme maps platform/system fonts",
+    "icons": "If an icon is required, reuse Icon/IconName from src/screens/home-dashboard/icons.tsx; it maps SF Symbols on iOS and Material names on Android/web. Do not add a new icon registry entry for this screen",
+    "stateAndData": "Inventory persists FarmerInventoryItem[] through usePersistedState with key inventory (AsyncStorage key rayGia:inventory), selects from COMMODITIES, values items with latestObservation, and formats VND with formatVnd",
+    "similarImplementations": "src/screens/home-dashboard/commodity-price-row.tsx demonstrates themed ledger rows and icon tiles; src/screens/account/index.tsx demonstrates explicit SafeAreaView edges=['top'] when a screen owns top insets"
+  },
+  "reuse": [
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/constants/theme.ts",
+    "src/hooks/use-theme.ts",
+    "src/hooks/use-persisted-state.ts",
+    "src/data/mock-data.ts",
+    "src/types/domain.ts",
+    "src/utils/format-price.ts",
+    "src/screens/home-dashboard/icons.tsx",
+    "src/screens/home-dashboard/commodity-price-row.tsx"
+  ],
+  "sharedEdits": [],
+  "serializedSharedRegistryEdits": [],
+  "writeScope": [
+    "src/screens/inventory/index.tsx"
+  ],
+  "forbiddenScope": [
+    ".stitch/inventory",
+    "artifacts/stitch/inventory/index.json",
+    "artifacts/stitch/inventory/run.json",
+    "src/app/_layout.tsx",
+    "src/app/inventory.tsx",
+    "src/app/(tabs)/_layout.tsx",
+    "src/components/app-tabs.tsx",
+    "src/components/app-tabs.web.tsx",
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/constants/theme.ts",
+    "src/hooks/use-theme.ts",
+    "src/hooks/use-persisted-state.ts",
+    "src/data/mock-data.ts",
+    "src/types/domain.ts",
+    "src/utils/format-price.ts",
+    "src/screens/home-dashboard/icons.tsx",
+    "src/screens/home-dashboard/commodity-price-row.tsx",
+    "DESIGN.md",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "ownership": {
+    "discoveryWorker": "inventory-repository-1",
+    "implementationOwner": "rn-ui-migrator",
+    "artifactOwner": "inventory-repository-1",
+    "sharedFilesReadOnly": true,
+    "registryEditsSerialized": true
+  },
+  "repository": {
+    "fingerprint": "719b6b849ab8e737aea5189060863896742439612a67c6d5758fa7f31a90d409",
+    "dependencies": [
+      "DESIGN.md",
+      "src/app/_layout.tsx",
+      "src/app/inventory.tsx",
+      "src/screens/inventory/index.tsx",
+      "src/components/themed-text.tsx",
+      "src/components/themed-view.tsx",
+      "src/constants/theme.ts",
+      "src/hooks/use-theme.ts",
+      "src/hooks/use-persisted-state.ts",
+      "src/data/mock-data.ts",
+      "src/types/domain.ts",
+      "src/utils/format-price.ts",
+      "src/screens/home-dashboard/icons.tsx",
+      "src/screens/home-dashboard/commodity-price-row.tsx",
+      "src/screens/account/index.tsx"
+    ]
+  },
+  "impactAnalysis": {
+    "screenOwner": {
+      "target": "Inventory",
+      "directCallers": 1,
+      "processesAffected": 1,
+      "risk": "low",
+      "evidence": "GitNexus upstream impact: Inventory -> src/app/inventory.tsx"
+    },
+    "readOnlySharedSymbols": [
+      {
+        "target": "usePersistedState",
+        "directCallers": 9,
+        "processesAffected": 10,
+        "risk": "critical",
+        "mitigation": "read-only dependency; do not edit shared hook"
+      },
+      {
+        "target": "ThemedText",
+        "directCallers": 46,
+        "processesAffected": 46,
+        "risk": "critical",
+        "mitigation": "read-only dependency; use existing type/theme API"
+      },
+      {
+        "target": "ThemedView",
+        "directCallers": 27,
+        "processesAffected": 27,
+        "risk": "critical",
+        "mitigation": "read-only dependency; use existing semantic color roles"
+      },
+      {
+        "target": "formatVnd",
+        "directCallers": 11,
+        "processesAffected": 14,
+        "risk": "critical",
+        "mitigation": "read-only dependency; preserve Vietnamese currency formatting"
+      },
+      {
+        "target": "latestObservation",
+        "directCallers": 4,
+        "processesAffected": 5,
+        "risk": "critical",
+        "mitigation": "read-only dependency; preserve current mock price source"
+      }
+    ],
+    "detectChanges": {
+      "scope": "all",
+      "changedSymbols": 0,
+      "affectedProcesses": 0,
+      "risk": "none"
+    }
+  },
+  "risk": "medium",
+  "riskReason": "The owner and route are isolated (one direct caller, low owner impact), while shared persistence, themed primitives, and price formatting have broad or critical upstream blast radius. Those dependencies are read-only and excluded from writeScope. Residual screen-level safe-area and local-data risks are recorded below.",
+  "riskResolved": true,
+  "unresolvedRisks": [
+    {
+      "id": "SAFE_AREA_BOTTOM",
+      "severity": "medium",
+      "status": "open",
+      "detail": "The native Stack owns the top header, but the screen currently has no explicit bottom inset. A migrated sticky action must account for its own bottom reachability without changing the root layout or tab shell."
+    },
+    {
+      "id": "LOCAL_DATA_SOURCE",
+      "severity": "low",
+      "status": "open",
+      "detail": "Inventory remains backed by AsyncStorage and mock observations; preserve the rayGia:inventory key and current domain shapes until backend synchronization is introduced."
+    }
+  ],
+  "dependencyFreshness": {
+    "status": "fresh-at-discovery",
+    "fingerprintAlgorithm": "scripts/stitch/repo-fingerprint.mjs SHA-256 over listed dependency file contents",
+    "codegraph": {
+      "status": "current",
+      "version": "1.5.0",
+      "files": 101,
+      "pending": {
+        "added": 0,
+        "modified": 0,
+        "removed": 0
+      }
+    },
+    "gitnexus": {
+      "repository": "Bprc-mobile",
+      "worktree": "/Users/mac/orca/Bprc-mobile",
+      "indexCommit": "abe1ecb8cd87e1537036f7e9bcf2bc42ac0bd023",
+      "indexUpdatedAt": "2026-09-09T07:31:13.103Z",
+      "staleness": "current"
+    }
+  },
+  "checks": [
+    "node scripts/stitch/repo-fingerprint.mjs --contract artifacts/stitch/inventory/repo-contract.json --write",
+    "node scripts/agents/validate-artifact.mjs artifacts/stitch/inventory/repo-contract.json",
+    "npm run typecheck (rn-ui-migrator after scoped screen implementation)",
+    "npm run lint (rn-ui-migrator after scoped screen implementation)"
+  ]
+}

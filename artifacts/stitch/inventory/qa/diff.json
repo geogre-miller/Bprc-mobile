@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "VisualDiffMetadata",
+  "generatedAt": "2026-09-09T08:27:01.183Z",
+  "informationalOnly": true,
+  "note": "Pixel metrics guide the fresh visual verifier and are never the final pass/fail criterion.",
+  "dimensions": {
+    "width": 118,
+    "height": 512
+  },
+  "mismatchPixels": 16870,
+  "mismatchRatio": 0.2792306673728814,
+  "threshold": 0.1,
+  "reference": "artifacts/stitch/inventory/qa/reference.png",
+  "actual": "artifacts/stitch/inventory/qa/actual.png",
+  "diff": "artifacts/stitch/inventory/qa/diff.png",
+  "comparison": "artifacts/stitch/inventory/qa/comparison.png",
+  "candidateMismatchRegions": [
+    {
+      "x": 32,
+      "y": 352,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 664
+    },
+    {
+      "x": 32,
+      "y": 96,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 613
+    },
+    {
+      "x": 32,
+      "y": 64,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 530
+    },
+    {
+      "x": 0,
+      "y": 96,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 528
+    },
+    {
+      "x": 64,
+      "y": 320,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 506
+    },
+    {
+      "x": 32,
+      "y": 416,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 506
+    },
+    {
+      "x": 32,
+      "y": 160,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 480
+    },
+    {
+      "x": 0,
+      "y": 352,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 478
+    },
+    {
+      "x": 0,
+      "y": 64,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 464
+    },
+    {
+      "x": 32,
+      "y": 288,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 452
+    },
+    {
+      "x": 0,
+      "y": 160,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 443
+    },
+    {
+      "x": 32,
+      "y": 192,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 440
+    }
+  ]
+}

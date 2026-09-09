@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "repository",
+  "status": "done",
+  "artifact": "artifacts/stitch/inventory/repo-contract.json",
+  "artifactIndex": "artifacts/stitch/inventory/index.json",
+  "risk": "medium",
+  "reasonCodes": [],
+  "changedFiles": [
+    "artifacts/stitch/inventory/repo-contract.json",
+    "artifacts/stitch/inventory/repo-receipt.json"
+  ],
+  "followup": "Implementation is owned by src/screens/inventory/index.tsx only; preserve route, shared registries, rayGia:inventory persistence, and account for screen-level bottom inset reachability."
+}

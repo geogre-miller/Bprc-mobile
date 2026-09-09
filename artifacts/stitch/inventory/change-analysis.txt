@@ -1,0 +1,79 @@
+{
+  "summary": {
+    "changed_count": 4,
+    "affected_count": 3,
+    "changed_files": 1,
+    "risk_level": "medium"
+  },
+  "changed_symbols": [
+    {
+      "id": "Function:src/screens/inventory/index.tsx:Inventory",
+      "name": "Inventory",
+      "type": "Function",
+      "filePath": "src/screens/inventory/index.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/screens/inventory/index.tsx:Inventory.addItem@18:2",
+      "name": "addItem",
+      "type": "Function",
+      "filePath": "src/screens/inventory/index.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/screens/inventory/index.tsx:Inventory.removeItem@25:2",
+      "name": "removeItem",
+      "type": "Function",
+      "filePath": "src/screens/inventory/index.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/screens/inventory/index.tsx:styles",
+      "name": "styles",
+      "type": "Const",
+      "filePath": "src/screens/inventory/index.tsx",
+      "change_type": "touched"
+    }
+  ],
+  "affected_processes": [
+    {
+      "id": "proc_42_inventoryscreen",
+      "name": "InventoryScreen → ObservationsByRecency",
+      "process_type": "cross_community",
+      "step_count": 4,
+      "changed_steps": [
+        {
+          "symbol": "Inventory",
+          "step": 2
+        }
+      ]
+    },
+    {
+      "id": "proc_68_inventoryscreen",
+      "name": "InventoryScreen → UsePersistedState",
+      "process_type": "intra_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "Inventory",
+          "step": 2
+        }
+      ]
+    },
+    {
+      "id": "proc_84_inventoryscreen",
+      "name": "InventoryScreen → UseTheme",
+      "process_type": "cross_community",
+      "step_count": 4,
+      "changed_steps": [
+        {
+          "symbol": "Inventory",
+          "step": 2
+        }
+      ]
+    }
+  ]
+}
+
+---
+**Next:** Review affected processes. Use context() on high-risk changed symbols. READ gitnexus://repo/Bprc-mobile/process/{name} for full execution traces.

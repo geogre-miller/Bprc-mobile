@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "CaptureMetadata",
+  "status": "captured",
+  "capturedAt": "2026-09-09T08:26:46.742Z",
+  "startedAt": "2026-09-09T08:26:43.112Z",
+  "url": "http://localhost:8091/inventory",
+  "route": "/inventory",
+  "output": "artifacts/stitch/inventory/qa/actual-390x1782.png",
+  "requestedViewport": {
+    "width": 390,
+    "height": 1782
+  },
+  "actualViewport": {
+    "width": 390,
+    "height": 1782,
+    "devicePixelRatio": 1
+  },
+  "document": {
+    "scrollWidth": 390,
+    "scrollHeight": 1782
+  },
+  "fullPage": true,
+  "probes": {},
+  "diagnostics": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": []
+  }
+}\n

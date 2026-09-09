@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ArtifactIndex",
+  "screen": {
+    "slug": "inventory",
+    "projectId": "16177202758777999982",
+    "screenId": "b67e452bee28487593486c1942288879"
+  },
+  "updatedAt": "2026-09-09T08:40:00.004Z",
+  "artifacts": {
+    "sourceManifest": ".stitch/inventory/manifest.json",
+    "designContract": "artifacts/stitch/inventory/design-contract.json",
+    "designContractDiff": null,
+    "repoContract": "artifacts/stitch/inventory/repo-contract.json",
+    "implementation": "artifacts/stitch/inventory/implementation.json",
+    "verification": "artifacts/stitch/inventory/qa/verification.json",
+    "referenceScreenshot": ".stitch/inventory/reference.png",
+    "actualScreenshot": "artifacts/stitch/inventory/qa/actual.png",
+    "comparison": "artifacts/stitch/inventory/qa/comparison.png",
+    "captureMetadata": "artifacts/stitch/inventory/qa/capture.json",
+    "diffMetadata": "artifacts/stitch/inventory/qa/diff.json"
+  },
+  "fingerprints": {
+    "stitch": "1f3731d67ab66344afda675a81a0cd9297e02cf7817f900a4c83da10e42cc049",
+    "repository": "719b6b849ab8e737aea5189060863896742439612a67c6d5758fa7f31a90d409"
+  }
+}
