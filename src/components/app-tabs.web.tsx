@@ -14,6 +14,7 @@ import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { BOTTOM_NAV_ITEMS } from '@/constants/navigation';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon, type IconName } from '@/screens/home-dashboard/icons';
 
@@ -35,26 +36,13 @@ export default function AppTabs() {
       <TabSlot style={[styles.tabSlot, compact && styles.compactTabSlot]} />
       <TabList asChild>
         <CustomTabList compact={compact}>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton compact={compact} iconName="home">
-              Tổng quan
-            </TabButton>
-          </TabTrigger>
-          <TabTrigger name="market" href="/market" asChild>
-            <TabButton compact={compact} iconName="trending_up">
-              Thị trường
-            </TabButton>
-          </TabTrigger>
-          <TabTrigger name="buyers" href="/buyers" asChild>
-            <TabButton compact={compact} iconName="storefront">
-              Đầu mối
-            </TabButton>
-          </TabTrigger>
-          <TabTrigger name="account" href="/account" asChild>
-            <TabButton compact={compact} iconName="person">
-              Của tôi
-            </TabButton>
-          </TabTrigger>
+          {BOTTOM_NAV_ITEMS.map((item) => (
+            <TabTrigger key={item.key} name={item.key} href={item.href} asChild>
+              <TabButton compact={compact} iconName={item.icon}>
+                {item.label}
+              </TabButton>
+            </TabTrigger>
+          ))}
         </CustomTabList>
       </TabList>
     </Tabs>
@@ -181,8 +169,8 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 0,
     paddingHorizontal: 0,
-    borderRadius: 0,
-    backgroundColor: 'transparent',
+    marginVertical: Spacing.one,
+    borderRadius: Spacing.five,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 2,
