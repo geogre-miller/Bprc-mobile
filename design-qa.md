@@ -1,59 +1,46 @@
-# Buyer Detail — Design QA
+# Buyer Directory design QA
 
 ## Comparison target
 
-- Stitch source: `.stitch/buyer-detail/stitch-screen-original.png`.
-- Stitch source pixels: 780 × 3612, interpreted as a 390 × 1806 logical-pixel mobile capture at 2× density.
-- Implementation route: `http://127.0.0.1:8081/buyer/b1`.
-- Implementation screenshot: `.stitch/buyer-detail/implementation-buyer-390.png`.
-- Same-input comparison: `.stitch/buyer-detail/buyer-detail-comparison.png` (Stitch left, implementation right).
-- Modal state screenshot: `.stitch/buyer-detail/implementation-sale-modal-390.png`.
-- Rendered state: 390 × 1806 viewport, device scale factor 2, light theme, Vietnamese locale, reduced motion.
+- Stitch project: `16177202758777999982` (`AgriFinance Market Tracker`).
+- Stitch screen: `52f49f27b2634f3480b258942a98e578` (`Buyer Directory`).
+- Source artifact: `.stitch/buyer-directory/stitch-source-390.png` (`390 × 1714`).
+- Implementation route: `http://127.0.0.1:8082/buyers`.
+- Test viewport: `390 × 884`, device scale factor `1`, light appearance, Google Chrome via Playwright.
+- Responsive check: `768 × 900`; the directory shell remained centered at exactly `430 px` wide.
 
-## Required source correction
+## Evidence
 
-The Stitch HTML applied `pt-24` to the main area and another `pt-20` to its first row beneath a fixed 64 px header. This produced roughly 112 logical pixels of unintended empty space at the top. The implementation intentionally removes that defect: the branded header occupies y=0–64, scroll content begins at y=72, the back row control begins at y=80, and the buyer-name baseline begins at y=156. The Buyer Detail card is therefore visible immediately below the navigation row without a duplicate native header or oversized spacer.
+- Top state: `artifacts/stitch/buyer-directory/qa/implementation-pass1-top-390x884.png`.
+- Middle scroll state: `artifacts/stitch/buyer-directory/qa/implementation-pass1-middle-390x884.png`.
+- Bottom scroll state: `artifacts/stitch/buyer-directory/qa/implementation-pass1-bottom-390x884.png`.
+- Quotation sheet: `artifacts/stitch/buyer-directory/qa/implementation-pass1-quotation-390x884.png`.
+- Wide layout: `artifacts/stitch/buyer-directory/qa/implementation-wide-768x900.png`.
+- Same-input top comparison: `artifacts/stitch/buyer-directory/qa/comparison-final-390x884.png`.
+- Focused scrolling comparison: `artifacts/stitch/buyer-directory/qa/comparison-middle-final-390x884.png`.
 
 ## Verification result
 
-- Reference and implementation captures are both exactly 780 × 3612 pixels and were inspected together in one side-by-side comparison image.
-- Browser metrics at the reference viewport: width 390, height 1806, scroll width 390, scroll height 1806, fonts loaded.
-- Compact mobile check at 360 × 844: scroll width remained 360 with no horizontal overflow.
-- No browser console errors or uncaught page errors were observed.
-- Real Stitch portrait and warehouse assets are used byte-for-byte; header logo/avatar reuse existing real project assets.
-- Create-sale flow opened as a bottom sheet, switched to `Tiêu Đen`, exposed `aria-selected="true"`, accepted `1000` kg, and recalculated the estimate to `148,500,000 ₫`; cancel closed the sheet.
-- Footer navigation reached `/market`; header controls reached `/alerts` and `/account`.
-- `/buyer/missing` retained and displayed the invalid-buyer state.
-- Expo SDK 57 production web export completed successfully.
-- TypeScript, targeted ESLint, and `git diff --check` pass.
+- Header, title, search, filter chips, safety message, all three buyer cards, trust panel, and fixed app tabs render without horizontal overflow or clipped content.
+- The generated Stitch HTML's search/filter row is implemented in the screenshot's blank slot, removing the unintended large empty region while preserving the surrounding vertical alignment.
+- Typography uses the bundled Manrope and Public Sans assets; colors, surfaces, radii, badges, shadows, icons, price wells, and call/detail actions match the Stitch design language.
+- Search and clear, verified-only filtering, product-sheet open/close, direct-quotation form submission, success toast, and scrolling were exercised successfully.
+- The quotation sheet respects safe-area padding and remains fully visible at `390 × 884` after its slide animation.
+- Browser console and uncaught page-error collections were empty during both mobile and wide checks.
+- TypeScript, scoped ESLint, production Expo web export, and `git diff --check` pass.
+- Full-project lint still reports the pre-existing `react-hooks/set-state-in-effect` error in `src/hooks/use-color-scheme.web.ts:11`; this screen did not modify that file.
+- GitNexus change analysis reports three affected Buyer screen flows and medium aggregate risk, with no HIGH or CRITICAL finding.
 
-## Visual findings
+## Comparison history
 
-- No remaining P0, P1, or P2 defects.
-- Layout, 16 px gutters, 12 px section rhythm, card dimensions, 8 px radii, muted shadows, palette, type hierarchy, image crops, and fixed footer match the Stitch source closely after accounting for the requested top-gap removal.
-- [P3] SF Symbol equivalents used by `expo-symbols` have minor platform-specific optical differences from the Material Symbols in the Stitch HTML. Semantic names, sizes, color roles, and alignment are preserved.
-- [P3] The Stitch raster capture omits visible copy in two pale quota strips and its secondary CTA even though the generated Stitch HTML contains that copy and behavior. The implementation follows the inspected HTML and renders those elements rather than reproducing the capture defect.
-- [P3] Removing the source's 112 px top gap leaves more breathing room above the fixed footer at the tall 1806 px comparison viewport. On ordinary phone-height viewports, this becomes scrollable content rather than a persistent blank region.
+- Initial review found unequal CTA columns, an extra detail disclosure, an incorrect verified-filter exclusion, undersized touch targets, and unsafe modal keyboard behavior. These were corrected before final capture.
+- The first quotation screenshot was taken during the bottom sheet's slide animation. A settled-state capture confirmed the sheet is visible and usable.
+- The first buyer name initially truncated; its exact screen-local text sizing was tightened so the complete name and verification mark fit at `390 px`.
+- The Stitch screenshot contains extra vertical gaps where hosted Material Symbols failed to paint while their wrapping spans still occupied layout. The implementation uses the project's real Expo Symbols mappings, so those icons render and the cards are correspondingly denser; the generated Stitch HTML's intended spacing is preserved.
 
-## Scrolling, safe areas, and states
+## Remaining punch list
 
-- Top and bottom safe-area insets are applied once via `useSafeAreaInsets`.
-- The 64 px branded header stays outside the vertical `ScrollView`; the 64 px bottom navigation stays fixed above the bottom inset.
-- Scroll content reserves 148 px plus bottom inset so both CTAs clear the fixed navigation.
-- Notification, avatar, back, call, share, five footer destinations, commodity tabs, numeric input, modal close/cancel, and submit confirmation are implemented as native controls.
-- Invalid buyer, loading fonts, modal selected/unselected, input focus, pressed, and confirmation states are covered by code or runtime verification.
-
-## Automated-check note
-
-Full-project `npm run lint` still reports one pre-existing error in `src/hooks/use-color-scheme.web.ts` (`react-hooks/set-state-in-effect` at line 11). That file is unchanged and outside this screen's scope. Targeted lint for every changed TypeScript/TSX file passes.
-
-## Graph review
-
-GitNexus change detection reports high aggregate reach because the shared icon module participates in eight known app processes. Review confirmed that its implementation was not changed: seven additive key mappings were appended to `ICONS`. Typecheck, targeted lint, runtime render, navigation checks, and production export cover the affected surface. Buyer Detail itself remains a single-route, low-upstream-risk screen.
-
-## Visual punch list
-
-- Optional P3 only: compare platform-native SF Symbols on physical iOS hardware if exact glyph shape is release-critical.
-- Optional P3 only: revisit the five-item detail footer in a separate product-wide navigation task if it should converge with the four-tab top-level architecture.
+- [P3] The existing product navigation has four tabs (`Tổng quan`, `Thị trường`, `Đầu mối`, `Của tôi`) while Stitch depicts five differently grouped destinations. This is intentionally preserved because the existing Expo Router shell is the architectural source of truth.
+- No remaining P0, P1, or P2 visual defects.
 
 final result: passed
