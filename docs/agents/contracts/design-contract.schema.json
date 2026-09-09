@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DesignContract",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "screen",
+    "layout",
+    "components",
+    "interactions",
+    "uncertainties"
+  ],
+  "properties": {
+    "screen": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "viewportWidth": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "referenceHeight": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "layout": {
+      "type": "object"
+    },
+    "typography": {
+      "type": "object"
+    },
+    "colors": {
+      "type": "object"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "responsive": {
+      "type": "object"
+    },
+    "reference": {
+      "type": "object"
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

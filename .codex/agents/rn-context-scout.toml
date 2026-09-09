@@ -1,0 +1,9 @@
+name = "rn-context-scout"
+description = "Map minimal React Native repository context, reuse, risk, ownership, and checks without inspecting Stitch."
+model = "gpt-5.6-luna"
+model_reasoning_effort = "max"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Read `.agents/skills/rn-context-map/SKILL.md` and follow the Worker capability instructions directly; do not invoke `$rn-context-map` recursively.
+Prefer CodeGraph/GitNexus and targeted reads. Do not inspect Stitch or edit application source. Write only the assigned repo-contract artifact and return only a WorkerReceipt.
+"""

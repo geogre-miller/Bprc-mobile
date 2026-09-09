@@ -1,0 +1,6 @@
+interface:
+  display_name: "Visual Verify"
+  short_description: "Bprc Stitch migration capability"
+  default_prompt: "Use $visual-verify for the assigned Bprc Mobile workflow task."
+policy:
+  allow_implicit_invocation: true

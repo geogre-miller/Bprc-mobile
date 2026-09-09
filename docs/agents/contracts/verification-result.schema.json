@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerificationResult",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "status",
+    "functional",
+    "visual",
+    "deltas"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "pass",
+        "fail",
+        "blocked"
+      ]
+    },
+    "functional": {
+      "type": "object"
+    },
+    "visual": {
+      "type": "object"
+    },
+    "deltas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "severity",
+          "area",
+          "issue"
+        ],
+        "properties": {
+          "severity": {
+            "enum": [
+              "P0",
+              "P1",
+              "P2"
+            ]
+          },
+          "area": {
+            "type": "string"
+          },
+          "issue": {
+            "type": "string"
+          },
+          "expected": {},
+          "observed": {}
+        }
+      }
+    },
+    "baselineIssues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

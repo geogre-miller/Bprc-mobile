@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StitchMigrationRun",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "workflow",
+    "target",
+    "state",
+    "tasks",
+    "corrections"
+  ],
+  "properties": {
+    "workflow": {
+      "const": "stitch-ui"
+    },
+    "target": {
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "INIT",
+        "DISCOVER",
+        "READY",
+        "IMPLEMENT",
+        "CHECK",
+        "VISUAL_VERIFY",
+        "REPAIR",
+        "REPLAN",
+        "DONE",
+        "BLOCKED"
+      ]
+    },
+    "tasks": {
+      "type": "object"
+    },
+    "artifacts": {
+      "type": "object"
+    },
+    "corrections": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    }
+  }
+}
