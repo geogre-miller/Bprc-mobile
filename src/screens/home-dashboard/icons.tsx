@@ -67,6 +67,10 @@ const ICONS = {
   verified_user: { ios: 'checkmark.shield.fill', other: 'verified_user' },
   water_drop: { ios: 'drop.fill', other: 'water_drop' },
   send: { ios: 'paperplane.fill', other: 'send' },
+  workspace_premium: { ios: 'medal.fill', other: 'workspace_premium' },
+  local_florist: { ios: 'leaf.fill', other: 'local_florist' },
+  fact_check: { ios: 'checklist', other: 'fact_check' },
+  open_in_new: { ios: 'arrow.up.right', other: 'open_in_new' },
 } as const;
 
 export type IconName = keyof typeof ICONS;
