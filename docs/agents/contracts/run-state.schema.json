@@ -1,46 +1,111 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/run-state.schema.json",
   "title": "StitchMigrationRun",
   "type": "object",
-  "additionalProperties": true,
-  "required": [
-    "workflow",
-    "target",
-    "state",
-    "tasks",
-    "corrections"
-  ],
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactType", "workflow", "target", "state", "limits", "tasks", "freshness", "artifactIndex", "corrections", "metrics", "reasonCodes"],
   "properties": {
-    "workflow": {
-      "const": "stitch-ui"
-    },
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "RunState" },
+    "workflow": { "const": "stitch-ui-v2" },
     "target": {
-      "type": "string"
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "projectId", "screenId"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "projectId": { "type": "string", "minLength": 1 },
+        "screenId": { "type": "string", "minLength": 1 }
+      }
     },
-    "state": {
-      "enum": [
-        "INIT",
-        "DISCOVER",
-        "READY",
-        "IMPLEMENT",
-        "CHECK",
-        "VISUAL_VERIFY",
-        "REPAIR",
-        "REPLAN",
-        "DONE",
-        "BLOCKED"
-      ]
+    "state": { "enum": ["INIT", "PREFLIGHT", "DISCOVER", "READY", "IMPLEMENT", "CHECK", "VISUAL_VERIFY", "REPAIR", "REPLAN", "DONE", "BLOCKED"] },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxParallelWorkers", "maxDelegationDepth", "maxRepairLoops"],
+      "properties": {
+        "maxParallelWorkers": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "maxDelegationDepth": { "const": 1 },
+        "maxRepairLoops": { "const": 2 }
+      }
     },
     "tasks": {
-      "type": "object"
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "status", "dependencies", "depth", "attempts", "maxAttempts", "ownership", "workerInstanceHistory"],
+        "properties": {
+          "kind": { "enum": ["health", "design", "repository", "implementation", "check", "visual-verification"] },
+          "status": { "enum": ["pending", "running", "done", "skipped", "blocked", "failed"] },
+          "dependencies": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "worker": { "type": ["string", "null"] },
+          "activeWorkerInstance": { "type": ["string", "null"] },
+          "requiredWorkerInstance": { "type": ["string", "null"] },
+          "workerInstanceHistory": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "depth": { "type": "integer", "minimum": 0, "maximum": 1 },
+          "attempts": { "type": "integer", "minimum": 0 },
+          "maxAttempts": { "type": "integer", "minimum": 1 },
+          "ownership": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["exclusive", "shared"],
+            "properties": {
+              "exclusive": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+              "shared": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path", "mode"],
+                  "properties": {
+                    "path": { "type": "string" },
+                    "mode": { "const": "additive" }
+                  }
+                }
+              }
+            }
+          },
+          "receipt": { "type": ["string", "null"] },
+          "reasonCodes": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+        }
+      }
     },
-    "artifacts": {
-      "type": "object"
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["needsDesign", "needsRepo", "branch"],
+      "properties": {
+        "needsDesign": { "type": "boolean" },
+        "needsRepo": { "type": "boolean" },
+        "branch": { "enum": ["00", "01", "10", "11"] },
+        "designReason": { "type": ["string", "null"] },
+        "repoReason": { "type": ["string", "null"] }
+      }
     },
-    "corrections": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 2
-    }
+    "artifactIndex": { "type": "string", "minLength": 1 },
+    "corrections": { "type": "integer", "minimum": 0, "maximum": 2 },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["startedAt", "updatedAt", "wallTimeMs", "workerCount", "peakParallelism", "correctionLoops", "stitchFetches", "stitchCacheHits", "artifactCacheHits", "toolAvailability"],
+      "properties": {
+        "startedAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "completedAt": { "type": ["string", "null"] },
+        "wallTimeMs": { "type": "integer", "minimum": 0 },
+        "workerCount": { "type": "integer", "minimum": 0 },
+        "peakParallelism": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "correctionLoops": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "stitchFetches": { "type": "integer", "minimum": 0 },
+        "stitchCacheHits": { "type": "integer", "minimum": 0 },
+        "artifactCacheHits": { "type": "integer", "minimum": 0 },
+        "toolAvailability": { "type": "object" },
+        "rtkEstimatedTokensSaved": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "reasonCodes": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
   }
 }

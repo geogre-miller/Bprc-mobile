@@ -1,51 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/worker-receipt.schema.json",
   "title": "WorkerReceipt",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "taskId",
-    "status"
-  ],
+  "required": ["schemaVersion", "artifactType", "taskId", "status", "reasonCodes"],
   "properties": {
-    "taskId": {
-      "type": "string",
-      "minLength": 1
-    },
-    "status": {
-      "enum": [
-        "done",
-        "partial",
-        "blocked",
-        "failed"
-      ]
-    },
-    "artifact": {
-      "type": "string"
-    },
-    "risk": {
-      "enum": [
-        "low",
-        "medium",
-        "high",
-        "critical",
-        "unknown"
-      ]
-    },
-    "changedFiles": {
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "WorkerReceipt" },
+    "taskId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["done", "partial", "blocked", "failed"] },
+    "artifact": { "type": "string", "minLength": 1 },
+    "artifactIndex": { "type": "string", "minLength": 1 },
+    "risk": { "enum": ["low", "medium", "high", "critical", "unknown"] },
+    "reasonCodes": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
-        "type": "string"
+        "enum": ["DESIGN_UNCERTAINTY", "HIGH_RISK", "CRITICAL_RISK", "UNKNOWN_RISK", "WRITE_CONFLICT", "CHECK_FAILED", "VISUAL_MISMATCH", "MCP_UNAVAILABLE", "RTK_UNAVAILABLE", "BASELINE_FAILURE", "ARTIFACT_INVALID", "CAPABILITY_UNAVAILABLE", "RETRY_EXHAUSTED"]
       }
     },
-    "blockers": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "followup": {
-      "type": "string"
-    }
+    "changedFiles": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "followup": { "type": "string" }
   }
 }

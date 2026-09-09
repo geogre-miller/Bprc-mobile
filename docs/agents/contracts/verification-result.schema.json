@@ -1,61 +1,65 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bprc.local/agents/verification-result.schema.json",
   "title": "VerificationResult",
   "type": "object",
   "additionalProperties": true,
-  "required": [
-    "status",
-    "functional",
-    "visual",
-    "deltas"
-  ],
+  "required": ["schemaVersion", "artifactType", "status", "route", "reference", "viewport", "functional", "visual", "deltas", "reasonCodes"],
   "properties": {
-    "status": {
-      "enum": [
-        "pass",
-        "fail",
-        "blocked"
-      ]
+    "schemaVersion": { "const": 2 },
+    "artifactType": { "const": "VerificationResult" },
+    "generatedAt": { "type": "string" },
+    "status": { "enum": ["pass", "fail", "blocked"] },
+    "route": { "type": "string", "minLength": 1 },
+    "reference": { "type": "string", "minLength": 1 },
+    "actual": { "type": ["string", "null"] },
+    "comparison": { "type": ["string", "null"] },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "deviceScaleFactor": { "type": "number", "exclusiveMinimum": 0 }
+      }
     },
-    "functional": {
-      "type": "object"
-    },
-    "visual": {
-      "type": "object"
+    "functional": { "type": "object" },
+    "visual": { "type": "object" },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "enum": ["pass", "fail", "blocked", "skipped"] },
+          "evidence": { "type": ["string", "null"] }
+        }
+      }
     },
     "deltas": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "severity",
-          "area",
-          "issue"
-        ],
+        "additionalProperties": true,
+        "required": ["severity", "area", "issue"],
         "properties": {
-          "severity": {
-            "enum": [
-              "P0",
-              "P1",
-              "P2"
-            ]
-          },
-          "area": {
-            "type": "string"
-          },
-          "issue": {
-            "type": "string"
-          },
+          "severity": { "enum": ["P0", "P1", "P2"] },
+          "area": { "type": "string", "minLength": 1 },
+          "issue": { "type": "string", "minLength": 1 },
           "expected": {},
           "observed": {}
         }
       }
     },
-    "baselineIssues": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
+    "baselineIssues": { "type": "array", "items": { "type": "string" } },
+    "reasonCodes": { "type": "array", "uniqueItems": true, "items": { "enum": ["CHECK_FAILED", "VISUAL_MISMATCH", "MCP_UNAVAILABLE", "BASELINE_FAILURE", "ARTIFACT_INVALID", "CAPABILITY_UNAVAILABLE"] } }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "enum": ["pass", "fail"] } } },
+      "then": { "required": ["actual"], "properties": { "actual": { "type": "string", "minLength": 1 } } }
     }
-  }
+  ]
 }

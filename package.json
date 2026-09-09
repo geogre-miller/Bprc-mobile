@@ -31,8 +31,12 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "ajv": "^8.17.1",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~57.0.2",
+    "pixelmatch": "^7.1.0",
+    "playwright": "^1.61.0",
+    "pngjs": "^7.0.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -44,7 +48,14 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "agents:sync": "node ./scripts/agents/sync-skills.mjs",
-    "agents:check": "node ./scripts/agents/sync-skills.mjs --check && node ./scripts/agents/validate-workflow.mjs"
+    "agents:check": "node ./scripts/agents/sync-skills.mjs --check && node ./scripts/agents/validate-workflow.mjs",
+    "agents:test": "node --test ./scripts/agents/__tests__/*.test.mjs",
+    "agents:health": "node ./scripts/agents/agent-health.mjs",
+    "agents:validate-artifact": "node ./scripts/agents/validate-artifact.mjs",
+    "stitch:cache": "node ./scripts/stitch/cache.mjs",
+    "stitch:freshness": "node ./scripts/stitch/artifact-freshness.mjs",
+    "qa:capture": "node ./scripts/qa/capture-route.mjs",
+    "qa:diff": "node ./scripts/qa/visual-diff.mjs"
   },
   "private": true
 }
