@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RepoContract",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "screenOwner",
+    "reuse",
+    "writeScope",
+    "risk",
+    "checks"
+  ],
+  "properties": {
+    "route": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "screenOwner": {
+      "type": "string"
+    },
+    "architecture": {
+      "type": "object"
+    },
+    "layout": {
+      "type": "object"
+    },
+    "reuse": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "patterns": {
+      "type": "object"
+    },
+    "sharedEdits": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "writeScope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbiddenScope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risk": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical",
+        "unknown"
+      ]
+    },
+    "riskReason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
