@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "implementation",
+  "status": "done",
+  "artifact": "artifacts/stitch/inventory/implementation.json",
+  "artifactIndex": "artifacts/stitch/inventory/index.json",
+  "risk": "medium",
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ],
+  "changedFiles": [
+    "src/screens/inventory/index.tsx",
+    "artifacts/stitch/inventory/implementation.json",
+    "artifacts/stitch/inventory/implementation-receipt.json"
+  ],
+  "followup": "Parent worker should run a fresh visual verifier against /inventory at 390x1782 using the existing web session on port 8091; latestObservation dynamic pricing is documented as an accepted reference variation, and footer clipping is repaired."
+}

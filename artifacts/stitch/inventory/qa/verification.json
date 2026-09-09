@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "VerificationResult",
+  "generatedAt": "2026-09-09T08:34:00.000Z",
+  "status": "blocked",
+  "route": "/inventory",
+  "reference": ".stitch/inventory/reference.png",
+  "actual": "artifacts/stitch/inventory/qa/actual.png",
+  "comparison": "artifacts/stitch/inventory/qa/comparison.png",
+  "viewport": {
+    "width": 390,
+    "height": 1782,
+    "deviceScaleFactor": 2
+  },
+  "functional": {
+    "status": "unverified",
+    "routeLoaded": true,
+    "captureDiagnostics": {
+      "pageErrors": [],
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    "interactionProbe": "Bounded Playwright probes were unavailable or aborted before response states could be observed."
+  },
+  "visual": {
+    "status": "pass",
+    "method": "Semantic comparison of the fresh 390x1782 route capture against the cached reference and design contract; the pixel diff is advisory only.",
+    "advisoryDiff": "artifacts/stitch/inventory/qa/diff.json",
+    "advisoryDiffReference": "artifacts/stitch/inventory/qa/reference.png",
+    "advisoryMismatchRatio": 0.2792306673728814,
+    "pixelMetricUse": "Informational only; semantic deltas determine status.",
+    "observations": [
+      "Header, title metadata, valuation card, advisory banner, four inventory cards, footnote, and fixed bottom navigation are present at the requested mobile viewport.",
+      "All four inventory card footer actions, including the full Sửa số cân and Bán lô này controls, are visible inside their card bounds at 390px.",
+      "The current market observations differ from the static reference snapshot, which is accepted data variance."
+    ],
+    "financialConsistency": {
+      "status": "pass",
+      "observedCapital": "412,000,000 ₫",
+      "observedCurrentValue": "575,750,000 ₫",
+      "observedProfit": "+163,750,000 ₫",
+      "observedProfitPercent": "+39.7%",
+      "checks": [
+        "195,000,000 + 88,000,000 + 78,000,000 + 51,000,000 = 412,000,000 ₫",
+        "286,250,000 + 126,400,000 + 105,600,000 + 57,500,000 = 575,750,000 ₫",
+        "575,750,000 - 412,000,000 = 163,750,000 ₫",
+        "163,750,000 / 412,000,000 = 39.7%"
+      ],
+      "note": "Summary and card values are internally consistent using the current app market observations."
+    }
+  },
+  "interactions": [
+    {
+      "id": "record-sale",
+      "status": "blocked",
+      "evidence": "Probe could not complete before browser automation was aborted."
+    },
+    {
+      "id": "new-stock",
+      "status": "blocked",
+      "evidence": "Probe could not complete before browser automation was aborted."
+    },
+    {
+      "id": "filter",
+      "status": "blocked",
+      "evidence": "Bounded filter probe was unavailable or aborted before response could be observed."
+    },
+    {
+      "id": "inventory-edit",
+      "status": "blocked",
+      "evidence": "Probe was not run after the bounded automation blocker."
+    },
+    {
+      "id": "inventory-sell",
+      "status": "blocked",
+      "evidence": "Probe was not run after the bounded automation blocker."
+    },
+    {
+      "id": "bottom-navigation",
+      "status": "blocked",
+      "evidence": "Probe was not run after the bounded automation blocker."
+    }
+  ],
+  "deltas": [
+    {
+      "severity": "P2",
+      "area": "Interaction verification",
+      "issue": "The declared press responses could not be observed because the bounded browser interaction probe was unavailable or aborted.",
+      "expected": "Each declared control responds to a concise press probe.",
+      "observed": "Visual reachability is present, but response states remain unverified."
+    }
+  ],
+  "baselineIssues": [
+    "Full repository lint retains the existing src/hooks/use-color-scheme.web.ts react-hooks/set-state-in-effect failure; owned Inventory lint, typecheck, and Expo web export passed."
+  ],
+  "reasonCodes": [
+    "CAPABILITY_UNAVAILABLE",
+    "BASELINE_FAILURE"
+  ]
+}

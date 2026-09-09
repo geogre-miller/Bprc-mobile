@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ImplementationResult",
+  "generatedAt": "2026-09-09T08:21:10Z",
+  "status": "done",
+  "changedFiles": [
+    "src/screens/inventory/index.tsx"
+  ],
+  "checks": [
+    {
+      "command": "npx tsc --noEmit --pretty false",
+      "status": "pass",
+      "evidence": "Repair loop 1: exit code 0; full repository TypeScript check passed."
+    },
+    {
+      "command": "npx eslint src/screens/inventory/index.tsx",
+      "status": "pass",
+      "evidence": "Repair loop 1: exit code 0; owned screen lint passed."
+    },
+    {
+      "command": "npm run lint",
+      "status": "baseline-failure",
+      "evidence": "Existing failure only at src/hooks/use-color-scheme.web.ts:11 (react-hooks/set-state-in-effect); no Inventory source errors."
+    },
+    {
+      "command": "npx expo export --platform web --output-dir /private/tmp/bprc-inventory-web-export --no-bytecode",
+      "status": "pass",
+      "evidence": "Expo SDK 57 web export from the implementation pass completed with a static /inventory route."
+    },
+    {
+      "command": "node scripts/agents/ownership-gate.mjs --file artifacts/stitch/inventory/run.json",
+      "status": "pass",
+      "evidence": "Repair loop 1: ok=true; conflicts=[]"
+    }
+  ],
+  "deviations": [
+    "Prepared inventory thumbnail binaries use .bin extensions, which Metro does not treat as image assets; the four screen thumbnails are embedded as compact data URIs inside the owned screen file so no shared asset file or Metro configuration is changed.",
+    "The route adapter's native header is hidden with a route-scoped Stack.Screen option so the contract's custom fixed header can render while the adapter remains unchanged.",
+    "The repository contract requires current latestObservation prices. Fresh verification evidence at artifacts/stitch/inventory/qa/verification.json identified coffee 114,500 ₫/kg and pepper 158,000 ₫/kg versus the cached design snapshot; card values remain dynamic and the summary now derives from the same source to keep valuation internally consistent.",
+    "Footer action text and horizontal padding were tightened so Sửa số cân and Bán lô này remain fully visible within the card inset while retaining their specified press feedback.",
+    "Contract interactions with unspecified destinations provide press feedback and local acknowledgement; header and bottom navigation links use the existing Expo Router destinations."
+  ],
+  "blockers": [],
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ]
+}

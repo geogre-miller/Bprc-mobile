@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "visual-verification",
+  "status": "blocked",
+  "artifact": "artifacts/stitch/inventory/qa/verification.json",
+  "artifactIndex": "artifacts/stitch/inventory/index.json",
+  "risk": "medium",
+  "reasonCodes": [
+    "CAPABILITY_UNAVAILABLE",
+    "BASELINE_FAILURE"
+  ],
+  "changedFiles": [
+    "artifacts/stitch/inventory/qa/actual-390x1782.png",
+    "artifacts/stitch/inventory/qa/actual.png",
+    "artifacts/stitch/inventory/qa/reference.png",
+    "artifacts/stitch/inventory/qa/diff.png",
+    "artifacts/stitch/inventory/qa/comparison.png",
+    "artifacts/stitch/inventory/qa/capture.json",
+    "artifacts/stitch/inventory/qa/diff.json",
+    "artifacts/stitch/inventory/qa/verification.json",
+    "artifacts/stitch/inventory/qa/verification-receipt.json"
+  ],
+  "blockers": [
+    "Bounded browser interaction probes could not complete, so declared control response states remain unverified."
+  ],
+  "followup": "Repeat the declared interaction probes in an environment with a responsive browser automation capability."
+}

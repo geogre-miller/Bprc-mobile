@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "StitchSourceManifest",
+  "projectId": "16177202758777999982",
+  "screenId": "b67e452bee28487593486c1942288879",
+  "retrievedAt": "2026-09-09T07:31:22.598Z",
+  "sourceFingerprint": "1f3731d67ab66344afda675a81a0cd9297e02cf7817f900a4c83da10e42cc049",
+  "screenshot": {
+    "path": ".stitch/inventory/reference.png",
+    "sha256": "f0ac58845a56f6821da53a0ea0bea664aaec2448162dc14cca6f9e01fe3580c9",
+    "bytes": 25801,
+    "height": 512,
+    "width": 118
+  },
+  "html": {
+    "path": ".stitch/inventory/source.html",
+    "sha256": "3b2e78fa6b310d1b178072f66a2c6067f6620350f1093bf6a8090a1b31542de5",
+    "bytes": 26247
+  },
+  "assets": [
+    {
+      "path": ".stitch/inventory/assets/asset-01.bin",
+      "sha256": "fda427c3bc8e6fee2b05ac0ed769bb597f205292a66f78e505ff60f5ec134145",
+      "bytes": 31404
+    },
+    {
+      "path": ".stitch/inventory/assets/asset-02.bin",
+      "sha256": "f3e3b953a95247beea5b54fff4daba386b8aa81537a8926a8fd746662642e397",
+      "bytes": 103596
+    },
+    {
+      "path": ".stitch/inventory/assets/asset-03.bin",
+      "sha256": "d1eba00f4031fd63ad335adeb8558f3729ead4a12954c34767c21acd8abda1e4",
+      "bytes": 84537
+    },
+    {
+      "path": ".stitch/inventory/assets/asset-04.bin",
+      "sha256": "af353965aa896fc726f8fe6961d11969bedaee6d96063c62218f1d7a5b9f4760",
+      "bytes": 51359
+    },
+    {
+      "path": ".stitch/inventory/assets/asset-05.bin",
+      "sha256": "0b551b4142f706c4fb57de77417677b50dfc68a7634e47a27b34ab247bb6ce52",
+      "bytes": 65989
+    },
+    {
+      "path": ".stitch/inventory/assets/asset-06.bin",
+      "sha256": "079895964e12a8381113c24e12a59ed5479c77ae343d5686d697ecd4f902423b",
+      "bytes": 60973
+    }
+  ]
+}

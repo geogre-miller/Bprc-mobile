@@ -1,0 +1,694 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "DesignContract",
+  "sourceFingerprint": "1f3731d67ab66344afda675a81a0cd9297e02cf7817f900a4c83da10e42cc049",
+  "generatedAt": "2026-09-09T07:33:53Z",
+  "project": {
+    "id": "16177202758777999982",
+    "title": "NôngSản Pro"
+  },
+  "screen": {
+    "slug": "inventory",
+    "id": "b67e452bee28487593486c1942288879",
+    "name": "Inventory",
+    "title": "Inventory",
+    "locale": "vi",
+    "deviceType": "MOBILE",
+    "viewportWidth": 390,
+    "referenceHeight": 1782,
+    "sourceBitmap": {
+      "width": 780,
+      "height": 3564
+    },
+    "logicalReference": {
+      "width": 390,
+      "height": 1782,
+      "deviceScaleFactor": 2
+    }
+  },
+  "layout": {
+    "canvas": {
+      "background": "#f6fbf5",
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "centeredOnWideSurfaces": true,
+      "verticalScroll": true
+    },
+    "safeArea": {
+      "headerTopPadding": "env(safe-area-inset-top, 0px)",
+      "bottomNavigationPadding": "env(safe-area-inset-bottom, 0px)"
+    },
+    "header": {
+      "position": "fixed",
+      "top": 0,
+      "height": 64,
+      "horizontalPadding": 16,
+      "zIndex": 50,
+      "surface": "#f6fbf5",
+      "surfaceAlpha": 0.85,
+      "backdropBlur": "xl",
+      "shadow": "0 1px 8px rgba(0,0,0,0.04)",
+      "brandLogo": {
+        "asset": ".stitch/inventory/assets/asset-01.bin",
+        "height": 32,
+        "width": "auto",
+        "objectFit": "contain"
+      },
+      "brand": "NôngSản Pro",
+      "region": "Tây Nguyên • Đắk Lắk",
+      "locationIcon": "location_on",
+      "locationIconSize": 14,
+      "notificationTarget": {
+        "size": 44,
+        "radius": 8,
+        "surface": "#f0f5f0",
+        "icon": "notifications",
+        "iconSize": 22,
+        "badgeSize": 8,
+        "badgeColor": "#ba1a1a"
+      },
+      "profile": {
+        "asset": ".stitch/inventory/assets/asset-02.bin",
+        "size": 32,
+        "radius": 16,
+        "objectFit": "cover"
+      },
+      "actionGap": 8
+    },
+    "main": {
+      "horizontalPadding": 16,
+      "paddingTop": 24,
+      "paddingBottom": 112,
+      "stackGap": 16,
+      "surface": "#f6fbf5"
+    },
+    "titleMeta": {
+      "horizontalPadding": 4,
+      "titleStatusGap": 4,
+      "title": "Kho Nông Sản Của Tôi",
+      "count": "4 mặt hàng",
+      "countDot": {
+        "size": 6,
+        "color": "#2c694e"
+      },
+      "countBadge": {
+        "horizontalPadding": 8,
+        "verticalPadding": 2,
+        "radius": 12,
+        "surface": "#aeeecb",
+        "text": "#316e52"
+      },
+      "timestamp": "Ước tính theo giá thị trường hôm nay lúc 08:30",
+      "timestampIcon": "schedule",
+      "timestampIconSize": 15
+    },
+    "valuationCard": {
+      "surface": "#ffffff",
+      "radius": 8,
+      "padding": 16,
+      "verticalGap": 12,
+      "overflow": "hidden",
+      "shadow": "shadow-sm",
+      "decorativeCircle": {
+        "position": "top-right",
+        "size": 128,
+        "color": "#012d1d",
+        "alpha": 0.05,
+        "blur": "2xl"
+      },
+      "heading": "Tổng giá trị định giá kho",
+      "headingIcon": "account_balance_wallet",
+      "headingIconSize": 20,
+      "total": "486,500,000 ₫",
+      "profitLabel": "Lợi nhuận tạm tính",
+      "profit": "+68,400,000 ₫",
+      "profitChange": "+16.4%",
+      "profitChangeIcon": "trending_up",
+      "metricPanel": {
+        "surface": "#f0f5f0",
+        "radius": 4,
+        "padding": 12
+      },
+      "quickActions": {
+        "columns": 2,
+        "gap": 8,
+        "height": 48,
+        "radius": 4,
+        "actions": [
+          {
+            "id": "record-sale",
+            "label": "Ghi nhận bán",
+            "icon": "point_of_sale",
+            "surface": "#1b4332",
+            "text": "#ffffff"
+          },
+          {
+            "id": "new-stock",
+            "label": "Nhập kho mới",
+            "icon": "add_box",
+            "surface": "#e5e9e4",
+            "text": "#012d1d",
+            "iconColor": "#2c694e"
+          }
+        ],
+        "pressScale": 0.98
+      }
+    },
+    "storageAdvisory": {
+      "surface": "#f0f5f0",
+      "radius": 4,
+      "padding": 12,
+      "gap": 8,
+      "iconWell": {
+        "size": 32,
+        "padding": 6,
+        "radius": 4,
+        "surface": "#aeeecb",
+        "icon": "nest_eco_leaf",
+        "iconSize": 18,
+        "iconColor": "#316e52"
+      },
+      "title": "Khuyến nghị kỹ thuật kho",
+      "body": "Độ ẩm kho cà phê hiện tại 13.2% — Đạt chuẩn lưu trữ hạt xô an toàn, không sinh nấm mốc.",
+      "emphasis": "13.2%"
+    },
+    "inventorySectionHeader": {
+      "topPadding": 8,
+      "horizontalPadding": 4,
+      "title": "Danh mục hàng hóa đang giữ",
+      "filter": {
+        "label": "Bộ lọc",
+        "icon": "tune",
+        "iconSize": 14
+      }
+    },
+    "inventoryList": {
+      "gap": 12,
+      "card": {
+        "surface": "#ffffff",
+        "radius": 8,
+        "padding": 16,
+        "verticalGap": 12,
+        "shadow": "shadow-sm",
+        "thumbnail": {
+          "size": 48,
+          "radius": 4,
+          "objectFit": "cover"
+        },
+        "topRow": {
+          "alignment": "start",
+          "horizontalJustification": "space-between",
+          "thumbnailTextGap": 12
+        },
+        "metadata": {
+          "gap": 6,
+          "topMargin": 2,
+          "chipHorizontalPadding": 6,
+          "chipVerticalPadding": 2,
+          "chipRadius": 2,
+          "separator": "•"
+        },
+        "quantity": {
+          "alignment": "right",
+          "label": "Khối lượng cân",
+          "valueStyle": "numeric-lg"
+        },
+        "financialStrip": {
+          "surface": "#f0f5f0",
+          "radius": 4,
+          "padding": 12,
+          "columns": 2,
+          "gap": 8,
+          "marketColumnAlignment": "right"
+        },
+        "pnl": {
+          "topPadding": 4,
+          "surface": "#aeeecb",
+          "text": "#316e52",
+          "horizontalPadding": 8,
+          "verticalPadding": 4,
+          "gap": 6,
+          "radius": 6,
+          "icon": "trending_up",
+          "iconSize": 16
+        },
+        "actions": {
+          "gap": 12,
+          "edit": {
+            "label": "Sửa số cân",
+            "horizontalPadding": 8,
+            "verticalPadding": 6
+          },
+          "sell": {
+            "label": "Bán lô này",
+            "surface": "#012d1d",
+            "text": "#ffffff",
+            "radius": 4,
+            "horizontalPadding": 12,
+            "verticalPadding": 6
+          }
+        }
+      },
+      "items": [
+        {
+          "id": "robusta",
+          "name": "Cà phê Robusta",
+          "asset": ".stitch/inventory/assets/asset-03.bin",
+          "chip": "Niên vụ 2023 - 2024",
+          "detail": "Nhân xô",
+          "quantity": "2,500 kg",
+          "costLabel": "Giá vốn nhập/sản xuất",
+          "cost": "78,000 ₫/kg",
+          "capital": "Vốn: 195.000.000 ₫",
+          "marketLabel": "Giá thị trường hôm nay",
+          "market": "118,500 ₫/kg",
+          "change": "▲ 2.8%",
+          "changeDirection": "up",
+          "current": "Hiện tại: 296.250.000 ₫",
+          "pnl": "+101,250,000 ₫",
+          "pnlPercent": "(+51.9%)"
+        },
+        {
+          "id": "black-pepper",
+          "name": "Tiêu đen khô",
+          "asset": ".stitch/inventory/assets/asset-04.bin",
+          "chip": "Chư Sê",
+          "detail": "16 bao 50kg",
+          "quantity": "800 kg",
+          "costLabel": "Giá vốn đầu tư",
+          "cost": "110,000 ₫/kg",
+          "capital": "Vốn: 88.000.000 ₫",
+          "marketLabel": "Giá thị trường hôm nay",
+          "market": "148,000 ₫/kg",
+          "change": "▲ 1.4%",
+          "changeDirection": "up",
+          "current": "Hiện tại: 118.400.000 ₫",
+          "pnl": "+30,400,000 ₫",
+          "pnlPercent": "(+34.5%)"
+        },
+        {
+          "id": "durian-ri6",
+          "name": "Sầu riêng Ri6",
+          "asset": ".stitch/inventory/assets/asset-05.bin",
+          "chip": "Thu hoạch đợt 2",
+          "chipSurface": "#ffdcc3",
+          "chipText": "#2f1500",
+          "detail": "Cơm vàng hạt lép",
+          "quantity": "1,200 kg",
+          "costLabel": "Giá vốn sản xuất",
+          "cost": "65,000 ₫/kg",
+          "capital": "Vốn: 78.000.000 ₫",
+          "marketLabel": "Giá thị trường hôm nay",
+          "market": "88,000 ₫/kg",
+          "change": "▼ 2.2%",
+          "changeDirection": "down",
+          "changeColor": "#ba1a1a",
+          "current": "Hiện tại: 105.600.000 ₫",
+          "pnl": "+27,600,000 ₫",
+          "pnlPercent": "(+35.4%)"
+        },
+        {
+          "id": "rice-st25",
+          "name": "Lúa khô ST25",
+          "asset": ".stitch/inventory/assets/asset-06.bin",
+          "chip": "Đang giữ giá",
+          "detail": "Lưu kho an toàn",
+          "quantity": "5,000 kg",
+          "costLabel": "Giá vốn thu mua",
+          "cost": "10,200 ₫/kg",
+          "capital": "Vốn: 51.000.000 ₫",
+          "marketLabel": "Giá thị trường hôm nay",
+          "market": "11,500 ₫/kg",
+          "change": "▬ 0.0%",
+          "changeDirection": "flat",
+          "changeColor": "#717973",
+          "current": "Hiện tại: 57.500.000 ₫",
+          "pnl": "+6,500,000 ₫",
+          "pnlPercent": "(+12.7%)"
+        }
+      ]
+    },
+    "footnote": "Định giá cập nhật tự động từ sàn giao dịch nông sản Tây Nguyên."
+  },
+  "typography": {
+    "families": {
+      "headline": "Manrope",
+      "body": "Public Sans",
+      "icons": "Material Symbols Outlined"
+    },
+    "styles": {
+      "headline-lg": {
+        "family": "Manrope",
+        "size": 22,
+        "lineHeight": 28,
+        "letterSpacing": "-0.01em",
+        "weight": 600
+      },
+      "title-md": {
+        "family": "Public Sans",
+        "size": 16,
+        "lineHeight": 22,
+        "letterSpacing": "0em",
+        "weight": 600
+      },
+      "numeric-hero": {
+        "family": "Public Sans",
+        "size": 28,
+        "lineHeight": 36,
+        "letterSpacing": "-0.02em",
+        "weight": 700
+      },
+      "numeric-lg": {
+        "family": "Public Sans",
+        "size": 18,
+        "lineHeight": 24,
+        "letterSpacing": "-0.01em",
+        "weight": 600
+      },
+      "numeric-md": {
+        "family": "Public Sans",
+        "size": 14,
+        "lineHeight": 20,
+        "letterSpacing": "0em",
+        "weight": 600
+      },
+      "label-md": {
+        "family": "Public Sans",
+        "size": 13,
+        "lineHeight": 18,
+        "letterSpacing": "0.01em",
+        "weight": 500
+      },
+      "label-sm": {
+        "family": "Public Sans",
+        "size": 11,
+        "lineHeight": 14,
+        "letterSpacing": "0.04em",
+        "weight": 600
+      },
+      "body-sm": {
+        "family": "Public Sans",
+        "size": 12,
+        "lineHeight": 16,
+        "letterSpacing": "0.01em",
+        "weight": 400
+      },
+      "body-md": {
+        "family": "Public Sans",
+        "size": 14,
+        "lineHeight": 20,
+        "letterSpacing": "0em",
+        "weight": 400
+      },
+      "body-lg": {
+        "family": "Public Sans",
+        "size": 16,
+        "lineHeight": 24,
+        "letterSpacing": "0em",
+        "weight": 400
+      }
+    }
+  },
+  "colors": {
+    "surface": "#f6fbf5",
+    "surfaceContainerLowest": "#ffffff",
+    "surfaceContainerLow": "#f0f5f0",
+    "surfaceContainer": "#ebefea",
+    "surfaceContainerHigh": "#e5e9e4",
+    "onSurface": "#181d1a",
+    "onSurfaceVariant": "#414844",
+    "outline": "#717973",
+    "primary": "#012d1d",
+    "primaryContainer": "#1b4332",
+    "secondary": "#2c694e",
+    "secondaryContainer": "#aeeecb",
+    "onSecondaryContainer": "#316e52",
+    "tertiaryFixed": "#ffdcc3",
+    "onTertiaryFixed": "#2f1500",
+    "error": "#ba1a1a",
+    "onPrimary": "#ffffff",
+    "onSecondary": "#ffffff",
+    "surfaceTint": "#3f6653",
+    "activeNavigation": "#1b4332"
+  },
+  "assets": [
+    {
+      "id": "brand-logo",
+      "path": ".stitch/inventory/assets/asset-01.bin",
+      "role": "header logo",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "display": "32px high, intrinsic width"
+    },
+    {
+      "id": "profile",
+      "path": ".stitch/inventory/assets/asset-02.bin",
+      "role": "header profile avatar",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "display": "32px square, circular crop"
+    },
+    {
+      "id": "coffee-robusta",
+      "path": ".stitch/inventory/assets/asset-03.bin",
+      "role": "Cà phê Robusta thumbnail",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 279
+      },
+      "display": "48px square, rounded crop"
+    },
+    {
+      "id": "black-pepper",
+      "path": ".stitch/inventory/assets/asset-04.bin",
+      "role": "Tiêu đen khô thumbnail",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 279
+      },
+      "display": "48px square, rounded crop"
+    },
+    {
+      "id": "durian-ri6",
+      "path": ".stitch/inventory/assets/asset-05.bin",
+      "role": "Sầu riêng Ri6 thumbnail",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 279
+      },
+      "display": "48px square, rounded crop"
+    },
+    {
+      "id": "rice-st25",
+      "path": ".stitch/inventory/assets/asset-06.bin",
+      "role": "Lúa khô ST25 thumbnail",
+      "mimeType": "image/jpeg",
+      "sourceDimensions": {
+        "width": 512,
+        "height": 279
+      },
+      "display": "48px square, rounded crop"
+    }
+  ],
+  "components": [
+    {
+      "id": "inventory-header",
+      "type": "fixed-header",
+      "content": {
+        "brand": "NôngSản Pro",
+        "region": "Tây Nguyên • Đắk Lắk",
+        "notificationLabel": "Thông báo"
+      }
+    },
+    {
+      "id": "inventory-title",
+      "type": "section-title",
+      "content": {
+        "title": "Kho Nông Sản Của Tôi",
+        "status": "4 mặt hàng",
+        "timestamp": "Ước tính theo giá thị trường hôm nay lúc 08:30"
+      }
+    },
+    {
+      "id": "valuation-summary",
+      "type": "valuation-card",
+      "content": {
+        "total": "486,500,000 ₫",
+        "profit": "+68,400,000 ₫",
+        "profitChange": "+16.4%"
+      }
+    },
+    {
+      "id": "storage-advisory",
+      "type": "advisory-banner",
+      "content": {
+        "title": "Khuyến nghị kỹ thuật kho",
+        "body": "Độ ẩm kho cà phê hiện tại 13.2% — Đạt chuẩn lưu trữ hạt xô an toàn, không sinh nấm mốc."
+      }
+    },
+    {
+      "id": "inventory-ledger",
+      "type": "inventory-card-list",
+      "content": {
+        "title": "Danh mục hàng hóa đang giữ",
+        "count": 4,
+        "filterLabel": "Bộ lọc"
+      }
+    },
+    {
+      "id": "inventory-footnote",
+      "type": "footnote",
+      "content": "Định giá cập nhật tự động từ sàn giao dịch nông sản Tây Nguyên."
+    },
+    {
+      "id": "bottom-navigation",
+      "type": "fixed-bottom-navigation",
+      "activePath": "kho-&-loi-nhuan",
+      "items": [
+        {
+          "path": "trang-chu",
+          "label": "Trang chủ",
+          "icon": "home"
+        },
+        {
+          "path": "thi-truong",
+          "label": "Thị trường",
+          "icon": "trending_up"
+        },
+        {
+          "path": "giao-dich",
+          "label": "Giao dịch",
+          "icon": "receipt_long"
+        },
+        {
+          "path": "kho-&-loi-nhuan",
+          "label": "Kho & Lãi",
+          "icon": "inventory_2"
+        },
+        {
+          "path": "ca-nhan",
+          "label": "Cá nhân",
+          "icon": "person"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "id": "notification",
+      "action": "Tap the header notification button labeled Thông báo",
+      "expectedState": "Notification affordance receives the press; destination behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "record-sale",
+      "action": "Tap Ghi nhận bán",
+      "expectedState": "Primary quick-action button receives press feedback with scale 0.98; destination behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "new-stock",
+      "action": "Tap Nhập kho mới",
+      "expectedState": "Secondary quick-action button receives press feedback with scale 0.98; destination behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "filter",
+      "action": "Tap Bộ lọc and tune icon",
+      "expectedState": "Filter control receives the press; filter surface behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "inventory-edit",
+      "action": "Tap Sửa số cân on an inventory card",
+      "expectedState": "Edit control receives the press; edit surface behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "inventory-sell",
+      "action": "Tap Bán lô này on an inventory card",
+      "expectedState": "Sell control receives the press; sale flow behavior is not encoded in the Stitch source"
+    },
+    {
+      "id": "bottom-navigation",
+      "action": "Tap one of the five bottom navigation items",
+      "expectedState": "Selected destination uses its data-path; source href values are placeholders (#)"
+    }
+  ],
+  "reference": {
+    "screenshotPath": ".stitch/inventory/reference.png",
+    "htmlPath": ".stitch/inventory/source.html",
+    "manifestPath": ".stitch/inventory/manifest.json",
+    "normalizedScreenshot": {
+      "width": 118,
+      "height": 512,
+      "sha256": "f0ac58845a56f6821da53a0ea0bea664aaec2448162dc14cca6f9e01fe3580c9"
+    },
+    "sourceScreenMetadata": {
+      "width": 780,
+      "height": 3564,
+      "deviceType": "MOBILE",
+      "title": "Inventory"
+    },
+    "htmlViewportFacts": {
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "logicalReferenceWidth": 390,
+      "logicalReferenceHeight": 1782,
+      "deviceScaleFactor": 2
+    }
+  },
+  "responsive": {
+    "centeredShellMaxWidth": 430,
+    "mobileHorizontalPadding": 16,
+    "widerSurfaceBehavior": "center the mobile shell without stretching card internals",
+    "fixedChrome": ["header", "bottom-navigation"],
+    "safeAreaAware": true
+  },
+  "verificationHints": {
+    "route": null,
+    "referenceViewport": {
+      "width": 390,
+      "height": 1782,
+      "deviceScaleFactor": 2
+    },
+    "interactions": [
+      {
+        "id": "record-sale",
+        "action": "Tap Ghi nhận bán",
+        "expectedState": "Primary quick-action press feedback is visible"
+      },
+      {
+        "id": "new-stock",
+        "action": "Tap Nhập kho mới",
+        "expectedState": "Secondary quick-action press feedback is visible"
+      },
+      {
+        "id": "filter",
+        "action": "Tap Bộ lọc",
+        "expectedState": "Filter control is reachable and responds"
+      },
+      {
+        "id": "inventory-edit",
+        "action": "Tap Sửa số cân on a card",
+        "expectedState": "Edit control is reachable and responds"
+      },
+      {
+        "id": "inventory-sell",
+        "action": "Tap Bán lô này on a card",
+        "expectedState": "Sell control is reachable and responds"
+      },
+      {
+        "id": "bottom-navigation",
+        "action": "Tap Kho & Lãi in bottom navigation",
+        "expectedState": "Kho & Lãi is the active navigation item"
+      }
+    ],
+    "keyTestIds": []
+  },
+  "uncertainties": []
+}
