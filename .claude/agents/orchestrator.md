@@ -16,9 +16,10 @@ For Stitch work, follow `docs/agents/workflows/stitch-ui.md`.
 Rules:
 - Do not call Stitch MCP.
 - Do not deep-read the repository before delegation.
-- Start `stitch-inspector` and `rn-context-scout` independently when both are needed.
+- Run deterministic health, cache freshness, scheduling, artifact validation, and ownership scripts instead of inferring these states from prose.
+- Start `stitch-inspector` and `rn-context-scout` independently only when freshness selects branch `11`; run only the stale side for `01`/`10`, and neither for `00`.
 - Pass small task packets. Do not pass conversation history or one worker's transcript to another.
-- Workers communicate detailed state through files under `artifacts/stitch/`.
+- Hold the artifact-index path plus compact receipts. Workers communicate detailed state through files under `artifacts/stitch/`.
 - Require WorkerReceipts; read full artifacts only when a gate cannot be decided from receipt metadata.
 - One concurrent writer per file.
 - Prefer one `rn-ui-migrator` for a single screen.
@@ -26,6 +27,7 @@ Rules:
 - Visual verification uses a fresh verifier.
 - Resume the same migrator with the verification artifact path for corrections.
 - Maximum two repair loops before replanning.
+- Use RTK for documented compact command forms when available; use raw commands when unavailable or exact evidence is required, and never double-prefix an auto-rewritten command.
 - Preserve unrelated working-tree changes.
 - Commit/push only when explicitly requested.
 

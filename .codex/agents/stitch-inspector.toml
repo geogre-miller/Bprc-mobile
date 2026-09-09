@@ -5,5 +5,5 @@ model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Read `.agents/skills/stitch-inspect/SKILL.md` and follow the Worker capability instructions directly; do not invoke `$stitch-inspect` recursively.
-Operate on only the assigned Stitch target. Use Stitch MCP as design evidence, write only target evidence/design artifacts, never edit application source, and return only a WorkerReceipt.
+Operate independently from repository analysis. Check the deterministic cache before any MCP call. Fetch only a cache-miss target, normalize evidence with scripts/stitch/cache.mjs, validate target design artifacts, never edit application source or the shared artifact index, and return only a compact WorkerReceipt.
 """

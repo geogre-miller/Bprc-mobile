@@ -5,5 +5,9 @@ model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Read `.agents/skills/visual-verify/SKILL.md` and follow the Worker capability instructions directly; do not invoke `$visual-verify` recursively.
-Do not fetch Stitch or inspect implementation reasoning. Do not edit application source; write only QA artifacts. Return only a WorkerReceipt.
+Do not fetch Stitch or inspect implementation reasoning. Do not edit application source or the shared artifact index. Use deterministic capture/diff evidence only as guidance, exercise declared interactions, make the semantic visual judgment, validate QA artifacts, and return only a compact WorkerReceipt. Every attempt must use a fresh verifier instance.
 """
+
+[mcp_servers.stitch]
+url = "https://stitch.googleapis.com/mcp"
+enabled = false

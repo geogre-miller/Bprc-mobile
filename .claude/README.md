@@ -4,15 +4,17 @@ Setup guide for this repository's Claude Code workflow. The core workflow runs a
 
 ## What this workflow is
 
-An orchestrator/worker split. An Opus orchestrator interprets the task, gathers facts, writes a task packet, and delegates bounded implementation to a Sonnet worker, keeping verbose output out of the expensive context.
+V2 is a provider-neutral artifact workflow. A low-effort Opus control plane schedules bounded high-effort Sonnet workers, while deterministic scripts own health checks, caching, fingerprints, artifact validation, ownership conflicts, retries, and visual evidence generation.
 
 | Agent | Model | Role |
 | --- | --- | --- |
-| `orchestrator` | opus | Task interpretation, architecture, risk, acceptance criteria, delegation |
-| `rn-implementer` | sonnet | Implements one packet, returns a fixed status block |
-| `rn-verifier` | sonnet | Read-only verification, screenshots, diff review |
+| `orchestrator` | Claude Opus 5, low | Thin control plane and scheduler integration |
+| `stitch-inspector` | Claude Sonnet 5, high | Cache-first design evidence and DesignContract |
+| `rn-context-scout` | Claude Sonnet 5, high | Repository contract, ownership, risk, and freshness dependencies |
+| `rn-ui-migrator` | Claude Sonnet 5, high | Single-writer screen implementation without Stitch access |
+| `visual-verifier` | Claude Sonnet 5, high | Fresh semantic verification using deterministic capture/diff evidence |
 
-Three project skills carry the per-role playbooks: `stitch-screen-spec` (design to packet), `rn-ui-implementation` (implementation order), `verify-change` (verification gate). Two path-scoped rule files in `rules/` load only when matching files are touched.
+The commands are `/stitch-ui`, `/stitch-inspect`, `/rn-context-map`, `/rn-ui-migrate`, `/visual-verify`, and `/agent-health`. Canonical skills live in `.claude/skills`; `npm run agents:sync` generates the matching Codex skills.
 
 `CLAUDE.md` intentionally does not import `AGENTS.md`: that file is maintained by GitNexus and includes a generated instruction block. The applicable Expo-version and impact-analysis policies are summarized once in `CLAUDE.md` to avoid contradictory always-on instructions.
 
@@ -60,9 +62,9 @@ These live in your user configuration, not in the repository, because two of the
 | `codegraph` | stdio | `codegraph serve --mcp` | all three agents |
 | `gitnexus` | stdio | `npx gitnexus mcp` | orchestrator, implementer, verifier |
 | `expo` | http | `https://mcp.expo.dev/mcp` | implementer, for SDK 57 API facts |
-| `stitch` | http | `https://stitch.googleapis.com/mcp` with your own `X-Goog-Api-Key` header | orchestrator, for design work only |
+| `stitch` | http | `https://stitch.googleapis.com/mcp` with your own `X-Goog-Api-Key` header | Stitch inspector only |
 
-Confirm with `/mcp` inside Claude Code. A server that fails to connect disables the workflow step that depends on it; it does not silently degrade.
+Confirm with `/mcp` inside Claude Code. Required Stitch access blocks honestly when no valid cache exists. Optional CodeGraph/GitNexus capabilities use the documented targeted-source fallback and record unresolved risk instead of silently degrading.
 
 ## 4. Enable the plugins
 
@@ -74,7 +76,7 @@ Confirm with `/mcp` inside Claude Code. A server that fails to connect disables 
 rtk init -g
 ```
 
-This installs a global `PreToolUse` hook that rewrites plain commands to their `rtk` equivalents, so `npm run typecheck` runs as `rtk npm run typecheck` and `cat file` as `rtk read file`. Check it took effect with `rtk gain`. Without it, agents run narrow raw commands. The repository deliberately does not ship this hook, to avoid double-processing on machines that already have it globally.
+This may install a global `PreToolUse` rewrite hook. Agents use only command forms supported by the installed RTK version and must never add a second prefix when the hook already rewrites commands. They do not blindly wrap arbitrary commands or run raw output after every compact command. Without RTK, the workflow uses the equivalent raw commands. Check aggregate savings with `rtk gain` when available.
 
 ## 6. Verify the setup
 
@@ -90,19 +92,17 @@ npm run lint
 claude --agent orchestrator
 ```
 
-For Stitch work, name the exact project, screen, target route, and intended platform in the request. The orchestrator fetches one screen, produces a packet, delegates, and calls the verifier only when risk or uncertainty warrants it.
-
-Every delegation uses the packet template in `references/task-packet.md`. The design blocks are filled only for design work. Work spanning several screens or a migration starts from a concise ordered plan, with one packet per independently verifiable step.
+For Stitch work, name the exact project, screen, target route, and intended platform, then use `/stitch-ui <target>`. The orchestrator runs cache/freshness gates and delegates only stale discovery. The workflow always runs a fresh verifier after deterministic checks; it does not make visual verification conditional on risk. Detailed state lives in `artifacts/stitch/<screen>/index.json` and versioned contracts, not task transcripts.
 
 ## How the tools divide up
 
 Three tools, three different questions. Mixing them up is the main way this workflow gets expensive:
 
 - **CodeGraph** answers *what is this code and what does it say*. When its index is available, `codegraph_explore` returns source plus call paths in one call. Otherwise agents use targeted file reads rather than blocking the task.
-- **GitNexus** answers *what breaks*. `impact({direction: "upstream", summaryOnly: true})` gives a ranked risk verdict with affected execution flows before editing a shared symbol; `detect_changes({scope: "all"})` reviews a diff before committing. Do not use its `query` or `context` for reading code, as they cost more round trips and return no source.
+- **GitNexus** answers *what breaks*. `impact({direction: "upstream", summaryOnly: true})` gives a ranked risk verdict with affected execution flows before editing a shared symbol; `detect_changes({scope: "all"})` reviews a diff before committing. Follow repository GitNexus instructions for concept and named-symbol queries.
 - **rtk** shrinks command output when installed. It is a quieter command runner, never a substitute for graph analysis.
 
-The orchestrator records the GitNexus verdict in the packet's `RISK` field so the worker inherits the judgment instead of re-deriving it.
+The repository scout records the GitNexus verdict in the RepoContract so the migrator inherits the judgment instead of re-deriving it.
 
 ## Git guardrail
 

@@ -14,4 +14,4 @@ mcpServers:
 
 Execute the delegated `visual-verify` task.
 
-Do not fetch Stitch. Do not edit application source. You may write only verification artifacts/screenshots under `artifacts/stitch/<screen>/qa/`. Return a WorkerReceipt with pass/fail/blocked status and the verification artifact path.
+Do not fetch Stitch. Do not edit application source or the shared artifact index. Use deterministic capture/diff helpers as advisory evidence, then make an independent semantic visual judgment. Exercise declared interaction hints. You may write only verification artifacts/screenshots under `artifacts/stitch/<screen>/qa/`. Validate them and return a compact WorkerReceipt. Every verification attempt must use a newly spawned verifier instance.

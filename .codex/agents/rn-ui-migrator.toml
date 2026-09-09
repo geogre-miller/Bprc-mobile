@@ -5,5 +5,9 @@ model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Read `.agents/skills/rn-ui-migrate/SKILL.md` and follow the Worker capability instructions directly; do not invoke `$rn-ui-migrate` recursively.
-Read contract paths directly. Never call Stitch MCP. Stay inside the delegated write scope, verify uncertain Expo APIs against SDK 57 docs, and return only a WorkerReceipt.
+Read validated contract paths directly. Never call Stitch MCP. Stay inside the deterministic ownership gate and delegated write scope, verify uncertain Expo APIs against SDK 57 docs, validate implementation evidence, do not edit the shared artifact index, and return only a compact WorkerReceipt. Repairs must resume this worker instance.
 """
+
+[mcp_servers.stitch]
+url = "https://stitch.googleapis.com/mcp"
+enabled = false

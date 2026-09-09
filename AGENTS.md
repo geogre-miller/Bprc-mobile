@@ -16,3 +16,7 @@ Codex runtime policy:
 - detailed worker state moves through artifacts/receipts, not conversation transcripts
 - parallelize independent discovery; keep a single writer per file
 - verify Expo SDK 57 APIs against exact versioned docs when uncertain
+
+Available workflow skills remain aligned with Claude: `$stitch-ui`, `$stitch-inspect`, `$rn-context-map`, `$rn-ui-migrate`, `$visual-verify`, and `$agent-health`.
+
+RTK policy: prefer documented RTK forms for supported Git, file inspection/search, diffs, and test runners when available. Do not prepend RTK to arbitrary commands, do not run RTK plus raw output by default, and do not double-prefix an auto-rewritten command. Fall back to raw commands when RTK is absent or exact evidence is required. RTK does not replace CodeGraph or GitNexus. Codex RTK integration is independent from Claude's hook and may be installed with `rtk init -g --codex` when supported by the installed version.
