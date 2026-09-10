@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { BottomTabInset, Colors, Radius, Spacing } from '@/constants/theme';
+import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon } from '@/screens/home-dashboard/icons';
 
@@ -21,20 +21,7 @@ import { MarketPriceRow, type MarketPriceRowData } from './market-price-row';
 type SortKey = 'featured' | 'name' | 'price';
 type SheetKind = 'product' | 'region' | 'advanced';
 
-const SCREEN_COLORS = {
-  background: Colors.light.background,
-  surface: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceHigh: '#E5E9E4',
-  text: '#181D1A',
-  textMuted: '#414844',
-  outline: '#717973',
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  error: '#BA1A1A',
-} as const;
+const SCREEN_COLORS = LightPalette;
 
 const MARKET_ROWS: MarketPriceRowData[] = [
   {

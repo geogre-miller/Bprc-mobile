@@ -51,6 +51,46 @@ export const Colors = {
   },
 } as const;
 
+/**
+ * Shared light-theme aliases used by screens that were authored with the
+ * detailed surface-role vocabulary from DESIGN.md. Keeping the aliases here
+ * prevents each screen from carrying its own palette while dark mode is
+ * intentionally deferred.
+ */
+export const LightPalette = {
+  background: Colors.light.background,
+  surface: Colors.light.backgroundElement,
+  surfaceLowest: Colors.light.backgroundElement,
+  surfaceLow: Colors.light.backgroundSelected,
+  surfaceContainer: Colors.light.backgroundSelected,
+  surfaceHigh: Colors.light.borderSubtle,
+  surfaceHighest: Colors.light.border,
+  text: Colors.light.text,
+  onSurface: Colors.light.text,
+  onSurfaceVariant: Colors.light.textSecondary,
+  textMuted: Colors.light.textSecondary,
+  outline: Colors.light.border,
+  borderSubtle: Colors.light.borderSubtle,
+  divider: Colors.light.borderSubtle,
+  primary: Colors.light.primary,
+  primaryContainer: Colors.light.primary,
+  onPrimary: Colors.light.onPrimary,
+  onPrimaryContainer: Colors.light.accent,
+  secondary: Colors.light.accent,
+  secondaryContainer: Colors.light.accentSoft,
+  onSecondaryContainer: Colors.light.primary,
+  secondaryFixed: Colors.light.accentSoft,
+  onSecondaryFixedVariant: Colors.light.primary,
+  tertiaryCopy: Colors.light.pending,
+  tertiaryFixed: Colors.light.pendingContainer,
+  onTertiaryFixed: Colors.light.text,
+  inverseSurface: Colors.light.text,
+  inverseOnSurface: Colors.light.backgroundElement,
+  amber: Colors.light.pending,
+  error: Colors.light.loss,
+  errorContainer: Colors.light.lossContainer,
+} as const;
+
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 /** Container Radius (8), Structural Sheet Radius (12), Base Radius (4) per DESIGN.md. */

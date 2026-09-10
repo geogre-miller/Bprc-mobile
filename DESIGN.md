@@ -6,97 +6,97 @@ colors:
 
   surface: '#f6fbf5'
 
-  surface-dim: '#d7dbd6'
+  surface-dim: '#efece6'
 
   surface-bright: '#f6fbf5'
 
   surface-container-lowest: '#ffffff'
 
-  surface-container-low: '#f0f5f0'
+  surface-container-low: '#efece6'
 
-  surface-container: '#ebefea'
+  surface-container: '#efece6'
 
-  surface-container-high: '#e5e9e4'
+  surface-container-high: '#eceae4'
 
-  surface-container-highest: '#dfe4df'
+  surface-container-highest: '#e2e0d8'
 
-  on-surface: '#181d1a'
+  on-surface: '#1f2421'
 
-  on-surface-variant: '#414844'
+  on-surface-variant: '#6b7280'
 
-  inverse-surface: '#2c322e'
+  inverse-surface: '#1f2421'
 
-  inverse-on-surface: '#edf2ed'
+  inverse-on-surface: '#ffffff'
 
-  outline: '#717973'
+  outline: '#e2e0d8'
 
-  outline-variant: '#c1c8c2'
+  outline-variant: '#eceae4'
 
-  surface-tint: '#3f6653'
+  surface-tint: '#2d6a4f'
 
-  primary: '#012d1d'
+  primary: '#1b4332'
 
   on-primary: '#ffffff'
 
   primary-container: '#1b4332'
 
-  on-primary-container: '#86af99'
+  on-primary-container: '#2d6a4f'
 
-  inverse-primary: '#a5d0b9'
+  inverse-primary: '#e8f1ec'
 
-  secondary: '#2c694e'
+  secondary: '#2d6a4f'
 
   on-secondary: '#ffffff'
 
-  secondary-container: '#aeeecb'
+  secondary-container: '#e8f1ec'
 
-  on-secondary-container: '#316e52'
+  on-secondary-container: '#1b4332'
 
-  tertiary: '#3e1e00'
+  tertiary: '#b45309'
 
   on-tertiary: '#ffffff'
 
-  tertiary-container: '#5e3000'
+  tertiary-container: '#fef3c7'
 
-  on-tertiary-container: '#f48c24'
+  on-tertiary-container: '#b45309'
 
-  error: '#ba1a1a'
+  error: '#b91c1c'
 
   on-error: '#ffffff'
 
-  error-container: '#ffdad6'
+  error-container: '#fee2e2'
 
-  on-error-container: '#93000a'
+  on-error-container: '#b91c1c'
 
-  primary-fixed: '#c1ecd4'
+  primary-fixed: '#e8f1ec'
 
-  primary-fixed-dim: '#a5d0b9'
+  primary-fixed-dim: '#e8f1ec'
 
-  on-primary-fixed: '#002114'
+  on-primary-fixed: '#1b4332'
 
-  on-primary-fixed-variant: '#274e3d'
+  on-primary-fixed-variant: '#2d6a4f'
 
-  secondary-fixed: '#b1f0ce'
+  secondary-fixed: '#e8f1ec'
 
-  secondary-fixed-dim: '#95d4b3'
+  secondary-fixed-dim: '#e8f1ec'
 
-  on-secondary-fixed: '#002114'
+  on-secondary-fixed: '#1b4332'
 
-  on-secondary-fixed-variant: '#0e5138'
+  on-secondary-fixed-variant: '#2d6a4f'
 
-  tertiary-fixed: '#ffdcc3'
+  tertiary-fixed: '#fef3c7'
 
-  tertiary-fixed-dim: '#ffb77d'
+  tertiary-fixed-dim: '#fef3c7'
 
-  on-tertiary-fixed: '#2f1500'
+  on-tertiary-fixed: '#1f2421'
 
-  on-tertiary-fixed-variant: '#6e3900'
+  on-tertiary-fixed-variant: '#b45309'
 
   background: '#f6fbf5'
 
-  on-background: '#181d1a'
+  on-background: '#1f2421'
 
-  surface-variant: '#dfe4df'
+  surface-variant: '#efece6'
 
 typography:
 
@@ -318,35 +318,37 @@ Key attributes:
 
 The palette is engineered for high daylight contrast and calm utility. It couples deep evergreen tones with tactile paper neutrals and disciplined financial status colors.
 
+The YAML roles below map to the shared light runtime palette. Some roles intentionally share a value because the app uses one token for multiple surfaces or states.
+
 ### Core Canvas &amp; Surfaces
 
-- **Canvas `#F6FBF5`):** Pale sage neutral providing a low-strain, paper-like foundation.
+- **Canvas (`#F6FBF5`):** Pale sage neutral providing a low-strain, paper-like foundation.
 
-- **Surface Elevation `#FFFFFF`):** Crisp white for structured data cards, table ledgers, and modal sheets.
+- **Surface Elevation (`#FFFFFF`):** Crisp white for structured data cards, table ledgers, and modal sheets.
 
-- **Surface Subdued `#EFECE6`):** Secondary containment for grouped line items, metric wells, and disabled fields.
+- **Surface Subdued (`#EFECE6`):** Secondary containment for grouped line items, metric wells, and disabled fields.
 
 ### Brand Palette
 
-- **Primary Deep Forest `#1B4332`):** Anchors headers, primary interactive surfaces, and brand emphasis.
+- **Primary Deep Forest (`#1B4332`):** Anchors headers, primary interactive surfaces, and brand emphasis.
 
-- **Accent Deep Moss `#2D6A4F`):** Used for interactive states, secondary buttons, active selection tabs, and segmented controls.
+- **Accent Deep Moss (`#2D6A4F`):** Used for interactive states, secondary buttons, active selection tabs, and segmented controls.
 
-- **Subtle Sage Tint `#E8F1EC`):** Surface tint for active badges, positive metric containers, and selected navigation nodes.
+- **Subtle Sage Tint (`#E8F1EC`):** Surface tint for active badges, positive metric containers, and selected navigation nodes.
 
 ### Borders &amp; Delimiters
 
-- **Warm Neutral Border `#E2E0D8`):** The primary boundary line for cards, row separators, and text inputs.
+- **Warm Neutral Border (`#E2E0D8`):** The primary boundary line for cards, row separators, and text inputs.
 
-- **Subtle Divider `#ECEAE4`):** Internal cell splitters for high-density ledgers.
+- **Subtle Divider (`#ECEAE4`):** Internal cell splitters for high-density ledgers.
 
 ### Financial Semantics
 
-- **Gain / Profit / Upward Trend `#15803D`):** Rich forest emerald for positive yield, realized profits, and market increases. Accompanied by `#DCFCE7` for low-contrast chip backgrounds.
+- **Gain / Profit / Upward Trend (`#15803D`):** Rich forest emerald for positive yield, realized profits, and market increases. Accompanied by `#DCFCE7` for low-contrast chip backgrounds.
 
-- **Loss / Expense / Downward Trend `#B91C1C`):** Earthy brick red for deficits, price drops, and outgoing payments. Accompanied by `#FEE2E2` for alert chip fills.
+- **Loss / Expense / Downward Trend (`#B91C1C`):** Earthy brick red for deficits, price drops, and outgoing payments. Accompanied by `#FEE2E2` for alert chip fills.
 
-- **Pending / Threshold Warning `#B45309`):** Burnished amber for pending settlements, warehouse capacity limits, or moisture tolerances. Accompanied by `#FEF3C7` container fills.
+- **Pending / Threshold Warning (`#B45309`):** Burnished amber for pending settlements, warehouse capacity limits, or moisture tolerances. Accompanied by `#FEF3C7` container fills.
 
 ## Typography
 

@@ -14,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { COMMODITIES, latestObservation } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
@@ -23,25 +23,7 @@ import { formatVnd } from '@/utils/format-price';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
-const COLORS = {
-  surface: '#F6FBF5',
-  surfaceLowest: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceContainer: '#EBEFEA',
-  surfaceHigh: '#E5E9E4',
-  onSurface: '#181D1A',
-  onSurfaceVariant: '#414844',
-  outline: '#717973',
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  onPrimary: '#FFFFFF',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  onSecondaryContainer: '#316E52',
-  tertiaryFixed: '#FFDCC3',
-  onTertiaryFixed: '#2F1500',
-  error: '#BA1A1A',
-} as const;
+const COLORS = LightPalette;
 
 const FONT = {
   manropeSemiBold: 'InventoryManropeSemiBold',
@@ -416,8 +398,8 @@ export function Inventory() {
     <ThemedView style={[styles.screen, { backgroundColor: theme.background }]}>
       <Stack.Screen options={{ headerShown: false, title: 'Inventory' }} />
 
-      <View style={[styles.shell, { backgroundColor: COLORS.surface }]}>
-        <View style={[styles.headerOuter, { paddingTop: insets.top, backgroundColor: COLORS.surface }]}>
+      <View style={[styles.shell, { backgroundColor: COLORS.background }]}>
+        <View style={[styles.headerOuter, { paddingTop: insets.top, backgroundColor: COLORS.background }]}>
           <View style={styles.headerInner}>
             <View style={styles.brand}>
               <Image
@@ -714,7 +696,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingTop: Spacing.four,
     gap: Spacing.three,
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.background,
   },
   titleMeta: {
     paddingHorizontal: 4,

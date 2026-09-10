@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, LinearGradient, Line, Path, Stop } from 'react-native-svg';
 
 import { ThemedText } from '@/components/themed-text';
-import { Radius, Spacing } from '@/constants/theme';
+import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import type { Commodity } from '@/types/domain';
 
@@ -31,24 +31,7 @@ type BuyerCardData = {
   secondaryIcon: IconName;
 };
 
-const SCREEN_COLORS = {
-  surface: '#F6FBF5',
-  surfaceLowest: '#FFFFFF',
-  onSurface: '#181D1A',
-  borderSubtle: '#ECEAE4',
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  onPrimary: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceHigh: '#E5E9E4',
-  surfaceHighest: '#DFE4DF',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  onSecondaryContainer: '#316E52',
-  outline: '#717973',
-  onSurfaceVariant: '#414844',
-  amber: '#F48C24',
-} as const;
+const SCREEN_COLORS = LightPalette;
 
 const TIMEFRAMES: Timeframe[] = ['1N', '7N', '1T', '3T', '1Năm'];
 
@@ -625,8 +608,8 @@ const cardShadow = {
 } as const;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: SCREEN_COLORS.surface },
-  shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: SCREEN_COLORS.surface },
+  screen: { flex: 1, backgroundColor: SCREEN_COLORS.background },
+  shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: SCREEN_COLORS.background },
   header: { height: 64, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0, backgroundColor: 'rgba(246,251,245,0.85)', shadowColor: '#1B4332', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexShrink: 1 },
   brandLogo: { width: 36, height: 32, borderRadius: Radius.base },
@@ -634,9 +617,9 @@ const styles = StyleSheet.create({
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   profileImage: { width: 34, height: 34, borderRadius: Radius.full },
   iconButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center' },
-  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: Radius.full, backgroundColor: '#BA1A1A', borderColor: SCREEN_COLORS.surface, borderWidth: 2 },
+  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: Radius.full, backgroundColor: SCREEN_COLORS.error, borderColor: SCREEN_COLORS.background, borderWidth: 2 },
   alertDot: { position: 'absolute', top: 9, right: 8, width: 8, height: 8, borderRadius: Radius.full, backgroundColor: SCREEN_COLORS.secondary, borderWidth: 2 },
-  scrollView: { flex: 1, backgroundColor: SCREEN_COLORS.surface },
+  scrollView: { flex: 1, backgroundColor: SCREEN_COLORS.background },
   content: { paddingHorizontal: Spacing.three, paddingTop: Spacing.five, paddingBottom: 140, gap: Spacing.three },
   topNavigation: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: Spacing.one },
   backButton: { minHeight: 44, paddingHorizontal: 12, borderRadius: Radius.container, flexDirection: 'row', alignItems: 'center', gap: 6, ...cardShadow },

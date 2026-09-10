@@ -13,29 +13,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, Radius, Spacing } from '@/constants/theme';
+import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 import { Icon } from '../home-dashboard/icons';
 
 import { PROFILE_FONTS, useProfileFonts } from './fonts';
 
-const COLORS = {
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  onPrimary: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceContainer: '#EBEFEA',
-  surfaceHighest: '#DFE4DF',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  onSecondaryContainer: '#316E52',
-  onSurface: '#181D1A',
-  onSurfaceVariant: '#414844',
-  outline: '#717973',
-  error: '#BA1A1A',
-  divider: '#DFE4DF',
-} as const;
+const COLORS = LightPalette;
 
 type SupportRowProps = {
   icon: 'call' | 'menu_book' | 'policy';

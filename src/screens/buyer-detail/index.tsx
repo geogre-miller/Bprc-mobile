@@ -17,31 +17,14 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
+import { LightPalette } from '@/constants/theme';
 import { BUYERS } from '@/data/mock-data';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
 import { BUYER_DETAIL_FONTS as FONT, useBuyerDetailFonts } from './fonts';
 
-const COLORS = {
-  surface: '#F6FBF5',
-  surfaceLowest: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceContainer: '#EBEFEA',
-  surfaceHigh: '#E5E9E4',
-  onSurface: '#181D1A',
-  onSurfaceVariant: '#414844',
-  outline: '#717973',
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  onPrimary: '#FFFFFF',
-  onPrimaryContainer: '#86AF99',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  onSecondaryContainer: '#316E52',
-  amber: '#F48C24',
-  error: '#BA1A1A',
-} as const;
+const COLORS = LightPalette;
 
 const PHONE = '0914829374';
 
@@ -436,10 +419,10 @@ const shadow = {
 } as const;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: COLORS.surface },
-  shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: COLORS.surface },
-  loading: { flex: 1, backgroundColor: COLORS.surface },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surface, padding: 24 },
+  screen: { flex: 1, backgroundColor: COLORS.background },
+  shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: COLORS.background },
+  loading: { flex: 1, backgroundColor: COLORS.background },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.background, padding: 24 },
   header: { height: 64, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'rgba(246,251,245,0.96)', shadowColor: '#1B4332', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
   brandLogo: { width: 36, height: 32, borderRadius: 4 },
@@ -449,9 +432,9 @@ const styles = StyleSheet.create({
   regionText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   notificationButton: { width: 44, height: 44, borderRadius: 8, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center' },
-  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: 999, backgroundColor: COLORS.error, borderColor: COLORS.surface, borderWidth: 2 },
+  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: 999, backgroundColor: COLORS.error, borderColor: COLORS.background, borderWidth: 2 },
   headerAvatar: { width: 34, height: 34, borderRadius: 999 },
-  scrollView: { flex: 1, backgroundColor: COLORS.surface },
+  scrollView: { flex: 1, backgroundColor: COLORS.background },
   content: { paddingHorizontal: 16, paddingTop: 8, gap: 12 },
   topNavigation: { minHeight: 56, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   backButton: { minHeight: 40, paddingRight: 8, flexDirection: 'row', alignItems: 'center', gap: 6 },
