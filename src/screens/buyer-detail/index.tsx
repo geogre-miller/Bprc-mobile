@@ -186,21 +186,6 @@ function PolicyRow({ icon, title, description }: { icon: IconName; title: string
   );
 }
 
-function BottomNavItem({ label, icon, active, onPress }: { label: string; icon: IconName; active?: boolean; onPress: () => void }) {
-  const color = active ? COLORS.primaryContainer : COLORS.onSurfaceVariant;
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ selected: Boolean(active) }}
-      onPress={onPress}
-      style={({ pressed }) => [styles.navItem, pressed && styles.pressed]}>
-      <Icon name={icon} size={21} color={color} />
-      <ThemedText type="labelSm" style={[styles.navLabel, active && styles.semibold, { color }]}>{label}</ThemedText>
-    </Pressable>
-  );
-}
-
 export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -380,15 +365,6 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
           </View>
         </ScrollView>
 
-        <View style={[styles.fixedFooter, { paddingBottom: insets.bottom }]}>
-          <View style={styles.bottomNavigation}>
-            <BottomNavItem label="Trang chủ" icon="home" onPress={() => router.navigate('/')} />
-            <BottomNavItem label="Thị trường" icon="trending_up" onPress={() => router.navigate('/market')} />
-            <BottomNavItem label="Giao dịch" icon="receipt_long" onPress={() => router.navigate('/journal')} />
-            <BottomNavItem label="Kho & Lãi" icon="inventory_2" onPress={() => router.navigate('/inventory')} />
-            <BottomNavItem label="Cá nhân" icon="person" onPress={() => router.navigate('/account')} />
-          </View>
-        </View>
       </View>
 
       <Modal visible={saleOpen} transparent animationType="slide" onRequestClose={() => setSaleOpen(false)}>
@@ -563,10 +539,6 @@ const styles = StyleSheet.create({
   primaryCtaText: { color: COLORS.onPrimary, fontFamily: FONT.publicSansSemiBold },
   secondaryCta: { height: 48, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.surfaceLowest, ...shadow },
   secondaryCtaText: { color: COLORS.primary, fontFamily: FONT.publicSansSemiBold },
-  fixedFooter: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-  bottomNavigation: { height: 64, paddingHorizontal: 2, flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-around', backgroundColor: 'rgba(255,255,255,0.96)', shadowColor: '#1B4332', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.06, shadowRadius: 10, elevation: 4 },
-  navItem: { minWidth: 56, flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
-  navLabel: { fontFamily: FONT.publicSansSemiBold, textAlign: 'center' },
   pressed: { opacity: 0.68 },
   ctaPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
   modalRoot: { flex: 1, justifyContent: 'flex-end' },

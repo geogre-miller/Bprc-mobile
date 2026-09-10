@@ -513,13 +513,6 @@ export function CommodityDetail({
               <Icon name="arrow_forward" size={18} color={SCREEN_COLORS.onPrimary} />
             </View>
           </Pressable>
-          <View style={styles.bottomNavigation}>
-            <BottomNavItem label="Trang chủ" icon="home" onPress={() => router.navigate('/')} />
-            <BottomNavItem label="Thị trường" icon="trending_up" active onPress={() => router.navigate('/market')} />
-            <BottomNavItem label="Giao dịch" icon="receipt_long" onPress={() => router.navigate('/journal')} />
-            <BottomNavItem label="Kho & Lãi" icon="inventory_2" onPress={() => router.navigate('/inventory')} />
-            <BottomNavItem label="Cá nhân" icon="person" onPress={() => router.navigate('/account')} />
-          </View>
         </View>
       </View>
     </View>
@@ -623,21 +616,6 @@ function BuyerCard({ buyer, onPrimary, onSecondary }: { buyer: BuyerCardData; on
   );
 }
 
-function BottomNavItem({ label, icon, active, onPress }: { label: string; icon: IconName; active?: boolean; onPress: () => void }) {
-  const color = active ? SCREEN_COLORS.primaryContainer : SCREEN_COLORS.onSurfaceVariant;
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ selected: active }}
-      onPress={onPress}
-      style={({ pressed }) => [styles.navItem, pressed && styles.pressed]}>
-      <Icon name={icon} size={21} color={color} />
-      <ThemedText type="labelSm" style={[active && styles.buttonLabel, { color }]}>{label}</ThemedText>
-    </Pressable>
-  );
-}
-
 const cardShadow = {
   shadowColor: '#1B4332',
   shadowOffset: { width: 0, height: 1 },
@@ -717,8 +695,6 @@ const styles = StyleSheet.create({
   sellCta: { minHeight: 44, marginHorizontal: Spacing.three, marginTop: Spacing.two, borderRadius: Radius.container, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two, ...cardShadow },
   sellCopy: { flex: 1 },
   sellButtonLabel: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: Radius.base, paddingHorizontal: 10, paddingVertical: 7 },
-  bottomNavigation: { height: 64, paddingHorizontal: Spacing.half, flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-around', marginTop: 2, backgroundColor: 'rgba(255,255,255,0.95)', shadowColor: '#1B4332', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.06, shadowRadius: 10, elevation: 4 },
-  navItem: { minWidth: 56, flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
   pressed: { opacity: 0.68 },
   ctaPressed: { transform: [{ scale: 0.99 }] },
 });
