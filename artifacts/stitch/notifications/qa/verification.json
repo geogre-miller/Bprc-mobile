@@ -100,5 +100,13 @@
       "Renamed Notifications route opens from the header bell."
     ],
     "limitations": "Earlier actual.png and interaction captures predate the dot/spacing follow-up. Use the follow-up screenshots for current layout."
+  },
+  "homeReturnRegression": {
+    "status": "pass",
+    "reviewer": "root",
+    "scenario": "Notifications → Market → single Home tab tap",
+    "observed": "Dashboard greeting and portfolio render; Notifications is popped without a second tap.",
+    "evidence": "artifacts/stitch/notifications/qa/home-return-single-tap.png",
+    "supersedes": "Earlier rootReportedChecks/tab-home-pop evidence describing stack preservation on the first Home tap."
   }
 }
