@@ -1,4 +1,5 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { StackActions, type NavigationState } from 'expo-router/react-navigation';
 
 import { Colors } from '@/constants/theme';
 import { BOTTOM_NAV_ITEMS } from '@/constants/navigation';
@@ -16,7 +17,18 @@ export default function AppTabs() {
       shadowColor={colors.borderSubtle}
       blurEffect="none"
       disableTransparentOnScrollEdge>
-      <NativeTabs.Trigger name={BOTTOM_NAV_ITEMS[0].tabName}>
+      <NativeTabs.Trigger
+        name={BOTTOM_NAV_ITEMS[0].tabName}
+        listeners={({ navigation, route }) => ({
+          tabPress: () => {
+            const tabState: NavigationState = navigation.getState();
+            const homeStack = tabState.routes.find((item) => item.key === route.key)?.state;
+            // Home always opens the dashboard, including when returning from another tab.
+            if (homeStack?.key && (homeStack.index ?? 0) > 0) {
+              navigation.dispatch({ ...StackActions.popToTop(), target: homeStack.key });
+            }
+          },
+        })}>
         <NativeTabs.Trigger.Label>{BOTTOM_NAV_ITEMS[0].label}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/home.png')}

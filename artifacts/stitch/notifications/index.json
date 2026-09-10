@@ -6,7 +6,7 @@
     "projectId": "16177202758777999982",
     "screenId": "e88bba9d354c4774a7ad84d775cfe266"
   },
-  "updatedAt": "2026-09-10T09:48:13.434Z",
+  "updatedAt": "2026-09-10T09:57:36.999Z",
   "artifacts": {
     "sourceManifest": ".stitch/notifications/manifest.json",
     "designContract": "artifacts/stitch/notifications/design-contract.json",
@@ -22,6 +22,6 @@
   },
   "fingerprints": {
     "stitch": "c79d806e27ddd55e0f06853a1155bab8039dbe1a783301861d2e35b1ce88cbcc",
-    "repository": "1ef3ee764d935efa03e76c68675b1cf0fe725bea724db06df3bbc6fb941f4e03"
+    "repository": "835d50870f9a0e8c66ab51673f3c6285ab06cbd0a643af7c57b1592e9ff83aad"
   }
 }

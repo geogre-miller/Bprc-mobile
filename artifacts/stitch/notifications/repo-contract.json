@@ -19,7 +19,7 @@
       "/",
       "/alerts"
     ],
-    "navigation": "Exactly five existing NativeTabs triggers. Home tabName is (home), hosting the nested home Stack. Public URLs remain / and /alerts.",
+    "navigation": "Exactly five existing NativeTabs triggers. Home tabName is (home), hosting the nested home Stack. Public URLs remain / and /alerts. Home tab presses pop the nested home Stack to its root even when switching from another tab. The web Home trigger uses resetOnFocus; other tabs preserve their existing state policy.",
     "integrationBoundary": "Keep the nested route adapters thin and render Notifications. The (home) Stack owns HomeDashboard and Notifications while AppTabs owns the shared bottom navigation.",
     "screenOwnerBoundary": "Notification content and local read/filter state live in src/screens/notifications/index.tsx. Bottom navigation is owned by AppTabs."
   },
@@ -213,7 +213,7 @@
       "src/screens/buyer-detail/index.tsx",
       "src/app/(tabs)/(home)/_layout.tsx"
     ],
-    "fingerprint": "1ef3ee764d935efa03e76c68675b1cf0fe725bea724db06df3bbc6fb941f4e03"
+    "fingerprint": "835d50870f9a0e8c66ab51673f3c6285ab06cbd0a643af7c57b1592e9ff83aad"
   },
   "reuse": [
     "src/components/app-tabs.tsx",

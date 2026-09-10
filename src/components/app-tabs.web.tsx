@@ -37,7 +37,7 @@ export default function AppTabs() {
       <TabList asChild>
         <CustomTabList compact={compact}>
           {BOTTOM_NAV_ITEMS.map((item) => (
-            <TabTrigger key={item.key} name={item.key} href={item.href} asChild>
+            <TabTrigger key={item.key} name={item.key} href={item.href} resetOnFocus={item.key === 'home'} asChild>
               <TabButton compact={compact} iconName={item.icon}>
                 {item.label}
               </TabButton>
