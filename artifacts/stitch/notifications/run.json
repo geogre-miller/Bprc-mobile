@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "RunState",
+  "workflow": "stitch-ui-v2",
+  "target": {
+    "slug": "notifications",
+    "projectId": "16177202758777999982",
+    "screenId": "e88bba9d354c4774a7ad84d775cfe266"
+  },
+  "state": "DONE",
+  "limits": {
+    "maxParallelWorkers": 3,
+    "maxDelegationDepth": 1,
+    "maxRepairLoops": 2
+  },
+  "tasks": {
+    "health": {
+      "kind": "health",
+      "status": "done",
+      "dependencies": [],
+      "worker": null,
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 0,
+      "attempts": 0,
+      "maxAttempts": 1,
+      "ownership": {
+        "exclusive": [],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "design": {
+      "kind": "design",
+      "status": "done",
+      "dependencies": [
+        "health"
+      ],
+      "worker": "stitch-inspector",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [
+        "notifications_design"
+      ],
+      "depth": 1,
+      "attempts": 1,
+      "maxAttempts": 2,
+      "ownership": {
+        "exclusive": [
+          ".stitch/notifications",
+          "artifacts/stitch/notifications/design-contract.json"
+        ],
+        "shared": []
+      },
+      "receipt": "artifacts/stitch/notifications/design-receipt.json",
+      "reasonCodes": []
+    },
+    "repository": {
+      "kind": "repository",
+      "status": "done",
+      "dependencies": [
+        "health"
+      ],
+      "worker": "rn-context-scout",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [
+        "notifications_repo"
+      ],
+      "depth": 1,
+      "attempts": 1,
+      "maxAttempts": 2,
+      "ownership": {
+        "exclusive": [
+          "artifacts/stitch/notifications/repo-contract.json"
+        ],
+        "shared": []
+      },
+      "receipt": "artifacts/stitch/notifications/repo-receipt.json",
+      "reasonCodes": []
+    },
+    "implementation": {
+      "kind": "implementation",
+      "status": "done",
+      "dependencies": [
+        "design",
+        "repository"
+      ],
+      "worker": "rn-ui-migrator",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": "notifications_impl",
+      "workerInstanceHistory": [
+        "notifications_impl"
+      ],
+      "depth": 1,
+      "attempts": 3,
+      "maxAttempts": 4,
+      "ownership": {
+        "exclusive": [
+          "src/screens/price-alerts/index.tsx",
+          "src/app/_layout.tsx",
+          "src/app/alerts.tsx",
+          "src/app/(tabs)/index.tsx",
+          "src/app/(tabs)/alerts.tsx",
+          "src/app/(tabs)/(home)/_layout.tsx",
+          "src/app/(tabs)/(home)/index.tsx",
+          "src/app/(tabs)/(home)/alerts.tsx",
+          "src/constants/navigation.ts",
+          "src/components/app-tabs.tsx"
+        ],
+        "shared": [
+          {
+            "path": "src/screens/home-dashboard/dashboard-header.tsx",
+            "mode": "additive"
+          }
+        ]
+      },
+      "receipt": "artifacts/stitch/notifications/implementation-receipt.json",
+      "reasonCodes": [
+        "BASELINE_FAILURE"
+      ]
+    },
+    "check": {
+      "kind": "check",
+      "status": "done",
+      "dependencies": [
+        "implementation"
+      ],
+      "worker": null,
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 0,
+      "attempts": 3,
+      "maxAttempts": 3,
+      "ownership": {
+        "exclusive": [],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "visual-verification": {
+      "kind": "visual-verification",
+      "status": "done",
+      "dependencies": [
+        "check"
+      ],
+      "worker": "visual-verifier",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [
+        "notifications_verify",
+        "notifications_native_verify",
+        "notifications_final_verify"
+      ],
+      "depth": 1,
+      "attempts": 3,
+      "maxAttempts": 3,
+      "ownership": {
+        "exclusive": [
+          "artifacts/stitch/notifications/qa"
+        ],
+        "shared": []
+      },
+      "receipt": "artifacts/stitch/notifications/qa/verification-receipt.json",
+      "reasonCodes": []
+    }
+  },
+  "freshness": {
+    "needsDesign": true,
+    "needsRepo": true,
+    "branch": "11",
+    "designReason": "design-artifact-absent",
+    "repoReason": "repo-contract-absent"
+  },
+  "artifactIndex": "artifacts/stitch/notifications/index.json",
+  "corrections": 2,
+  "metrics": {
+    "startedAt": "2026-09-10T07:25:04.342Z",
+    "updatedAt": "2026-09-10T09:19:06.553Z",
+    "completedAt": "2026-09-10T09:19:06.553Z",
+    "wallTimeMs": 6842211,
+    "workerCount": 8,
+    "peakParallelism": 2,
+    "correctionLoops": 2,
+    "stitchFetches": 0,
+    "stitchCacheHits": 0,
+    "artifactCacheHits": 0,
+    "toolAvailability": {
+      "stitch": {
+        "status": "available",
+        "required": true,
+        "version": null,
+        "detail": "codex: stitch https://stitch.googleapis.com/mcp - enabled Unknown; claude: Status: ✘ Failed to connect",
+        "reasonCode": null
+      },
+      "codegraph": {
+        "status": "available",
+        "required": false,
+        "version": "1.5.0",
+        "detail": "files=106; pending={\"added\":0,\"modified\":0,\"removed\":0}",
+        "reasonCode": null
+      },
+      "gitnexus": {
+        "status": "stale",
+        "required": false,
+        "version": null,
+        "detail": "Index is stale",
+        "reasonCode": null
+      },
+      "expoDocs": {
+        "status": "unknown",
+        "required": false,
+        "version": null,
+        "detail": "Expo MCP configured but network reachability failed",
+        "reasonCode": "CAPABILITY_UNAVAILABLE"
+      },
+      "browser": {
+        "status": "available",
+        "required": true,
+        "version": "1.61.0",
+        "detail": "package=1.61.0; chrome=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome; claudePlugin=true",
+        "reasonCode": null
+      },
+      "rtk": {
+        "status": "available",
+        "required": false,
+        "version": "0.48.0",
+        "detail": "Use only documented RTK command forms; raw fallback remains valid",
+        "reasonCode": null
+      },
+      "repositoryWritable": {
+        "status": "available",
+        "required": false,
+        "version": null,
+        "detail": "Repository root is writable",
+        "reasonCode": null
+      }
+    },
+    "rtkEstimatedTokensSaved": null
+  },
+  "reasonCodes": [
+    "VISUAL_MISMATCH"
+  ]
+}

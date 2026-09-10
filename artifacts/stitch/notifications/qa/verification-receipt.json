@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "visual-verification",
+  "status": "done",
+  "artifact": "artifacts/stitch/notifications/qa/verification.json",
+  "artifactIndex": "artifacts/stitch/notifications/index.json",
+  "risk": "low",
+  "reasonCodes": [],
+  "changedFiles": [
+    "artifacts/stitch/notifications/qa/verification.json",
+    "artifacts/stitch/notifications/qa/verification-receipt.json"
+  ],
+  "blockers": [],
+  "followup": "None; final native visual and supplied interaction verification passed with the shared five-tab bar and no More item."
+}

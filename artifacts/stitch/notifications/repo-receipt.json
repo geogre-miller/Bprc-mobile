@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "repository",
+  "status": "done",
+  "artifact": "artifacts/stitch/notifications/repo-contract.json",
+  "artifactIndex": "artifacts/stitch/notifications/index.json",
+  "risk": "medium",
+  "reasonCodes": [],
+  "changedFiles": [
+    "artifacts/stitch/notifications/repo-contract.json",
+    "artifacts/stitch/notifications/repo-receipt.json"
+  ],
+  "followup": "Move the home and /alerts adapters under src/app/(tabs)/(home)/, add the nested Stack layout, change the home registry tabName to (home), keep exactly five NativeTabs triggers with no alerts trigger, remove the root alerts Stack entry and local screen bottom bar, wire the header bell to /alerts, then rerun typecheck and separate the known baseline lint failure."
+}

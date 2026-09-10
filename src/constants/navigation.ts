@@ -1,5 +1,5 @@
 export const BOTTOM_NAV_ITEMS = [
-  { key: 'home', tabName: 'index', href: '/', label: 'Tổng quan', icon: 'home' },
+  { key: 'home', tabName: '(home)', href: '/', label: 'Tổng quan', icon: 'home' },
   { key: 'market', tabName: '(market)', href: '/market', label: 'Thị trường', icon: 'trending_up' },
   { key: 'buyers', tabName: '(buyers)', href: '/buyers', label: 'Đầu mối', icon: 'storefront' },
   { key: 'inventory', tabName: '(inventory)', href: '/inventory', label: 'Kho & Lãi', icon: 'inventory_2' },

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "implementation",
+  "status": "done",
+  "artifact": "artifacts/stitch/notifications/implementation.json",
+  "artifactIndex": "artifacts/stitch/notifications/index.json",
+  "risk": "medium",
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ],
+  "changedFiles": [
+    "src/screens/price-alerts/index.tsx",
+    "src/screens/home-dashboard/dashboard-header.tsx",
+    "src/app/_layout.tsx",
+    "src/app/alerts.tsx",
+    "src/app/(tabs)/index.tsx",
+    "src/app/(tabs)/alerts.tsx",
+    "src/app/(tabs)/(home)/_layout.tsx",
+    "src/app/(tabs)/(home)/index.tsx",
+    "src/app/(tabs)/(home)/alerts.tsx",
+    "src/constants/navigation.ts",
+    "src/components/app-tabs.tsx",
+    "artifacts/stitch/notifications/implementation.json",
+    "artifacts/stitch/notifications/implementation-receipt.json"
+  ],
+  "followup": "Run the fresh native simulator visual verifier for /alerts; verify exactly five shared bottom tabs with the home tab selected and no More option. No web or simulator automation was run by this worker."
+}

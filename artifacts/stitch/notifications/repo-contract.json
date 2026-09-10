@@ -1,0 +1,235 @@
+{
+  "$schema": "https://bprc.local/agents/repo-contract.schema.json",
+  "schemaVersion": 2,
+  "artifactType": "RepoContract",
+  "generatedAt": "2026-09-10T09:48:01.116893+00:00",
+  "route": "/alerts",
+  "screenOwner": "src/screens/notifications/index.tsx",
+  "revision": {
+    "supersedes": "pre-rename migration contract",
+    "reason": "Reconciled to committed Notifications implementation after user-requested rename, inline unread dots, and safe-area correction."
+  },
+  "architecture": {
+    "framework": "Expo SDK 57, React Native, TypeScript, Expo Router typed routes",
+    "currentRouteAdapter": "src/app/(tabs)/(home)/alerts.tsx",
+    "targetRouteAdapter": "src/app/(tabs)/(home)/alerts.tsx",
+    "homeAdapter": "src/app/(tabs)/(home)/index.tsx",
+    "homeStackLayout": "src/app/(tabs)/(home)/_layout.tsx",
+    "publicUrls": [
+      "/",
+      "/alerts"
+    ],
+    "navigation": "Exactly five existing NativeTabs triggers. Home tabName is (home), hosting the nested home Stack. Public URLs remain / and /alerts.",
+    "integrationBoundary": "Keep the nested route adapters thin and render Notifications. The (home) Stack owns HomeDashboard and Notifications while AppTabs owns the shared bottom navigation.",
+    "screenOwnerBoundary": "Notification content and local read/filter state live in src/screens/notifications/index.tsx. Bottom navigation is owned by AppTabs."
+  },
+  "layout": {
+    "parentOwner": "src/app/(tabs)/_layout.tsx delegates to AppTabs; src/app/(tabs)/(home)/_layout.tsx is a nested Stack inside the home NativeTabs route.",
+    "safeArea": "Notifications uses SafeAreaView edges=['top']. Its ScrollView reserves BottomTabInset + useSafeAreaInsets().bottom + Spacing.four so the final card clears the floating native tab bar.",
+    "scrolling": "Vertical ScrollView with explicit bottom content padding; horizontal ScrollView for category chips.",
+    "tabs": "Use exactly the existing five shared tab items. Do not add an alerts registry item or NativeTabs.Trigger; /alerts is a sibling screen in the home Stack and the home tab remains selected."
+  },
+  "patterns": {
+    "primitives": "Reuse ThemedText, ThemedView, Pressable, ScrollView, SafeAreaView, and StyleSheet already used by the owner and neighboring screens.",
+    "theme": "useTheme reads semantic Colors; Spacing, Radius, Fonts, BottomTabInset, and MaxContentWidth are in src/constants/theme.ts.",
+    "typography": "ThemedText supports the existing title/headline/body/label roles; do not add a font or token.",
+    "icons": "Reuse Icon/IconName from src/screens/home-dashboard/icons.tsx, including notifications and notification_important mappings; do not edit the icon registry.",
+    "stateAndData": "The current owner uses screen-local NotificationItem data and unread/filter state. No shared Notification domain type, API source, or persistence key exists; keep this bounded local pattern.",
+    "similarImplementations": "src/components/app-tabs.tsx and src/components/app-tabs.web.tsx are the existing native/web navigators; src/constants/navigation.ts is their shared route registry; src/screens/home-dashboard/dashboard-header.tsx is the shared source bell."
+  },
+  "sharedEdits": [
+    {
+      "path": "src/app/_layout.tsx",
+      "mode": "exclusive",
+      "registry": "root Expo Router Stack"
+    },
+    {
+      "path": "src/constants/navigation.ts",
+      "mode": "exclusive",
+      "registry": "BOTTOM_NAV_ITEMS"
+    },
+    {
+      "path": "src/components/app-tabs.tsx",
+      "mode": "exclusive",
+      "registry": "NativeTabs triggers"
+    },
+    {
+      "path": "src/screens/home-dashboard/dashboard-header.tsx",
+      "mode": "additive",
+      "registry": null
+    }
+  ],
+  "serializedSharedRegistryEdits": [
+    "src/constants/navigation.ts: change home tabName from index to (home) and retain only the existing five items",
+    "src/components/app-tabs.tsx: keep the five explicit NativeTabs.Trigger entries and remove any alerts trigger",
+    "src/app/_layout.tsx: remove the root alerts Stack.Screen because /alerts is nested under the home Stack",
+    "src/screens/home-dashboard/dashboard-header.tsx: keep the bell link targeting /alerts",
+    "src/app/(tabs)/index.tsx -> src/app/(tabs)/(home)/index.tsx: move the home adapter",
+    "src/app/(tabs)/alerts.tsx -> src/app/(tabs)/(home)/alerts.tsx: move the Notifications adapter"
+  ],
+  "writeScope": [
+    "src/screens/notifications/index.tsx",
+    "src/screens/home-dashboard/dashboard-header.tsx",
+    "src/app/_layout.tsx",
+    "src/app/(tabs)/(home)/_layout.tsx",
+    "src/app/(tabs)/(home)/index.tsx",
+    "src/app/(tabs)/(home)/alerts.tsx",
+    "src/constants/navigation.ts",
+    "src/components/app-tabs.tsx"
+  ],
+  "forbiddenScope": [
+    ".stitch/notifications",
+    "artifacts/stitch/notifications/index.json",
+    "artifacts/stitch/notifications/run.json",
+    "src/app/(tabs)/_layout.tsx",
+    "src/components/app-tabs.web.tsx",
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/constants/theme.ts",
+    "src/hooks/use-theme.ts",
+    "src/hooks/use-persisted-state.ts",
+    "src/types/domain.ts",
+    "src/data/mock-data.ts",
+    "src/screens/home-dashboard/icons.tsx",
+    "package.json",
+    "tsconfig.json",
+    "DESIGN.md"
+  ],
+  "impactAnalysis": {
+    "screenOwner": {
+      "target": "Notifications",
+      "directCallers": 1,
+      "processesAffected": 1,
+      "risk": "low",
+      "evidence": "Notifications is imported by the single nested /alerts route adapter. The renamed module passed TypeScript, scoped lint, and native simulator checks."
+    },
+    "headerTrigger": {
+      "target": "DashboardHeader",
+      "directCallers": 1,
+      "processesAffected": 2,
+      "risk": "low",
+      "evidence": "CodeGraph and targeted source identify HomeDashboard as the caller. The shared bell already targets /alerts in the implementation worktree."
+    },
+    "tabRegistry": {
+      "target": "BOTTOM_NAV_ITEMS",
+      "directCallers": 2,
+      "processesAffected": 2,
+      "risk": "medium",
+      "evidence": "CodeGraph resolves the registry to native and web AppTabs. Native has five explicit triggers while web maps the registry dynamically; changing only home.tabName and keeping five entries must be serialized."
+    },
+    "routeRegistration": {
+      "target": "Expo Router home group",
+      "directCallers": "dynamic/unknown in GitNexus",
+      "risk": "medium",
+      "evidence": "Expo Router registration is filesystem-driven. Targeted source and the native-tabs implementation show that a (home) trigger can host a nested Stack; route-group segments preserve / and /alerts while avoiding a sixth trigger."
+    },
+    "readOnlySharedSymbols": [
+      {
+        "target": "Icon",
+        "directCallers": 32,
+        "processesAffected": 19,
+        "risk": "critical",
+        "mitigation": "Read-only; use existing notification icons. GitNexus lower-bound result omitted 5 receiver call sites."
+      },
+      {
+        "target": "ThemedText",
+        "directCallers": 45,
+        "processesAffected": 34,
+        "risk": "critical",
+        "mitigation": "Read-only; use existing typography and semantic color APIs."
+      },
+      {
+        "target": "ThemedView",
+        "directCallers": 28,
+        "processesAffected": 27,
+        "risk": "critical",
+        "mitigation": "Read-only; use existing semantic surfaces."
+      },
+      {
+        "target": "useTheme",
+        "directCallers": 24,
+        "processesAffected": 34,
+        "risk": "critical",
+        "mitigation": "Read-only; do not alter the shared palette or hook."
+      }
+    ],
+    "detectChanges": {
+      "scope": "staged",
+      "changedSymbols": 35,
+      "affectedProcesses": 5,
+      "risk": "medium",
+      "evidence": "GitNexus pre-commit analysis after index refresh included Notifications, route adapters, header and shared home tab registry. No partial/truncated result reported."
+    }
+  },
+  "risk": "medium",
+  "riskReason": "The route move touches Expo Router filesystem ownership and the shared home tab registry; the five-trigger boundary, public hrefs, and nested Stack are explicit, while GitNexus remains stale.",
+  "riskResolved": true,
+  "unresolvedRisks": [
+    {
+      "id": "NOTIFICATION_DATA_SOURCE",
+      "severity": "low",
+      "status": "open",
+      "detail": "Notification data is local fixture data. Destination actions and threshold settings remain placeholders."
+    }
+  ],
+  "dependencyFreshness": {
+    "status": "reconciled-after-final-code-changes",
+    "fingerprintAlgorithm": "scripts/stitch/repo-fingerprint.mjs SHA-256 over listed dependency file contents",
+    "codegraph": {
+      "status": "current",
+      "version": "1.5.0",
+      "files": 106,
+      "nodes": 1219,
+      "edges": 2595
+    },
+    "gitnexus": {
+      "repository": "Bprc-mobile",
+      "indexCommit": "d6f63e6",
+      "headAtDiscovery": "8ea4963136ed0e1b5923b6eb6653213c33ab0703",
+      "staleness": "Historical discovery metadata; index refreshed before pre-commit change analysis. Recheck current index before future edits."
+    }
+  },
+  "repository": {
+    "dependencies": [
+      "DESIGN.md",
+      "src/app/_layout.tsx",
+      "src/app/(tabs)/_layout.tsx",
+      "src/app/(tabs)/(home)/index.tsx",
+      "src/app/(tabs)/(home)/alerts.tsx",
+      "src/components/app-tabs.tsx",
+      "src/components/app-tabs.web.tsx",
+      "src/components/themed-text.tsx",
+      "src/components/themed-view.tsx",
+      "src/constants/navigation.ts",
+      "src/constants/theme.ts",
+      "src/hooks/use-theme.ts",
+      "src/hooks/use-persisted-state.ts",
+      "src/data/mock-data.ts",
+      "src/screens/home-dashboard/index.tsx",
+      "src/screens/home-dashboard/dashboard-header.tsx",
+      "src/screens/home-dashboard/icons.tsx",
+      "src/screens/notifications/index.tsx",
+      "src/screens/account/index.tsx",
+      "src/screens/buyer-detail/index.tsx",
+      "src/app/(tabs)/(home)/_layout.tsx"
+    ],
+    "fingerprint": "1ef3ee764d935efa03e76c68675b1cf0fe725bea724db06df3bbc6fb941f4e03"
+  },
+  "reuse": [
+    "src/components/app-tabs.tsx",
+    "src/components/app-tabs.web.tsx",
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/constants/navigation.ts",
+    "src/constants/theme.ts",
+    "src/hooks/use-theme.ts",
+    "src/screens/home-dashboard/icons.tsx",
+    "src/screens/notifications/index.tsx"
+  ],
+  "checks": [
+    "node scripts/stitch/repo-fingerprint.mjs --contract artifacts/stitch/notifications/repo-contract.json --write",
+    "node scripts/agents/validate-artifact.mjs artifacts/stitch/notifications/repo-contract.json",
+    "npm run typecheck (baseline passed; rerun after scoped implementation)",
+    "npm run lint (baseline failure: src/hooks/use-color-scheme.web.ts:11 react-hooks/set-state-in-effect; rerun after scoped implementation and separate baseline failure)"
+  ]
+}

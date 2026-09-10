@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "VerificationResult",
+  "generatedAt": "2026-09-10T09:17:20Z",
+  "status": "pass",
+  "route": "/alerts",
+  "reference": ".stitch/notifications/reference.png",
+  "actual": "artifacts/stitch/notifications/qa/actual.png",
+  "comparison": null,
+  "viewport": {
+    "width": 395,
+    "height": 850,
+    "deviceScaleFactor": 1
+  },
+  "functional": {
+    "status": "pass",
+    "routeLoaded": true,
+    "captureDiagnostics": {
+      "source": "Fresh native iPhone 17 iOS 26.5 simulator capture supplied by the orchestrator after repair 2",
+      "imageDimensions": "395x850 including simulator chrome"
+    },
+    "rootReportedChecks": [
+      "Dashboard bell opens the /alerts notifications route.",
+      "read-all.png shows the read-all state with Đã đọc hết and Bạn đã đọc hết thông báo.",
+      "filter-price.png shows only the price notification with Biến động giá selected.",
+      "filter-purchase.png shows only the buyer notification with Yêu cầu mua selected.",
+      "tab-market.png confirms the shared market tab is reachable from notifications.",
+      "tab-home-pop.png confirms reselecting Home pops the nested notifications stack to the dashboard; a second Home tap uses standard native behavior."
+    ]
+  },
+  "visual": {
+    "status": "pass",
+    "method": "Semantic comparison of the fresh native simulator capture against the cached reference, design contract, and current shared five-tab navigation contract; pixel comparison is advisory only.",
+    "referenceViewport": {
+      "width": 390,
+      "height": 1342,
+      "deviceScaleFactor": 2
+    },
+    "advisoryDiff": null,
+    "pixelMetricUse": "Not used for the verdict. The normalized reference is 153x512 JPEG while the native capture is 395x850 RGBA including simulator chrome; visual-diff exited VISUAL_MISMATCH on dimension mismatch.",
+    "observations": [
+      "The fresh capture renders the NôngSản Pro header, unread notification affordance, avatar, emergency-update heading, filter chips, notification cards, safe-area spacing, and native bottom inset with the expected hierarchy and light green surface treatment.",
+      "The shared native bottom bar contains exactly five directly visible items: Tổng quan, Thị trường, Đầu mối, Kho & Lãi, and Của tôi. Tổng quan is selected on /alerts and no More affordance is present.",
+      "The native header region text is the shared app context (Ngọc Hội, Kon Tum), which differs from the static Stitch sample region; this does not change the notifications layout or navigation contract.",
+      "The supplied read-all, filter, market-tab, and home-pop captures visibly confirm the declared state changes and nested home-stack behavior."
+    ]
+  },
+  "deltas": [],
+  "interactions": [
+    {
+      "id": "header-notifications",
+      "status": "pass",
+      "evidence": "Dashboard bell opens /alerts; actual.png is the loaded destination."
+    },
+    {
+      "id": "mark-all",
+      "status": "pass",
+      "evidence": "artifacts/stitch/notifications/qa/read-all.png shows Đã đọc hết, Bạn đã đọc hết thông báo, and the read control in its completed state."
+    },
+    {
+      "id": "filters",
+      "status": "pass",
+      "evidence": "filter-price.png shows only the price card with Biến động giá selected; filter-purchase.png shows only the buyer card with Yêu cầu mua selected."
+    },
+    {
+      "id": "price-detail",
+      "status": "skipped",
+      "evidence": "No separate orchestrator capture was supplied for primary price-detail press feedback."
+    },
+    {
+      "id": "buyer-actions",
+      "status": "skipped",
+      "evidence": "No separate orchestrator capture was supplied for buyer-action press feedback."
+    },
+    {
+      "id": "alert-settings",
+      "status": "skipped",
+      "evidence": "No separate orchestrator capture was supplied for threshold-settings press feedback."
+    },
+    {
+      "id": "bottom-navigation",
+      "status": "pass",
+      "evidence": "actual.png shows five direct tabs with Tổng quan selected and no More; tab-market.png reaches Thị trường, and tab-home-pop.png reselects Home and pops the nested notifications stack."
+    }
+  ],
+  "reasonCodes": [],
+  "baselineIssues": [
+    "Full repository lint retains the existing src/hooks/use-color-scheme.web.ts react-hooks/set-state-in-effect failure; implementation typecheck and scoped lint passed."
+  ],
+  "followupVerification": {
+    "reviewer": "root",
+    "method": "Direct native simulator inspection after the independent navigation verification.",
+    "evidence": [
+      "artifacts/stitch/notifications/qa/unread-dot-fixed.png",
+      "artifacts/stitch/notifications/qa/bottom-inset-fixed.png"
+    ],
+    "checks": [
+      "Unread dots precede the clocks on both unread cards.",
+      "Price-threshold card is fully visible above the shared five-tab navbar at the end of the list.",
+      "Renamed Notifications route opens from the header bell."
+    ],
+    "limitations": "Earlier actual.png and interaction captures predate the dot/spacing follow-up. Use the follow-up screenshots for current layout."
+  }
+}

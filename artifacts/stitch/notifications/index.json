@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ArtifactIndex",
+  "screen": {
+    "slug": "notifications",
+    "projectId": "16177202758777999982",
+    "screenId": "e88bba9d354c4774a7ad84d775cfe266"
+  },
+  "updatedAt": "2026-09-10T09:48:13.434Z",
+  "artifacts": {
+    "sourceManifest": ".stitch/notifications/manifest.json",
+    "designContract": "artifacts/stitch/notifications/design-contract.json",
+    "designContractDiff": null,
+    "repoContract": "artifacts/stitch/notifications/repo-contract.json",
+    "implementation": "artifacts/stitch/notifications/implementation.json",
+    "verification": "artifacts/stitch/notifications/qa/verification.json",
+    "referenceScreenshot": ".stitch/notifications/reference.png",
+    "actualScreenshot": "artifacts/stitch/notifications/qa/actual.png",
+    "comparison": null,
+    "captureMetadata": null,
+    "diffMetadata": null
+  },
+  "fingerprints": {
+    "stitch": "c79d806e27ddd55e0f06853a1155bab8039dbe1a783301861d2e35b1ce88cbcc",
+    "repository": "1ef3ee764d935efa03e76c68675b1cf0fe725bea724db06df3bbc6fb941f4e03"
+  }
+}

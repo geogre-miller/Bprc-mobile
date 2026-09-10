@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ImplementationResult",
+  "generatedAt": "2026-09-10T09:48:01.116893+00:00",
+  "status": "done",
+  "changedFiles": [
+    "src/screens/notifications/index.tsx",
+    "src/screens/home-dashboard/dashboard-header.tsx",
+    "src/app/_layout.tsx",
+    "src/app/(tabs)/(home)/_layout.tsx",
+    "src/app/(tabs)/(home)/index.tsx",
+    "src/app/(tabs)/(home)/alerts.tsx",
+    "src/constants/navigation.ts",
+    "src/components/app-tabs.tsx"
+  ],
+  "checks": [
+    {
+      "command": "npm run typecheck",
+      "status": "pass",
+      "evidence": "Exit code 0; TypeScript completed without diagnostics after the nested home Stack route move."
+    },
+    {
+      "command": "npx eslint 'src/screens/notifications/index.tsx' 'src/screens/home-dashboard/dashboard-header.tsx' 'src/app/_layout.tsx' 'src/app/(tabs)/(home)/_layout.tsx' 'src/app/(tabs)/(home)/index.tsx' 'src/app/(tabs)/(home)/alerts.tsx' 'src/constants/navigation.ts' 'src/components/app-tabs.tsx'",
+      "status": "pass",
+      "evidence": "Exit code 0; all eight surviving owned source files pass scoped ESLint."
+    },
+    {
+      "command": "npm run lint",
+      "status": "baseline-failure",
+      "evidence": "The existing failure remains only at src/hooks/use-color-scheme.web.ts:11 (react-hooks/set-state-in-effect); owned files have no lint errors."
+    },
+    {
+      "command": "node scripts/agents/ownership-gate.mjs --file artifacts/stitch/notifications/run.json",
+      "status": "pass",
+      "evidence": "ok=true; conflicts=[] for the updated 11-file implementation ownership plan."
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass",
+      "evidence": "No whitespace errors in the bounded source diff."
+    },
+    {
+      "command": "node scripts/agents/validate-artifact.mjs artifacts/stitch/notifications/design-contract.json && node scripts/agents/validate-artifact.mjs artifacts/stitch/notifications/repo-contract.json",
+      "status": "pass",
+      "evidence": "Both validated input contracts remain semantically valid after the route restructuring."
+    },
+    {
+      "command": "npm run typecheck; scoped ESLint after Notifications rename and spacing correction",
+      "status": "pass",
+      "evidence": "Reran successfully after the final source edits; final-review.md records native screenshot evidence."
+    }
+  ],
+  "deviations": [
+    "Notifications is now src/app/(tabs)/(home)/alerts.tsx, a sibling screen in the nested (home) Stack; src/app/(tabs)/(home)/index.tsx owns the home adapter, while the old root and flat tab adapters were removed. URLs remain / and /alerts.",
+    "The shared native navigator keeps exactly the five existing tab items. The alerts navigation registry entry and sixth NativeTabs.Trigger were removed, so the home tab remains selected on /alerts and the native bottom bar remains shared.",
+    "The repository has no Notification domain or persistence source, so the four contract notifications and read/filter state remain screen-local as permitted by RepoContract.",
+    "The shared icon registry is read-only and does not expose severe_cold or done_all; water_drop represents the humidity warning and task_alt/check_circle represent the read controls without adding registry entries.",
+    "User-requested follow-up renamed PriceAlerts to Notifications in src/screens/notifications; /alerts remains the public route.",
+    "Unread dots are inline immediately before the clock icon. ScrollView bottom padding includes BottomTabInset, device bottom safe-area inset, and Spacing.four.",
+    "Card destination actions and threshold settings are placeholders; this is a local notification UI, not a backend integration."
+  ],
+  "blockers": [],
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ]
+}
