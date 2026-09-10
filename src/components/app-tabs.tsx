@@ -9,8 +9,13 @@ export default function AppTabs() {
   return (
     <NativeTabs
       backgroundColor={colors.background}
-      indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      indicatorColor={colors.accentSoft}
+      iconColor={{ default: colors.textSecondary, selected: colors.primary }}
+      labelStyle={{ default: { color: colors.textSecondary }, selected: { color: colors.primary } }}
+      tintColor={colors.primary}
+      shadowColor={colors.borderSubtle}
+      blurEffect="none"
+      disableTransparentOnScrollEdge>
       <NativeTabs.Trigger name={BOTTOM_NAV_ITEMS[0].tabName}>
         <NativeTabs.Trigger.Label>{BOTTOM_NAV_ITEMS[0].label}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon

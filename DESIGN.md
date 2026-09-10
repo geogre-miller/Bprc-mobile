@@ -6,97 +6,97 @@ colors:
 
   surface: '#f6fbf5'
 
-  surface-dim: '#efece6'
+  surface-dim: '#d7dbd6'
 
   surface-bright: '#f6fbf5'
 
   surface-container-lowest: '#ffffff'
 
-  surface-container-low: '#efece6'
+  surface-container-low: '#f0f5f0'
 
-  surface-container: '#efece6'
+  surface-container: '#ebefea'
 
-  surface-container-high: '#eceae4'
+  surface-container-high: '#e5e9e4'
 
-  surface-container-highest: '#e2e0d8'
+  surface-container-highest: '#dfe4df'
 
-  on-surface: '#1f2421'
+  on-surface: '#181d1a'
 
-  on-surface-variant: '#6b7280'
+  on-surface-variant: '#414844'
 
-  inverse-surface: '#1f2421'
+  inverse-surface: '#2c322e'
 
-  inverse-on-surface: '#ffffff'
+  inverse-on-surface: '#edf2ed'
 
-  outline: '#e2e0d8'
+  outline: '#717973'
 
-  outline-variant: '#eceae4'
+  outline-variant: '#c1c8c2'
 
-  surface-tint: '#2d6a4f'
+  surface-tint: '#3f6653'
 
-  primary: '#1b4332'
+  primary: '#012d1d'
 
   on-primary: '#ffffff'
 
   primary-container: '#1b4332'
 
-  on-primary-container: '#2d6a4f'
+  on-primary-container: '#86af99'
 
-  inverse-primary: '#e8f1ec'
+  inverse-primary: '#a5d0b9'
 
-  secondary: '#2d6a4f'
+  secondary: '#2c694e'
 
   on-secondary: '#ffffff'
 
-  secondary-container: '#e8f1ec'
+  secondary-container: '#aeeecb'
 
-  on-secondary-container: '#1b4332'
+  on-secondary-container: '#316e52'
 
-  tertiary: '#b45309'
+  tertiary: '#3e1e00'
 
   on-tertiary: '#ffffff'
 
-  tertiary-container: '#fef3c7'
+  tertiary-container: '#5e3000'
 
-  on-tertiary-container: '#b45309'
+  on-tertiary-container: '#f48c24'
 
-  error: '#b91c1c'
+  error: '#ba1a1a'
 
   on-error: '#ffffff'
 
-  error-container: '#fee2e2'
+  error-container: '#ffdad6'
 
-  on-error-container: '#b91c1c'
+  on-error-container: '#93000a'
 
-  primary-fixed: '#e8f1ec'
+  primary-fixed: '#c1ecd4'
 
-  primary-fixed-dim: '#e8f1ec'
+  primary-fixed-dim: '#a5d0b9'
 
-  on-primary-fixed: '#1b4332'
+  on-primary-fixed: '#002114'
 
-  on-primary-fixed-variant: '#2d6a4f'
+  on-primary-fixed-variant: '#274e3d'
 
-  secondary-fixed: '#e8f1ec'
+  secondary-fixed: '#b1f0ce'
 
-  secondary-fixed-dim: '#e8f1ec'
+  secondary-fixed-dim: '#95d4b3'
 
-  on-secondary-fixed: '#1b4332'
+  on-secondary-fixed: '#002114'
 
-  on-secondary-fixed-variant: '#2d6a4f'
+  on-secondary-fixed-variant: '#0e5138'
 
-  tertiary-fixed: '#fef3c7'
+  tertiary-fixed: '#ffdcc3'
 
-  tertiary-fixed-dim: '#fef3c7'
+  tertiary-fixed-dim: '#ffb77d'
 
-  on-tertiary-fixed: '#1f2421'
+  on-tertiary-fixed: '#2f1500'
 
-  on-tertiary-fixed-variant: '#b45309'
+  on-tertiary-fixed-variant: '#6e3900'
 
   background: '#f6fbf5'
 
-  on-background: '#1f2421'
+  on-background: '#181d1a'
 
-  surface-variant: '#efece6'
+  surface-variant: '#dfe4df'
 
 typography:
 
@@ -318,37 +318,38 @@ Key attributes:
 
 The palette is engineered for high daylight contrast and calm utility. It couples deep evergreen tones with tactile paper neutrals and disciplined financial status colors.
 
-The YAML roles below map to the shared light runtime palette. Some roles intentionally share a value because the app uses one token for multiple surfaces or states.
+The YAML roles above are the source of truth for the shared light runtime palette. Use the named role instead of recreating or approximating a color in a screen.
 
 ### Core Canvas &amp; Surfaces
 
-- **Canvas (`#F6FBF5`):** Pale sage neutral providing a low-strain, paper-like foundation.
+- **Canvas (`#F6FBF5`):** Pale sage neutral providing the low-strain foundation.
 
-- **Surface Elevation (`#FFFFFF`):** Crisp white for structured data cards, table ledgers, and modal sheets.
+- **Surface Elevation (`#FFFFFF`):** `surface-container-lowest` is used for crisp structured data cards, table ledgers, and modal sheets.
 
-- **Surface Subdued (`#EFECE6`):** Secondary containment for grouped line items, metric wells, and disabled fields.
+- **Surface Roles:** `surface-dim` `#D7DBD6`, `surface-container-low` `#F0F5F0`, `surface-container` `#EBEFEA`, `surface-container-high` `#E5E9E4`, and `surface-container-highest` `#DFE4DF` provide tonal steps for grouped content and metric wells.
 
 ### Brand Palette
 
-- **Primary Deep Forest (`#1B4332`):** Anchors headers, primary interactive surfaces, and brand emphasis.
+- **Primary Deep Forest (`#012D1D`):** Anchors headers, text, and primary emphasis.
 
-- **Accent Deep Moss (`#2D6A4F`):** Used for interactive states, secondary buttons, active selection tabs, and segmented controls.
+- **Primary Container (`#1B4332`):** Filled actions, active navigation, and strong brand surfaces.
 
-- **Subtle Sage Tint (`#E8F1EC`):** Surface tint for active badges, positive metric containers, and selected navigation nodes.
+- **Secondary Moss (`#2C694E`):** Secondary actions, market movement, and active selection states.
+- **Secondary Container (`#AEEECB`):** Positive badges, selected controls, and lightweight metric containers.
 
 ### Borders &amp; Delimiters
 
-- **Warm Neutral Border (`#E2E0D8`):** The primary boundary line for cards, row separators, and text inputs.
+- **Outline (`#717973`):** Higher-contrast focus and control outlines.
 
-- **Subtle Divider (`#ECEAE4`):** Internal cell splitters for high-density ledgers.
+- **Outline Variant (`#C1C8C2`):** Card boundaries, row separators, and text inputs.
 
 ### Financial Semantics
 
-- **Gain / Profit / Upward Trend (`#15803D`):** Rich forest emerald for positive yield, realized profits, and market increases. Accompanied by `#DCFCE7` for low-contrast chip backgrounds.
+- **Positive / Upward Trend:** Use `secondary` `#2C694E` with `secondary-container` `#AEEECB`.
 
-- **Loss / Expense / Downward Trend (`#B91C1C`):** Earthy brick red for deficits, price drops, and outgoing payments. Accompanied by `#FEE2E2` for alert chip fills.
+- **Error / Downward Trend:** Use `error` `#BA1A1A` with `error-container` `#FFDAD6`.
 
-- **Pending / Threshold Warning (`#B45309`):** Burnished amber for pending settlements, warehouse capacity limits, or moisture tolerances. Accompanied by `#FEF3C7` container fills.
+- **Pending / Threshold Warning:** Use `on-tertiary-fixed-variant` `#6E3900` with `tertiary-fixed` `#FFDCC3`; use `on-tertiary-container` `#F48C24` for highlighted orange copy.
 
 ## Typography
 
@@ -382,13 +383,13 @@ The layout is built around a predictable mobile vertical rhythm, adhering to a 4
 
 Visual hierarchy is communicated through tactile surface differentiation, tonal containment, and crisp low-contrast borders. Deep dropshadows and soft blurred multi-tier elevations are omitted to prevent visual murkiness under outdoor brightness.
 
-- **Level 0 (Canvas):** Pale sage neutral `#F6FBF5`). The foundational plane on which all components sit.
+- **Level 0 (Canvas):** Pale sage neutral `#F6FBF5`, the foundational plane on which all components sit.
 
-- **Level 1 (Card / Ledger Surface):** Pure opaque white `#FFFFFF`) with a `1px` continuous border of `#E2E0D8`. Zero blur shadow by default `box-shadow: none`).
+- **Level 1 (Card / Ledger Surface):** `surface-container-lowest` `#FFFFFF` with a `1px` `outline-variant` `#C1C8C2` border. Zero blur shadow by default (`box-shadow: none`).
 
 - **Level 2 (Active Item / Sheet):** Raised bottom sheets, filter drawers, and sticky headers use a grounded micro-shadow: `0 4px 12px -2px rgba(27, 67, 50, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.04)` combined with the standard `1px` border.
 
-- **Depth via Tonal Inset:** Metric wells (e.g., net valuation summaries inside cards) rest flush inside white cards using the subdued surface `#EFECE6`), delivering visual structure without layer elevation.
+- **Depth via Tonal Inset:** Metric wells (e.g., net valuation summaries inside cards) rest flush inside white cards using `surface-container-low` `#F0F5F0`, delivering visual structure without layer elevation.
 
 ## Shapes
 
@@ -406,44 +407,44 @@ The design system adopts a soft, disciplined shape language `roundedness: 1`). E
 
 ### Buttons
 
-- **Primary:** Forest green `#1B4332`) solid background, `#FFFFFF` text, 8px border radius, 48px standard height, `title-md` font weight. Active/Pressed state darkens to `#133024`.
+- **Primary:** `primary-container` `#1B4332` solid background with `on-primary` `#FFFFFF` text, 8px border radius, 48px standard height, and `title-md` font weight. Active/Pressed state uses `primary` `#012D1D`.
 
-- **Secondary / Outline:** Pure white background, `1.5px` border in `#2D6A4F`, text in `#1B4332`.
+- **Secondary / Outline:** `surface-container-low` `#F0F5F0` background, `1.5px` `outline` `#717973` border, and `primary` `#012D1D` text.
 
-- **Destructive:** Light rose background `#FEE2E2`), text and border in `#B91C1C`.
+- **Destructive:** `error-container` `#FFDAD6` background with `error` `#BA1A1A` text and border.
 
 - **Full Width:** Mobile execution forms utilize sticky bottom action buttons spanning the full container width minus 32px safe margins.
 
 ### Input Fields &amp; Selectors
 
-- **Structure:** 48px height, 8px radius, white background, `1px` border `#E2E0D8`. Focus state transitions border to `#1B4332` with a `2px` inset outline.
+- **Structure:** 48px height, 8px radius, `surface-container-lowest` `#FFFFFF` background, and a `1px` `outline-variant` `#C1C8C2` border. Focus state transitions the border to `primary` `#012D1D` with a `2px` inset outline.
 
-- **Numerical Inputs:** Right-aligned numerical entry for currency and weight, permanently displaying fixed units (e.g., `₫`, `kg`, `tấn`) anchored on the trailing side in muted neutral text `#666660`).
+- **Numerical Inputs:** Right-aligned numerical entry for currency and weight, permanently displaying fixed units (e.g., `₫`, `kg`, `tấn`) anchored on the trailing side in `on-surface-variant` `#414844`.
 
-- **Labels:** Left-aligned above the input using `label-md` in `#3E433E`, with an optional secondary prompt on the right.
+- **Labels:** Left-aligned above the input using `label-md` in `on-surface-variant` `#414844`, with an optional secondary prompt on the right.
 
 ### List Items &amp; Table Rows
 
 - **Dimensions:** 56px minimum row height with 16px horizontal padding.
 
-- **Dividers:** Clean `1px` hairline dividers `#ECEAE4`) running edge-to-edge or indented 16px to align with text labels.
+- **Dividers:** Clean `1px` hairline dividers in `outline-variant` `#C1C8C2` running edge-to-edge or indented 16px to align with text labels.
 
 - **Ledger Alignment:** Commodity name and transaction date on the left; quantity, localized price `85,000 ₫/kg`), and profit/loss indicator flush right in tabular formatting.
 
 ### Valuation &amp; Metric Cards
 
-- **Structure:** Crisp white background with `1px` border in `#E2E0D8`, 16px internal padding.
+- **Structure:** `surface-container-lowest` `#FFFFFF` background with a `1px` `outline-variant` `#C1C8C2` border and 16px internal padding.
 
 - **Metric Row:** Label in `label-sm` (uppercase, muted), value in `numeric-hero`.
 
-- **Trend Pills:** Integrated inline badges showing delta (e.g., `+3.4%` or `-1,200 ₫/kg`) using semantic container fills `#DCFCE7` or `#FEE2E2`) with corresponding high-contrast text.
+- **Trend Pills:** Integrated inline badges showing delta (e.g., `+3.4%` or `-1,200 ₫/kg`) use `secondary-container` `#AEEECB` or `error-container` `#FFDAD6` with corresponding high-contrast text.
 
 ### Chips &amp; Commodity Badges
 
-- **Filter Chips:** 36px height, soft 6px radius, neutral border `#E2E0D8` on white. Selected state uses deep moss fill `#2D6A4F`) with white text.
+- **Filter Chips:** 36px height, soft 6px radius, `outline-variant` `#C1C8C2` border on `surface-container-lowest` `#FFFFFF`. Selected state uses `primary-container` `#1B4332` with `on-primary` `#FFFFFF` text.
 
-- **Unit &amp; Grade Badges:** Small badges (e.g., "Grade A", "Robusta", "Độ ẩm 14%") formatted in `label-sm` with `#EFECE6` neutral background and `#1F2421` text.
+- **Unit &amp; Grade Badges:** Small badges (e.g., "Grade A", "Robusta", "Độ ẩm 14%") use `label-sm` with `surface-container-highest` `#DFE4DF` background and `on-surface` `#181D1A` text.
 
 ### Navigation Bar
 
-- **Bottom Bar:** 64px fixed height with subtle `#E2E0D8` top boundary line. Canvas in `#FFFFFF`. Icons are dual-tone 24px glyphs: 1.75px stroke in neutral `#6B7280` when inactive, solid fill in `#1B4332` with a 4px bottom dot when active.
+- **Bottom Bar:** 64px fixed height with a subtle `outline-variant` `#C1C8C2` top boundary line. Canvas uses `surface-container-lowest` `#FFFFFF`. Icons are dual-tone 24px glyphs: 1.75px stroke in `on-surface-variant` `#414844` when inactive, and `primary-container` `#1B4332` with a 4px bottom dot when active.

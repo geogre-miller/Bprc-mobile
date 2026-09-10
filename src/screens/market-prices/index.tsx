@@ -377,10 +377,10 @@ export function MarketPrices() {
           style={styles.filterScroll}>
           <Pressable onPress={() => setSheet('product')}>
             <View style={[styles.filterPill, styles.activeFilterPill]}>
-              <ThemedText type="labelMd" style={{ color: '#FFFFFF' }}>
+              <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.onPrimary }}>
                 {productFilterLabel}
               </ThemedText>
-              <Icon name="expand_more" size={16} color="#FFFFFF" />
+              <Icon name="expand_more" size={16} color={SCREEN_COLORS.onPrimary} />
             </View>
           </Pressable>
           <Pressable onPress={() => setSheet('region')}>
@@ -415,10 +415,10 @@ export function MarketPrices() {
             <ThemedText type="bodySm" style={{ color: SCREEN_COLORS.secondaryContainer, fontWeight: '700' }}>
               18 tăng
             </ThemedText>
-            <ThemedText type="bodySm" style={{ color: '#FFDAD6' }}>
+            <ThemedText type="bodySm" style={{ color: SCREEN_COLORS.lossContainer }}>
               {' • 4 giảm'}
             </ThemedText>
-            <ThemedText type="bodySm" style={{ color: '#FFFFFF' }}>
+            <ThemedText type="bodySm" style={{ color: SCREEN_COLORS.onPrimary }}>
               {' • Cập nhật lúc 08:30'}
             </ThemedText>
           </ThemedText>
@@ -483,15 +483,15 @@ export function MarketPrices() {
                 <ThemedText type="labelSm" style={{ color: SCREEN_COLORS.secondaryContainer }}>
                   CẢNH BÁO TỰ ĐỘNG
                 </ThemedText>
-                <ThemedText type="bodySm" numberOfLines={1} style={{ color: '#FFFFFF' }}>
+                <ThemedText type="bodySm" numberOfLines={1} style={{ color: SCREEN_COLORS.onPrimary }}>
                   Báo khi Cà phê chạm 120,000 ₫/kg
                 </ThemedText>
               </View>
               <View style={[styles.ctaButton, { backgroundColor: SCREEN_COLORS.secondary }]}>
-                <ThemedText type="labelMd" style={{ color: '#FFFFFF' }}>
+                <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.onPrimary }}>
                   Đặt báo
                 </ThemedText>
-                <Icon name="chevron_right" size={16} color="#FFFFFF" />
+                <Icon name="chevron_right" size={16} color={SCREEN_COLORS.onPrimary} />
               </View>
             </View>
           </Pressable>
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: Radius.container,
-    shadowColor: '#1B4332',
+    shadowColor: SCREEN_COLORS.shadow,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 1 },
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 14,
     borderRadius: Radius.container,
-    shadowColor: '#1B4332',
+    shadowColor: SCREEN_COLORS.shadow,
     shadowOpacity: 0.04,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
     backgroundColor: SCREEN_COLORS.secondary,
   },
   selectedLightPill: {
-    backgroundColor: '#E8F1EC',
+    backgroundColor: SCREEN_COLORS.secondaryContainer,
   },
   bulletin: {
     height: 48,
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
   },
   bulletinText: {
     flex: 1,
-    color: '#FFFFFF',
+    color: SCREEN_COLORS.onPrimary,
   },
   liveDot: {
     width: 8,
@@ -720,7 +720,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DCEBE2',
+    backgroundColor: SCREEN_COLORS.secondaryContainer,
   },
   insightBody: {
     flex: 1,
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(1, 45, 29, 0.28)',
+    backgroundColor: SCREEN_COLORS.primaryScrim,
   },
   sheet: {
     backgroundColor: SCREEN_COLORS.surface,
@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingTop: 10,
     paddingBottom: 24,
-    shadowColor: '#012D1D',
+    shadowColor: SCREEN_COLORS.shadow,
     shadowOpacity: 0.14,
     shadowRadius: 12,
     shadowOffset: { width: 0, height: -4 },
@@ -808,7 +808,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.container,
   },
   optionSelected: {
-    backgroundColor: '#E8F1EC',
+    backgroundColor: SCREEN_COLORS.secondaryContainer,
   },
   optionLabel: {
     flexDirection: 'row',

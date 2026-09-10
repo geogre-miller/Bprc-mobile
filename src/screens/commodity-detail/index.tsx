@@ -380,7 +380,7 @@ export function CommodityDetail({
                   cy={chart.selectedY}
                   r="5"
                   fill={SCREEN_COLORS.primaryContainer}
-                  stroke="#FFFFFF"
+                  stroke={SCREEN_COLORS.onPrimary}
                   strokeWidth="2.5"
                 />
                 <Circle cx="358" cy="19" r="4.5" fill={SCREEN_COLORS.primary} stroke={SCREEN_COLORS.secondaryContainer} strokeWidth="2" />
@@ -487,7 +487,7 @@ export function CommodityDetail({
               <ThemedText type="titleMd" style={[styles.bold, { color: SCREEN_COLORS.onPrimary }]}>
                 Tạo phiếu bán {label.toLowerCase()} ngay
               </ThemedText>
-              <ThemedText type="labelSm" style={{ color: '#A5D0B9' }}>
+              <ThemedText type="labelSm" style={{ color: SCREEN_COLORS.secondaryContainer }}>
                 Khóa giá chốt {formatCommodityPrice(displayPrice)} ₫ trong 2 giờ
               </ThemedText>
             </View>
@@ -600,7 +600,7 @@ function BuyerCard({ buyer, onPrimary, onSecondary }: { buyer: BuyerCardData; on
 }
 
 const cardShadow = {
-  shadowColor: '#1B4332',
+  shadowColor: SCREEN_COLORS.shadow,
   shadowOffset: { width: 0, height: 1 },
   shadowOpacity: 0.06,
   shadowRadius: 4,
@@ -610,7 +610,7 @@ const cardShadow = {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: SCREEN_COLORS.background },
   shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: SCREEN_COLORS.background },
-  header: { height: 64, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0, backgroundColor: 'rgba(246,251,245,0.85)', shadowColor: '#1B4332', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
+  header: { height: 64, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0, backgroundColor: SCREEN_COLORS.background, shadowColor: SCREEN_COLORS.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexShrink: 1 },
   brandLogo: { width: 36, height: 32, borderRadius: Radius.base },
   brandTitle: { lineHeight: 20 },
@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
   fixedFooter: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'transparent' },
   sellCta: { minHeight: 44, marginHorizontal: Spacing.three, marginTop: Spacing.two, borderRadius: Radius.container, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two, ...cardShadow },
   sellCopy: { flex: 1 },
-  sellButtonLabel: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: Radius.base, paddingHorizontal: 10, paddingVertical: 7 },
+  sellButtonLabel: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one, backgroundColor: SCREEN_COLORS.primaryPressed, borderRadius: Radius.base, paddingHorizontal: 10, paddingVertical: 7 },
   pressed: { opacity: 0.68 },
   ctaPressed: { transform: [{ scale: 0.99 }] },
 });
