@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "RuntimeHealth",
+  "checkedAt": "2026-09-10T07:25:03.923Z",
+  "ok": true,
+  "required": [
+    "browser",
+    "stitch"
+  ],
+  "requiredFailures": [],
+  "capabilities": {
+    "stitch": {
+      "status": "available",
+      "required": true,
+      "version": null,
+      "detail": "codex: stitch https://stitch.googleapis.com/mcp - enabled Unknown; claude: Status: ✘ Failed to connect",
+      "reasonCode": null
+    },
+    "codegraph": {
+      "status": "available",
+      "required": false,
+      "version": "1.5.0",
+      "detail": "files=106; pending={\"added\":0,\"modified\":0,\"removed\":0}",
+      "reasonCode": null
+    },
+    "gitnexus": {
+      "status": "stale",
+      "required": false,
+      "version": null,
+      "detail": "Index is stale",
+      "reasonCode": null
+    },
+    "expoDocs": {
+      "status": "unknown",
+      "required": false,
+      "version": null,
+      "detail": "Expo MCP configured but network reachability failed",
+      "reasonCode": "CAPABILITY_UNAVAILABLE"
+    },
+    "browser": {
+      "status": "available",
+      "required": true,
+      "version": "1.61.0",
+      "detail": "package=1.61.0; chrome=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome; claudePlugin=true",
+      "reasonCode": null
+    },
+    "rtk": {
+      "status": "available",
+      "required": false,
+      "version": "0.48.0",
+      "detail": "Use only documented RTK command forms; raw fallback remains valid",
+      "reasonCode": null
+    },
+    "repositoryWritable": {
+      "status": "available",
+      "required": false,
+      "version": null,
+      "detail": "Repository root is writable",
+      "reasonCode": null
+    }
+  },
+  "repository": {
+    "root": "/Users/mac/orca/Bprc-mobile",
+    "writable": true,
+    "branch": "fix/unify-light-theme",
+    "head": "8ea4963136ed0e1b5923b6eb6653213c33ab0703",
+    "status": [
+      "?? .agents/skills/gitnexus-cli/",
+      "?? .agents/skills/gitnexus-debugging/",
+      "?? .agents/skills/gitnexus-exploring/",
+      "?? .agents/skills/gitnexus-guide/",
+      "?? .agents/skills/gitnexus-impact-analysis/",
+      "?? .agents/skills/gitnexus-refactoring/",
+      "?? .serena/"
+    ]
+  }
+}

@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "DesignContract",
+  "sourceFingerprint": "c79d806e27ddd55e0f06853a1155bab8039dbe1a783301861d2e35b1ce88cbcc",
+  "generatedAt": "2026-09-10T07:36:33Z",
+  "project": {
+    "id": "16177202758777999982",
+    "title": "NôngSản Pro"
+  },
+  "screen": {
+    "slug": "notifications",
+    "id": "e88bba9d354c4774a7ad84d775cfe266",
+    "name": "Notifications",
+    "title": "Notifications",
+    "locale": "vi",
+    "deviceType": "MOBILE",
+    "viewportWidth": 390,
+    "referenceHeight": 1342,
+    "sourceBitmap": {
+      "width": 780,
+      "height": 2684
+    },
+    "logicalReference": {
+      "width": 390,
+      "height": 1342,
+      "deviceScaleFactor": 2
+    }
+  },
+  "layout": {
+    "canvas": {
+      "background": "#f6fbf5",
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "centeredOnWideSurfaces": true,
+      "verticalScroll": true
+    },
+    "safeArea": {
+      "headerTopPadding": "env(safe-area-inset-top, 0px)",
+      "bottomNavigationPadding": "env(safe-area-inset-bottom, 0px)"
+    },
+    "header": {
+      "position": "fixed",
+      "height": 64,
+      "horizontalPadding": 16,
+      "surface": "#f6fbf5",
+      "surfaceAlpha": 0.85,
+      "backdropBlur": "xl",
+      "shadow": "0 1px 8px rgba(0,0,0,0.04)",
+      "brand": "NôngSản Pro",
+      "region": "Tây Nguyên • Đắk Lắk",
+      "brandLogo": {
+        "sourceSelector": "header img[alt=\"NôngSản Pro Logo\"]",
+        "height": 32,
+        "objectFit": "contain"
+      },
+      "notificationTarget": {
+        "ariaLabel": "Thông báo",
+        "size": 44,
+        "radius": 12,
+        "surface": "#f0f5f0",
+        "icon": "notifications",
+        "iconSize": 22,
+        "unreadBadge": "#ba1a1a"
+      },
+      "profileAvatar": {
+        "sourceSelector": "header img:nth-of-type(2)",
+        "size": 32,
+        "radius": "full"
+      }
+    },
+    "main": {
+      "surface": "#f6fbf5",
+      "paddingHorizontal": 16,
+      "paddingTop": 80,
+      "paddingBottom": 112
+    },
+    "controls": {
+      "heading": "Cập nhật khẩn cấp",
+      "headingStyle": "headline-sm",
+      "unreadPulse": true,
+      "markReadLabel": "Đánh dấu đã đọc",
+      "markReadIcon": "done_all",
+      "filterRow": {
+        "horizontalScroll": true,
+        "height": 36,
+        "gap": 8,
+        "items": [
+          "Tất cả 5",
+          "Biến động giá",
+          "Yêu cầu mua",
+          "Hệ thống"
+        ]
+      }
+    },
+    "notificationList": {
+      "gap": 8,
+      "cardSurface": "#ffffff",
+      "cardRadius": 12,
+      "cardPadding": 16,
+      "cardShadow": "shadow-sm",
+      "cardGap": 8,
+      "iconWell": {
+        "size": 40,
+        "radius": 12
+      },
+      "contentRowGap": 12
+    },
+    "statusCard": {
+      "surface": "#f0f5f0",
+      "radius": 12,
+      "padding": 16,
+      "icon": "tune",
+      "iconWellSize": 40,
+      "title": "Cài đặt ngưỡng giá",
+      "body": "Báo rung khi giá Robusta biến động > 2,000₫/ngày",
+      "actionIcon": "chevron_right"
+    },
+    "bottomNavigation": {
+      "position": "fixed",
+      "height": 64,
+      "surface": "#ffffff",
+      "surfaceAlpha": 0.95,
+      "backdropBlur": "xl",
+      "shadow": "0 -2px 10px rgba(27,67,50,0.06)",
+      "items": [
+        {
+          "path": "trang-chu",
+          "label": "Trang chủ",
+          "icon": "home"
+        },
+        {
+          "path": "thi-truong",
+          "label": "Thị trường",
+          "icon": "trending_up"
+        },
+        {
+          "path": "giao-dich",
+          "label": "Giao dịch",
+          "icon": "receipt_long"
+        },
+        {
+          "path": "kho-&-loi-nhuan",
+          "label": "Kho & Lãi",
+          "icon": "inventory_2"
+        },
+        {
+          "path": "ca-nhan",
+          "label": "Cá nhân",
+          "icon": "person"
+        }
+      ]
+    }
+  },
+  "typography": {
+    "families": {
+      "headline": "Manrope",
+      "body": "Public Sans",
+      "icons": "Material Symbols Outlined"
+    },
+    "styles": {
+      "headline-sm": {
+        "family": "Manrope",
+        "size": 18,
+        "lineHeight": 24,
+        "letterSpacing": "-0.005em",
+        "weight": 600
+      },
+      "title-md": {
+        "family": "Public Sans",
+        "size": 16,
+        "lineHeight": 22,
+        "letterSpacing": "0em",
+        "weight": 600
+      },
+      "body-md": {
+        "family": "Public Sans",
+        "size": 14,
+        "lineHeight": 20,
+        "letterSpacing": "0em",
+        "weight": 400
+      },
+      "body-sm": {
+        "family": "Public Sans",
+        "size": 12,
+        "lineHeight": 16,
+        "letterSpacing": "0.01em",
+        "weight": 400
+      },
+      "label-md": {
+        "family": "Public Sans",
+        "size": 13,
+        "lineHeight": 18,
+        "letterSpacing": "0.01em",
+        "weight": 500
+      },
+      "label-sm": {
+        "family": "Public Sans",
+        "size": 11,
+        "lineHeight": 14,
+        "letterSpacing": "0.04em",
+        "weight": 600
+      },
+      "numeric-md": {
+        "family": "Public Sans",
+        "size": 14,
+        "lineHeight": 20,
+        "letterSpacing": "0em",
+        "weight": 600
+      }
+    }
+  },
+  "colors": {
+    "surface": "#f6fbf5",
+    "surfaceContainerLowest": "#ffffff",
+    "surfaceContainerLow": "#f0f5f0",
+    "surfaceContainer": "#ebefea",
+    "surfaceContainerHigh": "#e5e9e4",
+    "surfaceContainerHighest": "#dfe4df",
+    "onSurface": "#181d1a",
+    "onSurfaceVariant": "#414844",
+    "outline": "#717973",
+    "primary": "#012d1d",
+    "primaryContainer": "#1b4332",
+    "secondary": "#2c694e",
+    "secondaryContainer": "#aeeecb",
+    "onSecondaryContainer": "#316e52",
+    "tertiaryFixed": "#ffdcc3",
+    "onTertiaryFixed": "#2f1500",
+    "error": "#ba1a1a",
+    "errorContainer": "#ffdad6",
+    "onPrimary": "#ffffff",
+    "onSecondary": "#ffffff",
+    "surfaceTint": "#3f6653"
+  },
+  "components": [
+    {
+      "id": "urgent-price",
+      "type": "notification-card",
+      "category": "price",
+      "icon": "trending_up",
+      "iconWell": "#aeeecb",
+      "label": "Biến động khẩn cấp",
+      "time": "15 phút trước",
+      "title": "Cà phê Robusta đạt đỉnh mới 118,500 ₫/kg!",
+      "body": "Giá tăng +3,200 ₫ so với hôm qua tại Đắk Lắk. Kho dự trữ 2,500 kg của nhà bạn tăng giá trị ước tính thêm:",
+      "metric": "Lợi nhuận gia tăng: +8,000,000 ₫",
+      "action": "Xem chi tiết giá sàn",
+      "unread": true
+    },
+    {
+      "id": "buyer-inquiry",
+      "type": "notification-card",
+      "category": "buyer",
+      "icon": "handshake",
+      "iconWell": "#ffdcc3",
+      "label": "Thương lái hỏi mua",
+      "time": "45 phút trước",
+      "title": "Đại lý Thành Công gửi báo giá thu mua",
+      "body": "Đề nghị mua 2,000 kg (2 tấn) Robusta với đơn giá 119,000 ₫/kg. Xe tải bốc trực tiếp tại vườn.",
+      "verified": "Đại lý Nông sản Thành Công — Đã xác minh uy tín • Trả tiền mặt ngay",
+      "actions": [
+        "Xem đề nghị",
+        "Liên hệ ngay"
+      ],
+      "unread": true
+    },
+    {
+      "id": "payment-complete",
+      "type": "notification-card",
+      "category": "system",
+      "icon": "receipt_long",
+      "iconWell": "#e5e9e4",
+      "label": "Thanh toán hoàn tất",
+      "time": "2 giờ trước",
+      "title": "Đã nhận thanh toán 142,200,000 ₫",
+      "body": "Giao dịch bán 1,200 kg cà phê cho Đại lý Toàn Thắng đã khớp lệnh thành công vào tài khoản Vietcombank (*4821). Mã GD: #TX-984218",
+      "status": "Thành công",
+      "unread": false
+    },
+    {
+      "id": "storage-warning",
+      "type": "notification-card",
+      "category": "system",
+      "icon": "severe_cold",
+      "iconWell": "#ffdad6",
+      "label": "Cảnh báo kho bãi",
+      "time": "1 ngày trước",
+      "title": "Cảnh báo độ ẩm sau mưa bão",
+      "body": "Độ ẩm không khí tại trạm Krông Búk đang vượt 88%. Nguy cơ cà phê hút ẩm lại làm giảm chuẩn chất lượng xuất khẩu. Hãy kiểm tra bạt phủ và chạy máy quạt sấy.",
+      "metric": "Độ ẩm mục tiêu: <14.5% · Hiện tại: 16.2%",
+      "unread": false
+    }
+  ],
+  "interactions": [
+    {
+      "id": "header-notifications",
+      "action": "Tap the Thông báo header button",
+      "expectedState": "Press is reachable; destination behavior is not encoded in Stitch"
+    },
+    {
+      "id": "mark-all",
+      "action": "Tap Đánh dấu đã đọc",
+      "expectedState": "Unread dots and pulse are removed, cards dim, and the control changes to a check state"
+    },
+    {
+      "id": "filters",
+      "action": "Tap Tất cả, Biến động giá, Yêu cầu mua, or Hệ thống",
+      "expectedState": "Selected chip uses primary styling and only matching notification cards remain; empty state appears when none match"
+    },
+    {
+      "id": "price-detail",
+      "action": "Tap Xem chi tiết giá sàn",
+      "expectedState": "Primary button press feedback is visible; destination is not encoded"
+    },
+    {
+      "id": "buyer-actions",
+      "action": "Tap Xem đề nghị or Liên hệ ngay",
+      "expectedState": "Button press feedback is visible; destination is not encoded"
+    },
+    {
+      "id": "alert-settings",
+      "action": "Tap Thiết lập cảnh báo",
+      "expectedState": "Threshold settings affordance is reachable"
+    },
+    {
+      "id": "bottom-navigation",
+      "action": "Tap a bottom navigation item",
+      "expectedState": "Item is reachable; source href values are placeholders and active state is not encoded"
+    }
+  ],
+  "reference": {
+    "screenshotPath": ".stitch/notifications/reference.png",
+    "htmlPath": ".stitch/notifications/source.html",
+    "manifestPath": ".stitch/notifications/manifest.json",
+    "normalizedScreenshot": {
+      "width": 153,
+      "height": 512,
+      "sha256": "5597b984c6850bb4bbd5fe42e3c328a4755fb7f36040a7841200d7f7499b13ec"
+    },
+    "sourceScreenMetadata": {
+      "width": 780,
+      "height": 2684,
+      "deviceType": "MOBILE",
+      "title": "Notifications"
+    },
+    "htmlViewportFacts": {
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "logicalReferenceWidth": 390,
+      "logicalReferenceHeight": 1342,
+      "deviceScaleFactor": 2
+    }
+  },
+  "responsive": {
+    "maxContentWidth": 430,
+    "wideSurfaceAlignment": "center",
+    "mobileHorizontalPadding": 16,
+    "filterBehavior": "horizontal-scroll"
+  },
+  "uncertainties": [],
+  "verificationHints": {
+    "route": null,
+    "referenceViewport": {
+      "width": 390,
+      "height": 1342,
+      "deviceScaleFactor": 2
+    },
+    "interactions": [
+      {
+        "id": "mark-all",
+        "action": "Tap Đánh dấu đã đọc",
+        "expectedState": "Unread indicators clear and the control changes to a check state"
+      },
+      {
+        "id": "filters",
+        "action": "Tap each notification filter chip",
+        "expectedState": "Only matching cards remain and selected chip uses primary styling"
+      },
+      {
+        "id": "price-detail",
+        "action": "Tap Xem chi tiết giá sàn",
+        "expectedState": "Primary button press feedback is visible"
+      },
+      {
+        "id": "buyer-actions",
+        "action": "Tap Xem đề nghị or Liên hệ ngay",
+        "expectedState": "Buyer action button press feedback is visible"
+      },
+      {
+        "id": "alert-settings",
+        "action": "Tap Thiết lập cảnh báo",
+        "expectedState": "Threshold settings affordance is reachable"
+      },
+      {
+        "id": "bottom-navigation",
+        "action": "Tap a bottom navigation item",
+        "expectedState": "Navigation item is reachable"
+      }
+    ],
+    "keyTestIds": []
+  },
+  "userOverrides": [
+    "Use the existing five-tab Expo Router navbar, not the illustrative Stitch navbar and not a sixth Notifications tab.",
+    "Unread card dots precede the clock icon inline.",
+    "Provide bottom scroll clearance for the price-threshold card.",
+    "Implementation module and component are named Notifications."
+  ]
+}

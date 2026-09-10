@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "StitchSourceManifest",
+  "projectId": "16177202758777999982",
+  "screenId": "e88bba9d354c4774a7ad84d775cfe266",
+  "retrievedAt": "2026-09-10T07:27:21.446Z",
+  "sourceFingerprint": "c79d806e27ddd55e0f06853a1155bab8039dbe1a783301861d2e35b1ce88cbcc",
+  "screenshot": {
+    "path": ".stitch/notifications/reference.png",
+    "sha256": "5597b984c6850bb4bbd5fe42e3c328a4755fb7f36040a7841200d7f7499b13ec",
+    "bytes": 30815,
+    "height": 512,
+    "width": 153
+  },
+  "html": {
+    "path": ".stitch/notifications/source.html",
+    "sha256": "6d29ab19c446baa784269021040f294263523e06f24bf1826dab2eefe3e8804b",
+    "bytes": 23190
+  },
+  "assets": []
+}

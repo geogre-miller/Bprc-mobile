@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -16,9 +16,12 @@ export function DashboardHeader() {
   return (
     <ThemedView style={[styles.header, { borderBottomColor: theme.borderSubtle }]}>
       <ThemedView style={styles.brand}>
-        <ThemedView style={[styles.brandMark, { backgroundColor: theme.accentSoft }]}>
-          <Icon name="storefront" size={18} color={theme.primary} />
-        </ThemedView>
+        <Image
+          accessibilityLabel="Biểu trưng NôngSản Pro"
+          source={require('@/assets/images/nongsan-pro-logo.png')}
+          resizeMode="contain"
+          style={styles.brandMark}
+        />
         <ThemedView>
           <ThemedText type="titleMd" themeColor="primary">
             NôngSản Pro
@@ -33,17 +36,25 @@ export function DashboardHeader() {
       </ThemedView>
 
       <ThemedView style={styles.actions}>
-        <Pressable accessibilityLabel="Thông báo">
-          <ThemedView type="backgroundSelected" style={styles.button}>
-            <Icon name="notifications" size={22} color={theme.textSecondary} />
-            <View style={[styles.badgeDot, { backgroundColor: theme.loss, borderColor: theme.background }]} />
-          </ThemedView>
-        </Pressable>
+        <Link href="/alerts" asChild>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Thông báo"
+            style={({ pressed }) => pressed && styles.pressed}>
+            <ThemedView type="backgroundSelected" style={styles.button}>
+              <Icon name="notifications" size={22} color={theme.textSecondary} />
+              <View style={[styles.badgeDot, { backgroundColor: theme.loss, borderColor: theme.background }]} />
+            </ThemedView>
+          </Pressable>
+        </Link>
         <Link href="/account" asChild>
           <Pressable accessibilityLabel="Cá nhân">
-            <ThemedView style={[styles.avatar, { backgroundColor: theme.accentSoft }]}>
-              <Icon name="person" size={20} color={theme.primary} />
-            </ThemedView>
+            <Image
+              accessibilityLabel="Ảnh đại diện"
+              source={require('@/assets/images/nongsan-pro-profile.png')}
+              resizeMode="cover"
+              style={styles.avatar}
+            />
           </Pressable>
         </Link>
       </ThemedView>
@@ -70,8 +81,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: Radius.container,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#F0F5F0',
   },
   regionRow: {
     flexDirection: 'row',
@@ -99,11 +109,13 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     borderWidth: 2,
   },
+  pressed: {
+    opacity: 0.7,
+  },
   avatar: {
     width: 32,
     height: 32,
     borderRadius: Radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
+    overflow: 'hidden',
   },
 });
