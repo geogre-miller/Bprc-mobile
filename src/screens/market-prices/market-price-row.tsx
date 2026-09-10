@@ -9,7 +9,7 @@ import {
 } from '@/components/price-presentation';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { Icon } from '@/screens/home-dashboard/icons';
 
 export type MarketPriceRowData = {
@@ -30,8 +30,8 @@ export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
   const trendDirection = getPriceTrendDirection(row.changePercent);
   const flat = trendDirection === 'flat';
   const rising = trendDirection === 'up';
-  const trendColor = flat ? '#717973' : rising ? '#2C694E' : '#BA1A1A';
-  const pillBackground = flat ? '#DFE4DF' : rising ? '#AEEECB' : '#FFDAD6';
+  const trendColor = flat ? LightPalette.outline : rising ? LightPalette.secondary : LightPalette.error;
+  const pillBackground = flat ? LightPalette.surfaceHighest : rising ? LightPalette.secondaryContainer : LightPalette.errorContainer;
   const trendIcon = flat ? 'swap_vert' : rising ? 'trending_up' : 'trending_down';
 
   const openCommodityDetail = () =>
@@ -52,26 +52,26 @@ export function MarketPriceRow({ row }: { row: MarketPriceRowData }) {
       onPress={openCommodityDetail}
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
       <ThemedView type="backgroundElement" style={styles.name}>
-        <ThemedText type="titleMd" numberOfLines={1} style={[styles.label, { color: '#012D1D' }]}>
+        <ThemedText type="titleMd" numberOfLines={1} style={[styles.label, { color: LightPalette.primary }]}>
           {row.label}
         </ThemedText>
         {row.badge && (
-          <View style={[styles.badge, { backgroundColor: '#FFDCC3' }]}>
-            <ThemedText type="labelSm" style={{ color: '#2F1500' }}>
+          <View style={[styles.badge, { backgroundColor: LightPalette.tertiaryFixed }]}>
+            <ThemedText type="labelSm" style={{ color: LightPalette.onTertiaryFixed }}>
               {row.badge}
             </ThemedText>
           </View>
         )}
-        <ThemedText type="bodySm" numberOfLines={1} style={{ color: '#414844' }}>
+        <ThemedText type="bodySm" numberOfLines={1} style={{ color: LightPalette.onSurfaceVariant }}>
           {row.detail}
         </ThemedText>
-        <ThemedText type="labelSm" style={{ color: '#717973' }}>
+        <ThemedText type="labelSm" style={{ color: LightPalette.outline }}>
           {row.updatedLabel}
         </ThemedText>
       </ThemedView>
 
       <ThemedView type="backgroundElement" style={styles.figures}>
-        <PriceAmount amount={row.price} locale="en-US" amountStyle={[styles.price, { color: '#181D1A' }]} />
+        <PriceAmount amount={row.price} locale="en-US" amountStyle={[styles.price, { color: LightPalette.onSurface }]} />
         <ThemedText type="bodySm" style={{ color: trendColor }}>
           {flat || row.changeAmount == null
             ? 'Ngang giá'

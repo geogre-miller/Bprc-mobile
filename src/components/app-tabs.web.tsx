@@ -7,13 +7,13 @@ import {
   TabListProps,
 } from 'expo-router/ui';
 import { SymbolView } from 'expo-symbols';
-import { Pressable, useColorScheme, useWindowDimensions, View, StyleSheet } from 'react-native';
+import { Pressable, useWindowDimensions, View, StyleSheet } from 'react-native';
 
 import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { BOTTOM_NAV_ITEMS } from '@/constants/navigation';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon, type IconName } from '@/screens/home-dashboard/icons';
@@ -74,8 +74,7 @@ export function TabButton({ children, isFocused, compact = false, iconName, ...p
 }
 
 export function CustomTabList({ compact = false, ...props }: CustomTabListProps) {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const colors = useTheme();
 
   return (
     <View {...props} style={[styles.tabListContainer, compact && styles.compactTabListContainer]}>

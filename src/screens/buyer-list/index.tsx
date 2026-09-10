@@ -16,34 +16,13 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { BottomTabInset, Radius } from '@/constants/theme';
+import { BottomTabInset, LightPalette, Radius } from '@/constants/theme';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
 import { BUYER_DIRECTORY_FONTS, useBuyerDirectoryFonts } from './fonts';
 
-const COLORS = {
-  background: '#F6FBF5',
-  surface: '#FFFFFF',
-  surfaceLow: '#F0F5F0',
-  surfaceContainer: '#EBEFEA',
-  surfaceHigh: '#E5E9E4',
-  onSurface: '#181D1A',
-  onSurfaceVariant: '#414844',
-  outline: '#717973',
-  primary: '#012D1D',
-  primaryContainer: '#1B4332',
-  secondary: '#2C694E',
-  secondaryContainer: '#AEEECB',
-  secondaryFixed: '#B1F0CE',
-  onSecondaryContainer: '#316E52',
-  onSecondaryFixedVariant: '#0E5138',
-  tertiaryCopy: '#6E3900',
-  tertiaryFixed: '#FFDCC3',
-  error: '#BA1A1A',
-  inverseSurface: '#2C322E',
-  inverseOnSurface: '#EDF2ED',
-} as const;
+const COLORS = LightPalette;
 
 type Price = {
   label: string;
