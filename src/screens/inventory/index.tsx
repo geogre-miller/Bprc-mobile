@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
     borderRadius: 64,
     top: -48,
     right: -36,
-    backgroundColor: 'rgba(1,45,29,0.05)',
+    backgroundColor: COLORS.secondaryContainer,
   },
   valuationHeading: {
     flexDirection: 'row',

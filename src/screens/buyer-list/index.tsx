@@ -199,9 +199,9 @@ function Chip({ children, selected, icon, onPress, accessibilityLabel, tone = 'd
       hitSlop={4}
       onPress={onPress}
       style={({ pressed }) => [styles.filterChip, selected ? styles.filterChipSelected : styles.filterChipIdle, tone === 'orange' && !selected && styles.filterChipOrange, pressed && styles.pressed]}>
-      {icon && <Icon name={icon} size={16} color={selected ? '#FFFFFF' : tone === 'orange' ? COLORS.tertiaryCopy : COLORS.secondary} />}
-      <FontText type="labelMd" style={[styles.filterChipText, { color: selected ? '#FFFFFF' : COLORS.onSurfaceVariant }]}>{children}</FontText>
-      {!icon && <Icon name="expand_more" size={16} color={selected ? '#FFFFFF' : COLORS.onSurfaceVariant} />}
+      {icon && <Icon name={icon} size={16} color={selected ? COLORS.onPrimary : tone === 'orange' ? COLORS.tertiaryCopy : COLORS.secondary} />}
+      <FontText type="labelMd" style={[styles.filterChipText, { color: selected ? COLORS.onPrimary : COLORS.onSurfaceVariant }]}>{children}</FontText>
+      {!icon && <Icon name="expand_more" size={16} color={selected ? COLORS.onPrimary : COLORS.onSurfaceVariant} />}
     </Pressable>
   );
 }
@@ -249,7 +249,7 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (bu
             <Icon name={buyer.verificationIcon} size={18} color={COLORS.secondary} />
           </View>
           <View style={styles.metadataRow}>
-            <View style={styles.ratingRow}><Icon name="star" size={16} color="#F48C24" /><FontText type="labelMd" style={styles.ratingText}>{buyer.rating}</FontText></View>
+            <View style={styles.ratingRow}><Icon name="star" size={16} color={COLORS.tertiaryCopy} /><FontText type="labelMd" style={styles.ratingText}>{buyer.rating}</FontText></View>
             <FontText type="bodySm" style={styles.metadataSeparator}>•</FontText>
             {buyer.metadata.map((meta, index) => (
               <View key={meta} style={styles.metadataItem}>
@@ -264,7 +264,7 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (bu
 
       {buyer.trust && buyer.trustIcon && (
         <View style={styles.trustStrip}>
-          <Icon name={buyer.trustIcon} size={18} color={buyer.trustTone === 'orange' ? '#F48C24' : COLORS.secondary} />
+          <Icon name={buyer.trustIcon} size={18} color={buyer.trustTone === 'orange' ? COLORS.tertiaryCopy : COLORS.secondary} />
           <FontText type="bodySm" numberOfLines={1} style={styles.trustText}>
             {buyer.id === 'b1' ? <>Bạn đã bán thành công <FontText type="bodySm" style={styles.trustStrong}>14.2 tấn</FontText> với đại lý này</> : buyer.trust}
           </FontText>
@@ -288,7 +288,7 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (bu
       <View style={styles.ctaGrid}>
         <View style={styles.ctaCell}>
           <Pressable accessibilityRole="button" accessibilityLabel={`Gọi ${buyer.name}`} onPress={callBuyer} style={({ pressed }) => [styles.callButton, pressed && styles.pressed]}>
-            <Icon name="call" size={18} color="#FFFFFF" /><FontText type="titleMd" numberOfLines={1} style={styles.callButtonText}>{buyer.callLabel}</FontText>
+            <Icon name="call" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" numberOfLines={1} style={styles.callButtonText}>{buyer.callLabel}</FontText>
           </Pressable>
         </View>
         <View style={styles.ctaCell}>
@@ -381,7 +381,7 @@ function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; o
             <FontText type="labelMd" style={styles.fieldLabel}>Ghi chú thêm</FontText>
             <TextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
           </ScrollView>
-          <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color="#FFFFFF" /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
+          <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: COLORS.background },
   loadingScreen: { flex: 1, backgroundColor: COLORS.background },
   shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: COLORS.background },
-  header: { height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(27,67,50,0.12)', shadowColor: '#1B4332', shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  header: { height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: COLORS.borderSubtle, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
   logo: { width: 32, height: 32 },
   brandCopy: { flexShrink: 1 },
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   notificationButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceLow },
   notificationDot: { position: 'absolute', top: 10, right: 10, width: 8, height: 8, borderRadius: 4, borderWidth: 2, borderColor: COLORS.background, backgroundColor: COLORS.error },
   avatarButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  avatar: { width: 32, height: 32, borderRadius: Radius.full, shadowColor: '#1B4332', shadowOpacity: 0.1, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
+  avatar: { width: 32, height: 32, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.1, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
   content: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: BottomTabInset + 88, gap: 16 },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 },
   titleCopy: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
@@ -480,28 +480,28 @@ const styles = StyleSheet.create({
   openDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.secondary },
   openBadgeText: { color: COLORS.onSecondaryFixedVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
   searchRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  searchField: { flex: 1, height: 44, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: '#1B4332', shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  searchField: { flex: 1, height: 44, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   searchInput: { flex: 1, minWidth: 0, padding: 0, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular, fontSize: 14, lineHeight: 20 },
   clearButton: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
-  filterButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surface, shadowColor: '#1B4332', shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  filterButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   filterDot: { position: 'absolute', width: 6, height: 6, top: 10, right: 10, borderRadius: 3, backgroundColor: COLORS.secondary },
   hiddenDot: { opacity: 0 },
   filterScroll: { marginHorizontal: -16 },
   filterRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 2 },
-  filterChip: { height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: Radius.full, shadowColor: '#1B4332', shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  filterChip: { height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   filterChipText: { fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
   filterChipSelected: { backgroundColor: COLORS.secondary },
   filterChipIdle: { backgroundColor: COLORS.surface },
   filterChipOrange: { backgroundColor: COLORS.surface },
-  safetyTip: { position: 'relative', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, overflow: 'hidden', shadowColor: '#1B4332', shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
+  safetyTip: { position: 'relative', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
   safetyIconWell: { width: 32, height: 32, marginTop: 2, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.secondaryContainer },
   safetyCopy: { flex: 1, minWidth: 0, gap: 2 },
   safetyHeadingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   safetyHeading: { color: COLORS.secondary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, textTransform: 'uppercase', letterSpacing: 0.44 },
-  safetyDate: { color: 'rgba(65,72,68,0.8)', fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
+  safetyDate: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
   safetyBody: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
   buyerList: { gap: 12 },
-  buyerCard: { position: 'relative', overflow: 'hidden', padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: '#1B4332', shadowOpacity: 0.06, shadowRadius: 4, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  buyerCard: { position: 'relative', overflow: 'hidden', padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.06, shadowRadius: 4, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   cardTopRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 10 },
   cardHeading: { flex: 1, minWidth: 0 },
   buyerNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 0 },
@@ -537,9 +537,9 @@ const styles = StyleSheet.create({
   distanceText: { flexShrink: 0, maxWidth: '45%', color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
   ctaGrid: { flexDirection: 'row', alignItems: 'stretch', gap: 8, paddingTop: 4 },
   ctaCell: { flex: 1, minWidth: 0, height: 44 },
-  callButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.primaryContainer, shadowColor: '#1B4332', shadowOpacity: 0.05, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  callButtonText: { flexShrink: 1, color: '#FFFFFF', fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
-  secondaryButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.surfaceContainer, shadowColor: '#1B4332', shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  callButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.primaryContainer, shadowColor: COLORS.shadow, shadowOpacity: 0.05, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  callButtonText: { flexShrink: 1, color: COLORS.onPrimary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  secondaryButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.surfaceContainer, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   secondaryButtonText: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
   emptyState: { minHeight: 72, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.container, backgroundColor: COLORS.surface },
   emptyStateText: { color: COLORS.onSurfaceVariant },
@@ -553,8 +553,8 @@ const styles = StyleSheet.create({
   linkSeparator: { color: COLORS.outline },
   policyLinkText: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
   modalRoot: { flex: 1, justifyContent: 'flex-end' },
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(1,45,29,0.28)' },
-  sheet: { width: '100%', maxWidth: 430, maxHeight: '92%', alignSelf: 'center', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: COLORS.surface, shadowColor: '#1B4332', shadowOpacity: 0.16, shadowRadius: 16, shadowOffset: { width: 0, height: -4 }, elevation: 8 },
+  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: COLORS.primaryScrim },
+  sheet: { width: '100%', maxWidth: 430, maxHeight: '92%', alignSelf: 'center', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 16, shadowOffset: { width: 0, height: -4 }, elevation: 8 },
   sheetHandle: { width: 40, height: 4, alignSelf: 'center', marginBottom: 12, borderRadius: 2, backgroundColor: COLORS.outline, opacity: 0.45 },
   sheetHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 16 },
   sheetTitleCopy: { flex: 1, gap: 4 },
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   sheetClose: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.full, backgroundColor: COLORS.surfaceContainer },
   optionList: { gap: 8 },
   option: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
-  optionSelected: { backgroundColor: '#E8F1EC' },
+  optionSelected: { backgroundColor: COLORS.secondaryContainer },
   optionLabel: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   optionText: { color: COLORS.onSurface },
   resetOption: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 12 },
@@ -584,8 +584,8 @@ const styles = StyleSheet.create({
   cancelButton: { flex: 1, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.container, backgroundColor: COLORS.surfaceContainer },
   cancelButtonText: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
   submitButton: { flex: 1, height: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: Radius.container, backgroundColor: COLORS.primary },
-  submitButtonText: { color: '#FFFFFF', fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
-  toast: { position: 'absolute', alignSelf: 'center', bottom: BottomTabInset + 16, maxWidth: '92%', flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 10, borderRadius: Radius.full, backgroundColor: COLORS.inverseSurface, shadowColor: '#000000', shadowOpacity: 0.16, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5 },
+  submitButtonText: { color: COLORS.onPrimary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  toast: { position: 'absolute', alignSelf: 'center', bottom: BottomTabInset + 16, maxWidth: '92%', flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 10, borderRadius: Radius.full, backgroundColor: COLORS.inverseSurface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5 },
   toastText: { color: COLORS.inverseOnSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
   pressed: { opacity: 0.78 },
 });

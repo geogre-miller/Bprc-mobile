@@ -41,7 +41,7 @@ function SupportRow({ icon, title, description, onPress, accent, isLast }: Suppo
       <View
         style={[
           styles.supportIconWell,
-          { backgroundColor: accent ? 'rgba(174, 238, 203, 0.6)' : COLORS.surfaceContainer },
+          { backgroundColor: accent ? COLORS.secondaryContainer : COLORS.surfaceContainer },
         ]}>
         <Icon name={icon} size={18} color={accent ? COLORS.onSecondaryContainer : COLORS.onSurfaceVariant} />
       </View>
@@ -448,7 +448,7 @@ function FarmStat({
 }
 
 const cardShadow = {
-  shadowColor: '#1B4332',
+  shadowColor: COLORS.shadow,
   shadowOffset: { width: 0, height: 1 },
   shadowOpacity: 0.06,
   shadowRadius: 4,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   },
   header: {
     zIndex: 2,
-    shadowColor: '#1B4332',
+    shadowColor: COLORS.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
     shadowRadius: 4,
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     backgroundColor: COLORS.error,
     borderWidth: 2,
-    borderColor: '#F6FBF5',
+    borderColor: COLORS.background,
   },
   avatarButton: {
     width: 44,
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: Radius.container,
     padding: Spacing.three,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surfaceLowest,
     ...cardShadow,
     gap: 12,
   },
@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
     height: 32,
     flexShrink: 0,
     borderRadius: Radius.sheet,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surfaceLowest,
     alignItems: 'center',
     justifyContent: 'center',
     ...cardShadow,
@@ -832,7 +832,7 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     padding: Spacing.two,
     borderRadius: Radius.base,
-    backgroundColor: 'rgba(174, 238, 203, 0.4)',
+    backgroundColor: COLORS.gainContainer,
   },
   linkedText: {
     flex: 1,
@@ -914,7 +914,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: Radius.full,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.onPrimary,
     ...cardShadow,
   },
   supportRows: {
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
   },
   supportRowDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EBEFEA',
+    borderBottomColor: COLORS.divider,
   },
   supportIconWell: {
     width: 36,
