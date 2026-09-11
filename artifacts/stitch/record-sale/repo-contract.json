@@ -1,0 +1,204 @@
+{
+  "$schema": "https://bprc.local/agents/repo-contract.schema.json",
+  "schemaVersion": 2,
+  "artifactType": "RepoContract",
+  "generatedAt": "2026-09-10T10:15:48.000Z",
+  "route": "/journal",
+  "screenOwner": "src/screens/selling-journal/index.tsx",
+  "architecture": {
+    "routeAdapter": "src/app/journal.tsx imports SellingJournal and returns it from JournalScreen.",
+    "parentLayout": "The route is outside the tab groups and is registered by the root Stack in src/app/_layout.tsx; the current route option shows the native header with title 'Nhật ký bán hàng'.",
+    "safeArea": "SellingJournal currently owns no SafeAreaView or inset hook. The root navigation/header owns the route-level top inset; this route is not a bottom-tab surface and does not need BottomTabInset padding by default.",
+    "saleEntryPoint": "Inventory in src/screens/inventory/index.tsx exposes the 'Ghi nhận bán' quick action and its recordSale callback calls router.navigate('/journal'). The per-item 'Bán lô này' action currently only sets feedback.",
+    "ownership": "Implementation is owned by the SellingJournal screen file. Route registration, inventory entry navigation, persistence, domain types, shared theme, and shared icons remain read-only dependencies."
+  },
+  "layout": {
+    "currentOwner": "SellingJournal renders a ScrollView with a contentContainerStyle and a local form/list; it currently has no screen-level safe-area wrapper.",
+    "scrolling": "Use the existing bounded-form ScrollView pattern. Keep content reachable when the keyboard is shown and avoid adding tab inset padding to this root-stack route.",
+    "header": "The root Stack currently supplies the route header. A custom in-screen header would require an explicit, serialized edit to src/app/_layout.tsx and is outside this owner-only contract."
+  },
+  "patterns": {
+    "persistence": "usePersistedState<SellingJournalEntry[]>('selling-journal', []) stores JSON in AsyncStorage under rayGia:selling-journal. Its functional updater writes through AsyncStorage; do not alter the shared hook or key.",
+    "saleRecord": "SellingJournalEntry has id, farmerId, commodity, quantity, unit, optional buyerId and quotedPricePerUnit, actualPricePerUnit, and soldAt. The current addEntry validates nonzero numeric quantity and price, prepends the entry, derives a buyer quote from PRICE_OBSERVATIONS when a buyer is selected, and clears the inputs.",
+    "data": "COMMODITIES, BUYERS, and PRICE_OBSERVATIONS in src/data/mock-data.ts are the existing local options and quote source; formatVnd/formatPricePerUnit in src/utils/format-price.ts are the currency conventions.",
+    "downstreamConsumer": "useDashboardData reads the same selling-journal key and SellingJournalEntry shape to derive current-month revenue, gain versus quoted price, and closedDealCount; preserve that contract.",
+    "similarForms": "src/screens/selling-intents/index.tsx uses the same commodity chips, TextInput, usePersistedState, and local validation pattern. src/screens/buyer-demand-form/index.tsx demonstrates a validated save followed by router.back().",
+    "primitives": "Reuse ThemedText, ThemedView, Pressable, ScrollView, TextInput, StyleSheet, useTheme, and semantic theme colors. Use existing typography roles instead of local font-size constants where possible.",
+    "themeTypography": "DESIGN.md and src/constants/theme.ts define the surface roles, Colors/LightPalette, Spacing, Radius, Fonts, and typography conventions. Existing screen-local Manrope/Public Sans font loading and assets are demonstrated by src/screens/inventory/index.tsx; no global font or icon registry edit is needed.",
+    "icons": "Reuse Icon/IconName from src/screens/home-dashboard/icons.tsx for any sale/form affordances; the registry maps SF Symbols on iOS and Material names on other platforms."
+  },
+  "sharedEdits": [],
+  "serializedSharedRegistryEdits": [],
+  "writeScope": [
+    "src/screens/selling-journal/index.tsx"
+  ],
+  "forbiddenScope": [
+    "src/app/_layout.tsx",
+    "src/app/journal.tsx",
+    "src/app/(tabs)/(inventory)/inventory.tsx",
+    "src/screens/inventory/index.tsx",
+    "src/hooks/use-persisted-state.ts",
+    "src/types/domain.ts",
+    "src/data/mock-data.ts",
+    "src/screens/home-dashboard/use-dashboard-data.ts",
+    "src/constants/theme.ts",
+    "src/hooks/use-theme.ts",
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/screens/home-dashboard/icons.tsx",
+    "src/constants/navigation.ts",
+    "src/components/app-tabs.tsx",
+    "src/components/app-tabs.web.tsx",
+    "package.json",
+    "artifacts/stitch/record-sale/index.json"
+  ],
+  "impactAnalysis": {
+    "screenOwner": {
+      "target": "SellingJournal",
+      "directCallers": 1,
+      "processesAffected": 1,
+      "risk": "low",
+      "evidence": "GitNexus 1.6.11 exact upstream impact resolves the single caller JournalScreen in src/app/journal.tsx; CodeGraph is current and resolves the same route adapter."
+    },
+    "saleEntryPoint": {
+      "target": "Inventory.recordSale",
+      "directCallers": 1,
+      "processesAffected": 1,
+      "risk": "low",
+      "evidence": "CodeGraph and targeted source inspection resolve the Inventory 'Ghi nhận bán' Pressable to recordSale, which navigates to /journal."
+    },
+    "sharedPersistence": {
+      "target": "usePersistedState",
+      "directCallers": 8,
+      "processesAffected": 9,
+      "risk": "critical",
+      "mitigation": "Read-only dependency. Preserve the selling-journal key and updater semantics; GitNexus exact upstream impact covers Journal, Inventory, Home, Match, SellingIntents, and buyer form flows."
+    },
+    "journalDomain": {
+      "target": "SellingJournalEntry",
+      "directCallers": 15,
+      "processesAffected": 0,
+      "risk": "high",
+      "mitigation": "Read-only interface. Preserve the existing serialized shape because dashboard derivations and several source modules import it; GitNexus exact upstream import impact reports 15 direct importers."
+    },
+    "themedText": {
+      "target": "ThemedText",
+      "directCallers": 46,
+      "processesAffected": 43,
+      "risk": "critical",
+      "mitigation": "Read-only shared primitive; use existing type and themeColor props."
+    },
+    "themedView": {
+      "target": "ThemedView",
+      "directCallers": 27,
+      "processesAffected": 26,
+      "risk": "critical",
+      "mitigation": "Read-only shared primitive; use existing semantic surface roles."
+    },
+    "iconRegistry": {
+      "target": "Icon",
+      "directCallers": 34,
+      "processesAffected": 27,
+      "risk": "critical",
+      "epistemic": "lower-bound",
+      "boundary": "GitNexus reports five unresolved receiver call sites for Icon, so the result is a lower bound. Targeted source inspection confirms the registry is read-only for this task; do not edit it."
+    },
+    "detectChanges": {
+      "scope": "all",
+      "changedSymbols": 0,
+      "affectedProcesses": 0,
+      "risk": "none",
+      "evidence": "GitNexus detect-changes --scope all for repository Bprc-mobile reports no tracked changes at discovery."
+    }
+  },
+  "dependencyFreshness": {
+    "status": "fresh-at-discovery",
+    "fingerprintAlgorithm": "SHA-256 over listed dependency file contents via scripts/stitch/repo-fingerprint.mjs",
+    "codegraph": {
+      "status": "current",
+      "files": 107,
+      "nodes": 1224,
+      "edges": 2591,
+      "pending": {
+        "added": 0,
+        "modified": 0,
+        "removed": 0
+      }
+    },
+    "gitnexus": {
+      "repository": "Bprc-mobile",
+      "worktree": "/Users/mac/orca/Bprc-mobile",
+      "cliVersion": "1.6.11",
+      "indexCommit": "d3d8be22a23a3ede2a8a6bf88ec58124bfa1a7bb",
+      "indexUpdatedAt": "2026-09-10T09:58:45.330Z",
+      "staleness": "current",
+      "healthProbe": "timed-out; bounded indexed CLI impact and detect-changes used"
+    }
+  },
+  "risk": "medium",
+  "riskReason": "The owner is isolated to one screen, but the persisted journal record is consumed by the dashboard and depends on broad shared primitives. GitNexus and CodeGraph resolve the route and dependency edges; shared symbols stay read-only and the route already exists.",
+  "riskResolved": true,
+  "unresolvedRisks": [
+    {
+      "id": "INVENTORY_RECONCILIATION",
+      "severity": "medium",
+      "status": "open",
+      "detail": "The current save handler appends a SellingJournalEntry but does not reduce rayGia:inventory, and SellingJournalEntry has no inventory-item id. If acceptance requires stock depletion, implementation must choose an explicit commodity-level update or a planned domain change."
+    },
+    {
+      "id": "NAVIGATION_HEADER_OWNERSHIP",
+      "severity": "low",
+      "status": "open",
+      "detail": "The root Stack currently shows the native journal header while the screen owns no SafeAreaView. Preserve this ownership unless visual acceptance explicitly requires a serialized root route option edit."
+    }
+  ],
+  "reuse": [
+    "DESIGN.md",
+    "src/app/_layout.tsx",
+    "src/app/journal.tsx",
+    "src/app/(tabs)/(inventory)/inventory.tsx",
+    "src/screens/inventory/index.tsx",
+    "src/screens/selling-intents/index.tsx",
+    "src/screens/buyer-demand-form/index.tsx",
+    "src/hooks/use-persisted-state.ts",
+    "src/hooks/use-theme.ts",
+    "src/types/domain.ts",
+    "src/data/mock-data.ts",
+    "src/screens/home-dashboard/use-dashboard-data.ts",
+    "src/components/themed-text.tsx",
+    "src/components/themed-view.tsx",
+    "src/constants/theme.ts",
+    "src/screens/home-dashboard/icons.tsx",
+    "src/utils/format-price.ts"
+  ],
+  "repository": {
+    "dependencies": [
+      "DESIGN.md",
+      "src/app/_layout.tsx",
+      "src/app/journal.tsx",
+      "src/app/(tabs)/(inventory)/inventory.tsx",
+      "src/screens/inventory/index.tsx",
+      "src/screens/selling-journal/index.tsx",
+      "src/screens/selling-intents/index.tsx",
+      "src/screens/buyer-demand-form/index.tsx",
+      "src/hooks/use-persisted-state.ts",
+      "src/hooks/use-theme.ts",
+      "src/types/domain.ts",
+      "src/data/mock-data.ts",
+      "src/screens/home-dashboard/use-dashboard-data.ts",
+      "src/components/themed-text.tsx",
+      "src/components/themed-view.tsx",
+      "src/constants/theme.ts",
+      "src/screens/home-dashboard/icons.tsx",
+      "src/utils/format-price.ts"
+    ],
+    "fingerprint": "9ad3c52d4d5c1b3ccce927fce8ebdc3b9bbda9c825b794b994ea871d56fc47b6"
+  },
+  "checks": [
+    "node scripts/stitch/repo-fingerprint.mjs --contract artifacts/stitch/record-sale/repo-contract.json --write",
+    "node scripts/agents/validate-artifact.mjs artifacts/stitch/record-sale/repo-contract.json",
+    "npm run typecheck (baseline PASS; rerun after scoped implementation)",
+    "npm run lint (baseline FAIL: src/hooks/use-color-scheme.web.ts:11 react-hooks/set-state-in-effect; rerun and report separately)",
+    "Targeted functional check: open /journal from Inventory's Ghi nhận bán action, save positive quantity and price, reload and verify the persisted journal entry and dashboard journal metrics; verify removal if cleanup is part of acceptance."
+  ]
+}

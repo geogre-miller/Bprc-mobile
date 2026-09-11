@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "VerificationResult",
+  "generatedAt": "2026-09-11T03:20:43Z",
+  "status": "pass",
+  "route": "/journal",
+  "reference": ".stitch/record-sale/reference.png",
+  "actual": "artifacts/stitch/record-sale/qa/actual-390x1392.png",
+  "comparison": "artifacts/stitch/record-sale/qa/comparison-136x512.png",
+  "viewport": {
+    "width": 390,
+    "height": 1392,
+    "deviceScaleFactor": 2
+  },
+  "functional": {
+    "status": "pass",
+    "routeLoaded": true,
+    "captureDiagnostics": {
+      "pageErrors": [],
+      "consoleErrors": [],
+      "requestFailures": []
+    },
+    "initialState": {
+      "weight": "1200",
+      "unitPrice": "118500",
+      "shippingCost": "0",
+      "netProfit": "+48.600.000 ₫",
+      "stockProjection": "Tồn kho còn lại sau khi xuất: 1,300 kg",
+      "shippingRowHidden": true,
+      "customHeaderVisible": true,
+      "marginBadge": "Biên lãi 51.9%"
+    },
+    "freshInteractionEvidence": {
+      "weightPreset": {
+        "value": "1200",
+        "netProfit": "+48.600.000 ₫",
+        "evidence": "artifacts/stitch/record-sale/qa/interaction-preset-390x1392.png"
+      },
+      "shippingRow": {
+        "value": "250000",
+        "rowVisible": true,
+        "netProfit": "+48.350.000 ₫",
+        "evidence": "artifacts/stitch/record-sale/qa/interaction-shipping-390x1392.png"
+      },
+      "saveSale": {
+        "label": "Xác Nhận & Lưu Phiếu Bán",
+        "toastVisible": true,
+        "toastText": "Đã lưu phiếu bán thành công!\nĐã xuất kho và cập nhật doanh thu.",
+        "evidence": "artifacts/stitch/record-sale/qa/interaction-success-390x1392.png"
+      }
+    },
+    "reusedEvidence": {
+      "basis": "Prior bounded QA evidence is reused for unchanged persistence, validation, and repeated inventory behavior after the save-label-only repair.",
+      "priorVerificationGeneratedAt": "2026-09-11T03:09:20Z",
+      "evidence": [
+        "artifacts/stitch/record-sale/qa/interaction-persisted-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-validation-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-reload-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-repeated-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-repeated-reload-390x1392.png"
+      ]
+    },
+    "persistence": {
+      "status": "pass",
+      "storageKey": "rayGia:selling-journal",
+      "savedEntryCountAfterTwoSales": 2,
+      "reloadEntryVisible": true,
+      "evidence": "artifacts/stitch/record-sale/qa/interaction-persisted-390x1392.png"
+    },
+    "validation": {
+      "status": "pass",
+      "zeroWeightError": "Vui lòng nhập khối lượng xuất bán lớn hơn 0 kg.",
+      "zeroPriceError": "Vui lòng nhập đơn giá chốt bán lớn hơn 0 ₫/kg.",
+      "rejectedSavesAddedNoEntry": true,
+      "maxWeightClamp": "9999 entered, 2500 displayed after blur, projection became 0 kg",
+      "evidence": "artifacts/stitch/record-sale/qa/interaction-validation-390x1392.png"
+    },
+    "inventory": {
+      "status": "pass",
+      "storageKey": "rayGia:inventory",
+      "firstSale": {
+        "beforeCoffeeQuantity": 2500,
+        "soldQuantity": 1200,
+        "afterCoffeeQuantity": 1300,
+        "afterReloadCoffeeQuantity": 1300
+      },
+      "secondSale": {
+        "soldQuantity": 500,
+        "afterCoffeeQuantity": 800,
+        "afterReloadCoffeeQuantity": 800
+      },
+      "evidence": [
+        "artifacts/stitch/record-sale/qa/interaction-inventory-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-reload-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-repeated-390x1392.png",
+        "artifacts/stitch/record-sale/qa/interaction-inventory-repeated-reload-390x1392.png"
+      ]
+    }
+  },
+  "visual": {
+    "status": "pass",
+    "method": "Semantic comparison of a fresh 390x1392 route capture against the cached reference and DesignContract; visual-diff output is advisory only.",
+    "referenceViewport": {
+      "width": 390,
+      "height": 1392,
+      "deviceScaleFactor": 2
+    },
+    "captureViewport": {
+      "width": 390,
+      "height": 1392,
+      "deviceScaleFactor": 1
+    },
+    "advisoryDiff": "artifacts/stitch/record-sale/qa/diff.json",
+    "advisoryDiffReference": "artifacts/stitch/record-sale/qa/reference-136x512.png",
+    "advisoryMismatchRatio": 0.2475298713235294,
+    "pixelMetricUse": "Informational only; semantic deltas determine status.",
+    "exportSource": "/private/tmp/bprc-record-sale-web-export",
+    "observations": [
+      "The fresh export renders the fixed mobile header with back affordance, NôngSản Pro logo, Tạo Giao Dịch Bán title, and profile avatar.",
+      "The reference layout, typography, spacing, surfaces, selected preset, calculations, shipping state, scrolling, transparency card, and fixed success toast remain visually coherent at the requested viewport.",
+      "The primary save action now renders the literal label Xác Nhận & Lưu Phiếu Bán with an ampersand; the prior literal HTML entity mismatch is resolved.",
+      "No material P0, P1, or P2 visual regression was observed in the fresh capture or declared interaction states."
+    ]
+  },
+  "interactions": [
+    {
+      "id": "weight-presets",
+      "status": "pass",
+      "evidence": "Fresh click of the 1,200 kg preset kept saleWeight=1200, the preset highlighted, and net profit at +48.600.000 ₫; see interaction-preset-390x1392.png."
+    },
+    {
+      "id": "shipping-row",
+      "status": "pass",
+      "evidence": "Fresh entry of 250000 in shippingCost revealed Cước vận chuyển phát sinh with -250.000 ₫ and reduced net profit to +48.350.000 ₫; see interaction-shipping-390x1392.png."
+    },
+    {
+      "id": "save-sale",
+      "status": "pass",
+      "evidence": "Fresh submit rendered Xác Nhận & Lưu Phiếu Bán and the declared success toast; see interaction-success-390x1392.png."
+    },
+    {
+      "id": "save-persistence",
+      "status": "pass",
+      "evidence": "Prior bounded QA evidence reused: two saved selling-journal entries remained visible after journal reload; see interaction-persisted-390x1392.png."
+    },
+    {
+      "id": "validation",
+      "status": "pass",
+      "evidence": "Prior bounded QA evidence reused: zero weight and zero price were rejected and over-limit input clamped to 2,500 kg on blur; see interaction-validation-390x1392.png."
+    },
+    {
+      "id": "inventory-reconciliation",
+      "status": "pass",
+      "evidence": "Prior bounded QA evidence reused: sequential saves deducted coffee from 2,500 kg to 1,300 kg and then 800 kg; see the first and repeated inventory captures."
+    },
+    {
+      "id": "inventory-reload-repeated",
+      "status": "pass",
+      "evidence": "Prior bounded QA evidence reused: the 1,300 kg and 800 kg deductions remained visible after separate /inventory reloads; see interaction-inventory-reload-390x1392.png and interaction-inventory-repeated-reload-390x1392.png."
+    }
+  ],
+  "deltas": [],
+  "baselineIssues": [
+    "Full repository lint retains the known baseline error at src/hooks/use-color-scheme.web.ts:11 (react-hooks/set-state-in-effect); typecheck, owned lint, and the canonical Expo web export were reported pass."
+  ],
+  "reasonCodes": []
+}

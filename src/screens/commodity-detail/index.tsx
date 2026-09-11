@@ -158,7 +158,14 @@ export function CommodityDetail({
   }, [buyerSort]);
 
   const goBackToMarket = () => (router.canGoBack() ? router.back() : router.replace('/market'));
-  const goToSell = () => router.push('/selling-intents');
+  const goToSell = (buyer?: BuyerCardData) => router.push({
+    pathname: '/journal',
+    params: {
+      commodity: commodity ?? 'coffee',
+      price: String(buyer?.price ?? displayPrice),
+      ...(buyer ? { buyerId: buyer.id, buyerName: buyer.name } : {}),
+    },
+  });
   const shareMarket = () =>
     Share.share({
       title: `Giá ${label}`,
@@ -453,7 +460,7 @@ export function CommodityDetail({
                 buyer={buyer}
                 onPrimary={() =>
                   buyer.id === 'b1'
-                    ? goToSell()
+                    ? goToSell(buyer)
                     : router.push({ pathname: '/buyer/[id]', params: { id: buyer.id } })
                 }
                 onSecondary={() =>
@@ -481,7 +488,7 @@ export function CommodityDetail({
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`Tạo phiếu bán ${label.toLowerCase()} ngay`}
-            onPress={goToSell}
+            onPress={() => goToSell()}
             style={({ pressed }) => [styles.sellCta, { backgroundColor: SCREEN_COLORS.primaryContainer }, pressed && styles.ctaPressed]}>
             <View style={styles.sellCopy}>
               <ThemedText type="titleMd" style={[styles.bold, { color: SCREEN_COLORS.onPrimary }]}>

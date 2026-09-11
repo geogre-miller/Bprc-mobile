@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "CaptureMetadata",
+  "status": "captured",
+  "capturedAt": "2026-09-11T03:16:55.761Z",
+  "startedAt": "2026-09-11T03:16:23.789Z",
+  "url": "http://127.0.0.1:4176/journal",
+  "route": "/journal",
+  "output": "artifacts/stitch/record-sale/qa/actual-390x1392.png",
+  "requestedViewport": {
+    "width": 390,
+    "height": 1392
+  },
+  "actualViewport": {
+    "width": 390,
+    "height": 1392,
+    "devicePixelRatio": 1
+  },
+  "document": {
+    "scrollWidth": 390,
+    "scrollHeight": 1392
+  },
+  "fullPage": false,
+  "probes": {
+    "saleForm": {
+      "x": 16,
+      "y": 250,
+      "width": 358,
+      "height": 958
+    },
+    "commoditySelect": {
+      "x": 16,
+      "y": 278,
+      "width": 358,
+      "height": 48
+    },
+    "buyerSelect": {
+      "x": 16,
+      "y": 378,
+      "width": 358,
+      "height": 48
+    },
+    "saleWeight": {
+      "x": 16,
+      "y": 474,
+      "width": 317.609375,
+      "height": 48
+    },
+    "unitPrice": {
+      "x": 16,
+      "y": 606,
+      "width": 305.359375,
+      "height": 48
+    },
+    "deliveryDate": {
+      "x": 16,
+      "y": 710,
+      "width": 175,
+      "height": 44
+    },
+    "shippingCost": {
+      "x": 199,
+      "y": 710,
+      "width": 175,
+      "height": 44
+    },
+    "orderNote": {
+      "x": 16,
+      "y": 788,
+      "width": 358,
+      "height": 44
+    },
+    "submitBtn": {
+      "x": 16,
+      "y": 1112,
+      "width": 358,
+      "height": 56
+    },
+    "toastSuccess": null,
+    "netProfitText": {
+      "x": 154.828125,
+      "y": 978,
+      "width": 191.171875,
+      "height": 36
+    },
+    "stockProjectionText": {
+      "x": 54,
+      "y": 1060,
+      "width": 304,
+      "height": 16
+    }
+  },
+  "diagnostics": {
+    "pageErrors": [],
+    "consoleErrors": [],
+    "requestFailures": []
+  }
+}

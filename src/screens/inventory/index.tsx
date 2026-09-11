@@ -372,7 +372,16 @@ export function Inventory() {
   const sellItem = (index: number) => {
     const current = items[index];
     if (!current) return;
-    showFeedback('Đã chọn lô ' + (presentationItems[index]?.name ?? 'hàng hóa') + ' để bán.');
+    const presentation = presentationItems[index];
+    router.push({
+      pathname: '/journal',
+      params: {
+        commodity: current.commodity,
+        stock: String(current.quantity),
+        price: String(presentation.marketPrice),
+        unitCost: String(presentation.costPerUnit),
+      },
+    });
   };
 
   const recordSale = () => {

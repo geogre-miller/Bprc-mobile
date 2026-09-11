@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "design",
+  "status": "done",
+  "artifact": "artifacts/stitch/record-sale/design-contract.json",
+  "artifactIndex": "artifacts/stitch/record-sale/index.json",
+  "risk": "low",
+  "reasonCodes": []
+}
