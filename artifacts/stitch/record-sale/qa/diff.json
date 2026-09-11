@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "VisualDiffMetadata",
+  "generatedAt": "2026-09-11T03:17:22.481Z",
+  "informationalOnly": true,
+  "note": "Pixel metrics guide the fresh visual verifier and are never the final pass/fail criterion.",
+  "dimensions": {
+    "width": 136,
+    "height": 512
+  },
+  "mismatchPixels": 17236,
+  "mismatchRatio": 0.2475298713235294,
+  "threshold": 0.1,
+  "reference": "artifacts/stitch/record-sale/qa/reference-136x512.png",
+  "actual": "artifacts/stitch/record-sale/qa/actual-136x512.png",
+  "diff": "artifacts/stitch/record-sale/qa/diff-136x512.png",
+  "comparison": "artifacts/stitch/record-sale/qa/comparison-136x512.png",
+  "candidateMismatchRegions": [
+    {
+      "x": 32,
+      "y": 384,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 687
+    },
+    {
+      "x": 64,
+      "y": 384,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 679
+    },
+    {
+      "x": 32,
+      "y": 416,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 651
+    },
+    {
+      "x": 64,
+      "y": 416,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 639
+    },
+    {
+      "x": 96,
+      "y": 384,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 621
+    },
+    {
+      "x": 0,
+      "y": 384,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 563
+    },
+    {
+      "x": 96,
+      "y": 416,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 518
+    },
+    {
+      "x": 96,
+      "y": 320,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 494
+    },
+    {
+      "x": 32,
+      "y": 448,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 467
+    },
+    {
+      "x": 64,
+      "y": 192,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 439
+    },
+    {
+      "x": 0,
+      "y": 416,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 428
+    },
+    {
+      "x": 96,
+      "y": 352,
+      "width": 32,
+      "height": 32,
+      "changedPixels": 404
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "visual-verification",
+  "status": "done",
+  "artifact": "artifacts/stitch/record-sale/qa/verification.json",
+  "artifactIndex": "artifacts/stitch/record-sale/index.json",
+  "risk": "medium",
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ],
+  "changedFiles": [
+    "artifacts/stitch/record-sale/qa/actual-390x1392.png",
+    "artifacts/stitch/record-sale/qa/actual-136x512.png",
+    "artifacts/stitch/record-sale/qa/comparison-136x512.png",
+    "artifacts/stitch/record-sale/qa/diff-136x512.png",
+    "artifacts/stitch/record-sale/qa/capture.json",
+    "artifacts/stitch/record-sale/qa/diff.json",
+    "artifacts/stitch/record-sale/qa/interaction-preset-390x1392.png",
+    "artifacts/stitch/record-sale/qa/interaction-shipping-390x1392.png",
+    "artifacts/stitch/record-sale/qa/interaction-success-390x1392.png",
+    "artifacts/stitch/record-sale/qa/verification.json",
+    "artifacts/stitch/record-sale/qa/verification-receipt.json"
+  ],
+  "blockers": [],
+  "followup": "Fresh semantic visual verification passes at 390x1392; the literal save-label mismatch is resolved. Prior persistence, validation, and repeated inventory evidence is reused for unchanged behavior. Full repository lint retains the known web color-scheme baseline error."
+}

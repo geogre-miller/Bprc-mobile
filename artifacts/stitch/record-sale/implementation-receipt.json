@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "implementation",
+  "status": "done",
+  "artifact": "artifacts/stitch/record-sale/implementation.json",
+  "artifactIndex": "artifacts/stitch/record-sale/index.json",
+  "risk": "medium",
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ],
+  "changedFiles": [
+    "src/screens/selling-journal/index.tsx",
+    "artifacts/stitch/record-sale/implementation.json",
+    "artifacts/stitch/record-sale/implementation-receipt.json"
+  ],
+  "followup": "Copy repair verified; canonical web export is /private/tmp/bprc-record-sale-web-export. Parent worker may re-run the focused QA check."
+}

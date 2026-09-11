@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "WorkerReceipt",
+  "taskId": "repository",
+  "status": "done",
+  "artifact": "artifacts/stitch/record-sale/repo-contract.json",
+  "artifactIndex": "artifacts/stitch/record-sale/index.json",
+  "risk": "medium",
+  "reasonCodes": [],
+  "changedFiles": [
+    "artifacts/stitch/record-sale/repo-contract.json",
+    "artifacts/stitch/record-sale/repo-receipt.json"
+  ],
+  "followup": "Implement only in src/screens/selling-journal/index.tsx; preserve /journal routing, rayGia:selling-journal persistence, SellingJournalEntry shape, and read-only shared dependencies. Recheck inventory quantity reconciliation if acceptance requires stock depletion."
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ArtifactIndex",
+  "screen": {
+    "slug": "record-sale",
+    "projectId": "16177202758777999982",
+    "screenId": "3a110d9124cd41038e0c19c5b0ee6a33"
+  },
+  "updatedAt": "2026-09-11T03:24:10.648Z",
+  "artifacts": {
+    "sourceManifest": ".stitch/record-sale/manifest.json",
+    "designContract": "artifacts/stitch/record-sale/design-contract.json",
+    "designContractDiff": null,
+    "repoContract": "artifacts/stitch/record-sale/repo-contract.json",
+    "implementation": "artifacts/stitch/record-sale/implementation.json",
+    "verification": "artifacts/stitch/record-sale/qa/verification.json",
+    "referenceScreenshot": ".stitch/record-sale/reference.png",
+    "actualScreenshot": "artifacts/stitch/record-sale/qa/actual-390x1392.png",
+    "comparison": "artifacts/stitch/record-sale/qa/comparison-136x512.png",
+    "captureMetadata": "artifacts/stitch/record-sale/qa/capture.json",
+    "diffMetadata": "artifacts/stitch/record-sale/qa/diff.json"
+  },
+  "fingerprints": {
+    "stitch": "b7195fabf1b7dc8d8973b4af90a5b7e1b36a85852d2caa6cd8d9d1f736fca5a1",
+    "repository": "9ad3c52d4d5c1b3ccce927fce8ebdc3b9bbda9c825b794b994ea871d56fc47b6"
+  }
+}
