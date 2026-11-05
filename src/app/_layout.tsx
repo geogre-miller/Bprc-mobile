@@ -31,12 +31,8 @@ export default function RootLayout() {
         <Stack.Screen name="match/[id]" options={{ headerShown: true, title: 'So sánh đầu mối' }} />
         <Stack.Screen name="buyer-dashboard" options={{ headerShown: true, title: 'Kênh đầu mối' }} />
         <Stack.Screen
-          name="buyer-price-form"
-          options={{ headerShown: true, title: 'Cập nhật giá thu mua', presentation: 'modal' }}
-        />
-        <Stack.Screen
           name="buyer-demand-form"
-          options={{ headerShown: true, title: 'Cập nhật nhu cầu thu mua', presentation: 'modal' }}
+          options={{ headerShown: true, title: 'Tin thu mua', presentation: 'modal' }}
         />
         <Stack.Screen name="onboarding" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
