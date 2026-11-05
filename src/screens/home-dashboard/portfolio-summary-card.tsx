@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   button: {
-    height: 44,
+    minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.container,
   },
   buttonSecondary: {
-    height: 44,
+    minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

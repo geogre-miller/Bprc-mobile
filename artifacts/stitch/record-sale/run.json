@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "RunState",
+  "workflow": "stitch-ui-v2",
+  "target": {
+    "slug": "record-sale",
+    "projectId": "16177202758777999982",
+    "screenId": "3a110d9124cd41038e0c19c5b0ee6a33"
+  },
+  "state": "DONE",
+  "limits": {
+    "maxParallelWorkers": 3,
+    "maxDelegationDepth": 1,
+    "maxRepairLoops": 2
+  },
+  "tasks": {
+    "health": {
+      "kind": "health",
+      "status": "done",
+      "dependencies": [],
+      "worker": null,
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 0,
+      "attempts": 0,
+      "maxAttempts": 1,
+      "ownership": {
+        "exclusive": [],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "design": {
+      "kind": "design",
+      "status": "skipped",
+      "dependencies": [
+        "health"
+      ],
+      "worker": "stitch-inspector",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 1,
+      "attempts": 0,
+      "maxAttempts": 2,
+      "ownership": {
+        "exclusive": [
+          ".stitch/record-sale",
+          "artifacts/stitch/record-sale/design-contract.json"
+        ],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "repository": {
+      "kind": "repository",
+      "status": "skipped",
+      "dependencies": [
+        "health"
+      ],
+      "worker": "rn-context-scout",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 1,
+      "attempts": 0,
+      "maxAttempts": 2,
+      "ownership": {
+        "exclusive": [
+          "artifacts/stitch/record-sale/repo-contract.json"
+        ],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "implementation": {
+      "kind": "implementation",
+      "status": "done",
+      "dependencies": [
+        "design",
+        "repository"
+      ],
+      "worker": "rn-ui-migrator",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": "/root/record_sale_writer",
+      "workerInstanceHistory": [
+        "/root/record_sale_writer"
+      ],
+      "depth": 1,
+      "attempts": 3,
+      "maxAttempts": 4,
+      "ownership": {
+        "exclusive": [
+          "src/screens/selling-journal/index.tsx"
+        ],
+        "shared": []
+      },
+      "receipt": "artifacts/stitch/record-sale/implementation-receipt.json",
+      "reasonCodes": [
+        "BASELINE_FAILURE"
+      ]
+    },
+    "check": {
+      "kind": "check",
+      "status": "done",
+      "dependencies": [
+        "implementation"
+      ],
+      "worker": null,
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [],
+      "depth": 0,
+      "attempts": 3,
+      "maxAttempts": 3,
+      "ownership": {
+        "exclusive": [],
+        "shared": []
+      },
+      "receipt": null,
+      "reasonCodes": []
+    },
+    "visual-verification": {
+      "kind": "visual-verification",
+      "status": "done",
+      "dependencies": [
+        "check"
+      ],
+      "worker": "visual-verifier",
+      "activeWorkerInstance": null,
+      "requiredWorkerInstance": null,
+      "workerInstanceHistory": [
+        "/root/record_sale_verify",
+        "/root/record_sale_verify2",
+        "/root/record_sale_verify3"
+      ],
+      "depth": 1,
+      "attempts": 3,
+      "maxAttempts": 3,
+      "ownership": {
+        "exclusive": [
+          "artifacts/stitch/record-sale/qa"
+        ],
+        "shared": []
+      },
+      "receipt": "artifacts/stitch/record-sale/qa/verification-receipt.json",
+      "reasonCodes": [
+        "BASELINE_FAILURE"
+      ]
+    }
+  },
+  "freshness": {
+    "needsDesign": false,
+    "needsRepo": false,
+    "branch": "00",
+    "designReason": "stitch-fingerprint-match",
+    "repoReason": "repository-dependency-fingerprint-match"
+  },
+  "artifactIndex": "artifacts/stitch/record-sale/index.json",
+  "corrections": 2,
+  "metrics": {
+    "startedAt": "2026-09-11T02:08:18.523Z",
+    "updatedAt": "2026-09-11T03:24:10.924Z",
+    "completedAt": "2026-09-11T03:24:10.922Z",
+    "wallTimeMs": 4552401,
+    "workerCount": 6,
+    "peakParallelism": 1,
+    "correctionLoops": 2,
+    "stitchFetches": 0,
+    "stitchCacheHits": 1,
+    "artifactCacheHits": 2,
+    "toolAvailability": {
+      "stitch": {
+        "status": "available",
+        "required": true,
+        "version": null,
+        "detail": "codex: stitch https://stitch.googleapis.com/mcp - enabled Unknown; claude: Status: ✘ Failed to connect",
+        "reasonCode": null
+      },
+      "codegraph": {
+        "status": "available",
+        "required": false,
+        "version": "1.5.0",
+        "detail": "files=107; pending={\"added\":0,\"modified\":0,\"removed\":0}",
+        "reasonCode": null
+      },
+      "gitnexus": {
+        "status": "unknown",
+        "required": false,
+        "version": null,
+        "detail": "spawnSync /Users/mac/.hermes/node/bin/node ETIMEDOUT",
+        "reasonCode": null
+      },
+      "expoDocs": {
+        "status": "unknown",
+        "required": false,
+        "version": null,
+        "detail": "Expo MCP configured but network reachability failed",
+        "reasonCode": "CAPABILITY_UNAVAILABLE"
+      },
+      "browser": {
+        "status": "available",
+        "required": false,
+        "version": "1.61.0",
+        "detail": "package=1.61.0; chrome=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome; claudePlugin=true",
+        "reasonCode": null
+      },
+      "rtk": {
+        "status": "available",
+        "required": false,
+        "version": "0.48.0",
+        "detail": "Use only documented RTK command forms; raw fallback remains valid",
+        "reasonCode": null
+      },
+      "repositoryWritable": {
+        "status": "available",
+        "required": false,
+        "version": null,
+        "detail": "Repository root is writable",
+        "reasonCode": null
+      }
+    },
+    "rtkEstimatedTokensSaved": null
+  },
+  "reasonCodes": [
+    "VISUAL_MISMATCH"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "ImplementationResult",
+  "generatedAt": "2026-09-11T03:12:18Z",
+  "status": "done",
+  "changedFiles": [
+    "src/screens/selling-journal/index.tsx",
+    "artifacts/stitch/record-sale/implementation.json",
+    "artifacts/stitch/record-sale/implementation-receipt.json"
+  ],
+  "checks": [
+    {
+      "command": "node scripts/agents/validate-artifact.mjs artifacts/stitch/record-sale/design-contract.json",
+      "status": "pass",
+      "evidence": "Prepared DesignContract validated with valid=true and no errors before implementation."
+    },
+    {
+      "command": "node scripts/agents/validate-artifact.mjs artifacts/stitch/record-sale/repo-contract.json",
+      "status": "pass",
+      "evidence": "Prepared RepoContract validated with valid=true and no errors before implementation."
+    },
+    {
+      "command": "node scripts/agents/ownership-gate.mjs --file artifacts/stitch/record-sale/run.json",
+      "status": "pass",
+      "evidence": "Ownership gate returned ok=true with no conflicts for the implementation task."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "pass",
+      "evidence": "TypeScript emitted no errors after the screen implementation."
+    },
+    {
+      "command": "npx eslint src/screens/selling-journal/index.tsx",
+      "status": "pass",
+      "evidence": "Owned screen lint completed with no errors."
+    },
+    {
+      "command": "npm run lint",
+      "status": "baseline-failure",
+      "evidence": "Repository lint retains the known baseline error at src/hooks/use-color-scheme.web.ts:11 (react-hooks/set-state-in-effect); no owned screen error was reported."
+    },
+    {
+      "command": "npx expo export --platform web --output-dir /private/tmp/bprc-record-sale-web-export --no-bytecode",
+      "status": "pass",
+      "evidence": "Expo SDK 57 web export completed into /private/tmp/bprc-record-sale-web-export and included the static /journal route after the save-label copy repair."
+    },
+    {
+      "command": "git diff --check -- src/screens/selling-journal/index.tsx",
+      "status": "pass",
+      "evidence": "Owned screen diff has no whitespace errors after the repair loop."
+    }
+  ],
+  "deviations": [
+    "The route-local Stack header is hidden and the owned screen renders the prepared fixed header with back affordance, NôngSản Pro logo, Tạo Giao Dịch Bán title, and profile avatar without editing src/app/_layout.tsx.",
+    "SellingJournalEntry has no deliveryDate, shippingCost, or orderNote fields. Those controls stay local to the form, while saved records preserve the existing shape and use the save timestamp for soldAt so dashboard month metrics continue to update.",
+    "The form reads the existing rayGia:inventory array when available, seeds the existing default inventory only when that key is absent, and persists a quantity deduction across repeated saves while preserving unrelated inventory records. Journal persistence is written first, inventory second, and a best-effort journal rollback is attempted if inventory persistence fails; success feedback is shown only after both writes complete.",
+    "The instant margin badge uses the prepared cost-based formula (unit price minus unit cost divided by unit cost), yielding 51.9% for the reference values; net profit continues to subtract shipping when entered.",
+    "The read-only shared icon registry does not expose point_of_sale or shield_with_heart; the screen uses the closest existing registry symbols for those visual affordances."
+  ],
+  "blockers": [],
+  "reasonCodes": [
+    "BASELINE_FAILURE"
+  ]
+}

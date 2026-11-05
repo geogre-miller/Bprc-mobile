@@ -1,0 +1,483 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "DesignContract",
+  "sourceFingerprint": "b7195fabf1b7dc8d8973b4af90a5b7e1b36a85852d2caa6cd8d9d1f736fca5a1",
+  "generatedAt": "2026-09-10T10:24:04Z",
+  "project": {
+    "id": "16177202758777999982",
+    "title": "NôngSản Pro"
+  },
+  "screen": {
+    "id": "3a110d9124cd41038e0c19c5b0ee6a33",
+    "name": "Record Sale",
+    "slug": "record-sale",
+    "title": "Tạo Giao Dịch Bán",
+    "locale": "vi",
+    "deviceType": "MOBILE",
+    "viewportWidth": 390,
+    "referenceHeight": 1392,
+    "sourceBitmap": {
+      "width": 780,
+      "height": 2784
+    },
+    "logicalReference": {
+      "width": 390,
+      "height": 1392,
+      "deviceScaleFactor": 2
+    }
+  },
+  "layout": {
+    "canvas": {
+      "background": "#f6fbf5",
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "centeredOnWideSurfaces": true,
+      "verticalScroll": true
+    },
+    "safeArea": {
+      "headerTopPadding": "env(safe-area-inset-top, 0px)",
+      "mainBottomPadding": "env(safe-area-inset-bottom, 0px)"
+    },
+    "header": {
+      "position": "fixed",
+      "top": 0,
+      "height": 64,
+      "horizontalPadding": 16,
+      "zIndex": 50,
+      "surface": "#f6fbf5",
+      "surfaceAlpha": 0.85,
+      "backdropBlur": "xl",
+      "shadow": "0 1px 8px rgba(0,0,0,0.04)",
+      "contentGap": 8,
+      "backButton": {
+        "ariaLabel": "Quay lại",
+        "size": 44,
+        "radius": 8,
+        "surface": "#f0f5f0",
+        "icon": "arrow_back",
+        "iconSize": 22,
+        "pressBehavior": "history.back()"
+      },
+      "brandLogo": {
+        "sourceSelector": "header img[alt=\"NôngSản Pro Logo\"]",
+        "height": 32,
+        "objectFit": "contain"
+      },
+      "title": "Tạo Giao Dịch Bán",
+      "titleStyle": "headline-sm",
+      "profileAvatar": {
+        "sourceSelector": "header img[alt=\"Profile\"]",
+        "size": 32,
+        "radius": "full",
+        "objectFit": "cover",
+        "shadow": "0 1px 3px rgba(0,0,0,0.1)"
+      }
+    },
+    "main": {
+      "surface": "#f6fbf5",
+      "paddingHorizontal": 16,
+      "paddingTop": 64,
+      "paddingBottom": "safe-area",
+      "contentBottomSpacing": 48
+    },
+    "flowHeader": {
+      "paddingVertical": 8,
+      "marginBottom": 12,
+      "stepBadge": {
+        "text": "Bước 1/1",
+        "surface": "#aeeecb",
+        "textColor": "#316e52",
+        "radius": 12,
+        "horizontalPadding": 8,
+        "verticalPadding": 2,
+        "style": "label-sm-uppercase"
+      },
+      "helper": "1 chạm lưu ngay vào sổ cái",
+      "cancel": {
+        "label": "Hủy bỏ",
+        "icon": "cancel",
+        "iconSize": 18,
+        "style": "label-md",
+        "pressBehavior": "history.back()"
+      }
+    },
+    "quickBanner": {
+      "surface": "#f0f5f0",
+      "radius": 8,
+      "padding": 16,
+      "marginBottom": 16,
+      "layout": "row-space-between",
+      "eyebrow": "Giao dịch vụ mùa 2024",
+      "title": "Xuất Bán Nhanh Tại Vườn",
+      "body": "Tự động đối soát giá sàn & cập nhật tồn kho tức thì",
+      "iconWell": {
+        "size": 56,
+        "radius": 12,
+        "surface": "#c1ecd4",
+        "surfaceAlpha": 0.6,
+        "icon": "point_of_sale",
+        "iconSize": 32,
+        "iconColor": "#012d1d"
+      }
+    },
+    "form": {
+      "id": "saleForm",
+      "stackGap": 16,
+      "fieldLabelGap": 6,
+      "control": {
+        "surface": "#ffffff",
+        "radius": 4,
+        "shadow": "shadow-sm",
+        "selectHeight": 48,
+        "numberHeight": 48,
+        "compactHeight": 44
+      },
+      "commodityField": {
+        "id": "commoditySelect",
+        "label": "Nông sản xuất bán",
+        "icon": "eco",
+        "iconSize": 18,
+        "stock": "Kho còn: 2,500 kg",
+        "stockColor": "#2c694e",
+        "selected": "☕ Cà phê Robusta nhân xô (Tồn: 2,500 kg)",
+        "options": [
+          "☕ Cà phê Robusta nhân xô (Tồn: 2,500 kg)",
+          "🌿 Hồ tiêu đen Chư Sê (Tồn: 850 kg)",
+          "🍈 Sầu riêng Ri6 xuất khẩu (Tồn: 4,200 kg)",
+          "🌰 Hạt Mắc-ca sấy nứt (Tồn: 310 kg)"
+        ],
+        "chevron": "expand_more"
+      },
+      "buyerField": {
+        "id": "buyerSelect",
+        "label": "Thương lái / Đại lý thu mua",
+        "icon": "storefront",
+        "iconSize": 18,
+        "addAction": {
+          "label": "Thêm mới",
+          "icon": "add_circle",
+          "iconSize": 16
+        },
+        "selected": "🏢 Đại lý Toàn Thắng (Buôn Hồ - Đắk Lắk)",
+        "options": [
+          "🏢 Đại lý Toàn Thắng (Buôn Hồ - Đắk Lắk)",
+          "🏪 Thu mua nông sản Phát Đạt (Gia Lai)",
+          "🚢 Cty XNK Simexco Đắk Lắk",
+          "👤 Thương lái lẻ: Chị Bích (Cư M'gar)"
+        ],
+        "chevron": "expand_more"
+      },
+      "weightField": {
+        "id": "saleWeight",
+        "label": "Khối lượng xuất bán",
+        "icon": "scale",
+        "iconSize": 18,
+        "value": 1200,
+        "unit": "kg",
+        "min": 1,
+        "max": 2500,
+        "step": 10,
+        "sellAllAction": "Bán hết lô (2,500 kg)",
+        "presets": [
+          { "label": "500 kg", "value": 500, "selected": false },
+          { "label": "1,000 kg", "value": 1000, "selected": false },
+          { "label": "1,200 kg", "value": 1200, "selected": true },
+          { "label": "2,000 kg", "value": 2000, "selected": false }
+        ],
+        "presetGrid": { "columns": 4, "gap": 6, "height": 32 }
+      },
+      "priceField": {
+        "id": "unitPrice",
+        "label": "Đơn giá chốt bán",
+        "icon": "payments",
+        "iconSize": 18,
+        "value": 118500,
+        "unit": "₫/kg",
+        "step": 500,
+        "marketHint": "Sàn hôm nay: 118,500₫",
+        "marketIcon": "trending_up",
+        "marketIconSize": 14,
+        "validationHint": "Mức giá cao hơn vốn sản xuất +51.9% (+40,500 ₫/kg)",
+        "validationIcon": "verified",
+        "validationIconSize": 16
+      },
+      "settlementFields": {
+        "layout": "two-column",
+        "gap": 8,
+        "deliveryDate": {
+          "id": "deliveryDate",
+          "label": "Ngày chốt cân",
+          "value": "2024-10-24"
+        },
+        "shippingCost": {
+          "id": "shippingCost",
+          "label": "Cước vận chuyển",
+          "value": 0,
+          "unit": "₫"
+        }
+      },
+      "noteField": {
+        "id": "orderNote",
+        "label": "Ghi chú biên bản cân hàng",
+        "value": "Cân tại kho vườn, trừ độ ẩm 0.5%, tiền mặt 100%"
+      }
+    },
+    "profitCard": {
+      "id": "profit-calculation",
+      "surface": "#ebefea",
+      "radius": 8,
+      "padding": 16,
+      "gap": 12,
+      "marginTop": 8,
+      "shadow": "shadow-sm",
+      "liveHeader": {
+        "label": "Bảng tính lời lỗ tức thì",
+        "labelStyle": "label-sm-uppercase",
+        "dotSize": 10,
+        "dotColor": "#2c694e",
+        "pulse": true,
+        "marginBadge": {
+          "id": "marginBadge",
+          "text": "Biên lãi 51.9%",
+          "surface": "#2c694e",
+          "textColor": "#ffffff",
+          "radius": 12,
+          "horizontalPadding": 8,
+          "verticalPadding": 2
+        }
+      },
+      "breakdown": [
+        {
+          "id": "grossRevenueText",
+          "icon": "receipt_long",
+          "iconSize": 18,
+          "label": "Tổng doanh thu nhận:",
+          "value": "142,200,000 ₫",
+          "valueColor": "#181d1a"
+        },
+        {
+          "id": "totalCostText",
+          "icon": "inventory_2",
+          "iconSize": 18,
+          "label": "Giá vốn lô hàng (78,000 ₫/kg):",
+          "value": "-93,600,000 ₫",
+          "valueColor": "#ba1a1a"
+        },
+        {
+          "id": "shippingRow",
+          "icon": "local_shipping",
+          "iconSize": 18,
+          "label": "Cước vận chuyển phát sinh:",
+          "value": "-0 ₫",
+          "valueColor": "#ba1a1a",
+          "initiallyVisible": false,
+          "visibleWhen": "shippingCost > 0"
+        }
+      ],
+      "netProfitInset": {
+        "id": "netProfitText",
+        "surface": "#ffffff",
+        "radius": 4,
+        "padding": 12,
+        "label": "Lợi nhuận ròng thực tế",
+        "subtext": "Đã khấu trừ toàn bộ chi phí gốc",
+        "value": "+48,600,000 ₫",
+        "valueColor": "#2c694e",
+        "unitProfit": {
+          "id": "unitProfitText",
+          "text": "+40,500 ₫ / kg",
+          "surface": "#aeeecb",
+          "textColor": "#316e52"
+        }
+      },
+      "stockProjection": {
+        "id": "stockProjectionText",
+        "icon": "warehouse",
+        "iconSize": 16,
+        "text": "Tồn kho còn lại sau khi xuất: 1,300 kg",
+        "emphasis": "1,300 kg"
+      },
+      "calculation": {
+        "unitCost": 78000,
+        "initialStock": 2500,
+        "grossRevenue": "weight * unitPrice",
+        "totalCost": "weight * unitCost",
+        "netProfit": "grossRevenue - totalCost - shipping",
+        "margin": "netProfit / grossRevenue * 100",
+        "remainingStock": "max(0, initialStock - weight)"
+      }
+    },
+    "primaryAction": {
+      "id": "submitBtn",
+      "label": "Xác Nhận & Lưu Phiếu Bán",
+      "icon": "check_circle",
+      "iconSize": 24,
+      "height": 56,
+      "radius": 8,
+      "surface": "#012d1d",
+      "textColor": "#ffffff",
+      "shadow": "shadow-md",
+      "pressScale": 0.99,
+      "helper": "Hệ thống sẽ tự động trừ 1,200 kg trong kho và ghi nhận ngay vào sổ thu chi tổng hợp.",
+      "helperWeightId": "helpWeight"
+    },
+    "transparencyCard": {
+      "surface": "#f0f5f0",
+      "radius": 8,
+      "padding": 16,
+      "marginTop": 20,
+      "gap": 12,
+      "iconWell": {
+        "size": 48,
+        "radius": 4,
+        "surface": "#e5e9e4",
+        "icon": "shield_with_heart",
+        "iconSize": 28,
+        "iconColor": "#012d1d"
+      },
+      "title": "Minh bạch & An toàn",
+      "body": "Dữ liệu sao lưu đám mây thời gian thực, có thể xuất hóa đơn điện tử hoặc biên lai PDF gửi Zalo cho đối tác."
+    },
+    "successToast": {
+      "id": "toastSuccess",
+      "initialState": "hidden",
+      "position": "fixed",
+      "insetHorizontal": 16,
+      "bottom": 32,
+      "zIndex": 50,
+      "hiddenTransform": "translateY(32px)",
+      "visibleTransform": "translateY(0)",
+      "hiddenOpacity": 0,
+      "visibleOpacity": 1,
+      "durationMs": 300,
+      "autoHideMs": 2800,
+      "surface": "#012d1d",
+      "textColor": "#ffffff",
+      "icon": "task_alt",
+      "iconSize": 24,
+      "iconColor": "#95d4b3",
+      "title": "Đã lưu phiếu bán thành công!",
+      "body": "Đã xuất kho và cập nhật doanh thu."
+    }
+  },
+  "typography": {
+    "families": {
+      "headline": "Manrope",
+      "body": "Public Sans",
+      "icons": "Material Symbols Outlined"
+    },
+    "styles": {
+      "headline-sm": { "family": "Manrope", "size": 18, "lineHeight": 24, "letterSpacing": "-0.005em", "weight": 600 },
+      "title-md": { "family": "Public Sans", "size": 16, "lineHeight": 22, "letterSpacing": "0em", "weight": 600 },
+      "body-md": { "family": "Public Sans", "size": 14, "lineHeight": 20, "letterSpacing": "0em", "weight": 400 },
+      "body-sm": { "family": "Public Sans", "size": 12, "lineHeight": 16, "letterSpacing": "0.01em", "weight": 400 },
+      "label-md": { "family": "Public Sans", "size": 13, "lineHeight": 18, "letterSpacing": "0.01em", "weight": 500 },
+      "label-sm": { "family": "Public Sans", "size": 11, "lineHeight": 14, "letterSpacing": "0.04em", "weight": 600 },
+      "numeric-lg": { "family": "Public Sans", "size": 18, "lineHeight": 24, "letterSpacing": "-0.01em", "weight": 600 },
+      "numeric-md": { "family": "Public Sans", "size": 14, "lineHeight": 20, "letterSpacing": "0em", "weight": 600 },
+      "numeric-hero": { "family": "Public Sans", "size": 28, "lineHeight": 36, "letterSpacing": "-0.02em", "weight": 700 }
+    }
+  },
+  "colors": {
+    "surface": "#f6fbf5",
+    "surfaceContainerLowest": "#ffffff",
+    "surfaceContainerLow": "#f0f5f0",
+    "surfaceContainer": "#ebefea",
+    "surfaceContainerHigh": "#e5e9e4",
+    "surfaceContainerHighest": "#dfe4df",
+    "onSurface": "#181d1a",
+    "onSurfaceVariant": "#414844",
+    "outline": "#717973",
+    "primary": "#012d1d",
+    "primaryContainer": "#1b4332",
+    "primaryFixed": "#c1ecd4",
+    "onPrimaryFixed": "#002114",
+    "onPrimary": "#ffffff",
+    "onPrimaryContainer": "#86af99",
+    "secondary": "#2c694e",
+    "secondaryContainer": "#aeeecb",
+    "secondaryFixed": "#b1f0ce",
+    "secondaryFixedDim": "#95d4b3",
+    "onSecondary": "#ffffff",
+    "onSecondaryContainer": "#316e52",
+    "error": "#ba1a1a",
+    "errorContainer": "#ffdad6",
+    "onError": "#ffffff"
+  },
+  "components": [
+    { "id": "header", "type": "fixed-header", "title": "Tạo Giao Dịch Bán", "backAction": "Quay lại", "profile": true },
+    { "id": "flow-header", "type": "sale-flow-subheader", "step": "Bước 1/1", "helper": "1 chạm lưu ngay vào sổ cái", "cancel": "Hủy bỏ" },
+    { "id": "quick-banner", "type": "sale-context-banner", "title": "Xuất Bán Nhanh Tại Vườn", "eyebrow": "Giao dịch vụ mùa 2024" },
+    { "id": "commodity-field", "type": "select-field", "label": "Nông sản xuất bán", "controlId": "commoditySelect" },
+    { "id": "buyer-field", "type": "select-field", "label": "Thương lái / Đại lý thu mua", "controlId": "buyerSelect", "addAction": "Thêm mới" },
+    { "id": "weight-field", "type": "numeric-field-with-presets", "label": "Khối lượng xuất bán", "controlId": "saleWeight" },
+    { "id": "price-field", "type": "numeric-field-with-market-hint", "label": "Đơn giá chốt bán", "controlId": "unitPrice" },
+    { "id": "settlement-fields", "type": "two-column-field-row", "controls": ["deliveryDate", "shippingCost"] },
+    { "id": "note-field", "type": "text-field", "label": "Ghi chú biên bản cân hàng", "controlId": "orderNote" },
+    { "id": "profit-calculation", "type": "real-time-profit-card", "live": true, "margin": "51.9%" },
+    { "id": "primary-action", "type": "primary-submit-button", "label": "Xác Nhận & Lưu Phiếu Bán", "controlId": "submitBtn" },
+    { "id": "transparency-card", "type": "trust-information-card", "title": "Minh bạch & An toàn" },
+    { "id": "success-toast", "type": "success-toast", "initiallyHidden": true, "controlId": "toastSuccess" }
+  ],
+  "assets": [],
+  "interactions": [
+    { "id": "header-back", "action": "Tap Quay lại", "expectedState": "history.back() is invoked" },
+    { "id": "cancel-sale", "action": "Tap Hủy bỏ", "expectedState": "history.back() is invoked" },
+    { "id": "commodity-select", "action": "Select a commodity option", "expectedState": "Selected commodity and stock context update; option values are encoded in source" },
+    { "id": "buyer-select", "action": "Select a buyer option", "expectedState": "Selected buyer changes" },
+    { "id": "add-buyer", "action": "Tap Thêm mới", "expectedState": "A non-empty prompt value is appended as a selected buyer option" },
+    { "id": "sell-all", "action": "Tap Bán hết lô (2,500 kg)", "expectedState": "saleWeight becomes 2,500 kg and all metrics recalculate" },
+    { "id": "weight-presets", "action": "Tap a quick weight preset", "expectedState": "saleWeight becomes the selected preset and all metrics recalculate" },
+    { "id": "weight-input", "action": "Edit saleWeight", "expectedState": "Weight is clamped to 0..2,500 kg and all financial/stock metrics recalculate" },
+    { "id": "price-input", "action": "Edit unitPrice", "expectedState": "Revenue, profit, margin, and unit profit recalculate" },
+    { "id": "shipping-input", "action": "Edit shippingCost", "expectedState": "Shipping row is shown only when cost is greater than zero and profit recalculates" },
+    { "id": "save-sale", "action": "Submit saleForm via Xác Nhận & Lưu Phiếu Bán", "expectedState": "Success toast transitions into view and auto-hides after 2.8 seconds" }
+  ],
+  "responsive": {
+    "centeredShellMaxWidth": 430,
+    "mobileReferenceWidth": 390,
+    "mobileHorizontalPadding": 16,
+    "widerSurfaceBehavior": "center mobile shell without stretching controls",
+    "fixedChrome": ["header", "success-toast"],
+    "scrolling": "vertical main content",
+    "bottomNavigation": false
+  },
+  "reference": {
+    "screenshotPath": ".stitch/record-sale/reference.png",
+    "htmlPath": ".stitch/record-sale/source.html",
+    "manifestPath": ".stitch/record-sale/manifest.json",
+    "normalizedScreenshot": {
+      "width": 136,
+      "height": 512,
+      "sha256": "4fe56e0454dfc8a1f270ce5df78b5c2e345693b6039635a40f876a31037d15f8"
+    },
+    "sourceScreenMetadata": {
+      "width": 780,
+      "height": 2784,
+      "deviceType": "MOBILE",
+      "title": "Record Sale"
+    },
+    "htmlViewportFacts": {
+      "rootMaxWidth": 430,
+      "bodyMinHeight": 884,
+      "logicalReferenceWidth": 390,
+      "logicalReferenceHeight": 1392,
+      "deviceScaleFactor": 2
+    }
+  },
+  "verificationHints": {
+    "route": null,
+    "referenceViewport": {
+      "width": 390,
+      "height": 1392,
+      "deviceScaleFactor": 2
+    },
+    "interactions": [
+      { "id": "weight-presets", "action": "Tap 1,200 kg quick preset", "expectedState": "The selected preset remains highlighted and the totals remain +48,600,000 ₫ at the reference values", "testId": "saleWeight" },
+      { "id": "shipping-row", "action": "Enter a positive shipping cost", "expectedState": "Cước vận chuyển phát sinh row appears and net profit decreases", "testId": "shippingCost" },
+      { "id": "save-sale", "action": "Tap Xác Nhận & Lưu Phiếu Bán", "expectedState": "Success toast appears with the saved sale message", "testId": "submitBtn" }
+    ],
+    "keyTestIds": ["saleForm", "commoditySelect", "buyerSelect", "saleWeight", "unitPrice", "deliveryDate", "shippingCost", "orderNote", "submitBtn", "toastSuccess", "netProfitText", "stockProjectionText"]
+  },
+  "uncertainties": []
+}

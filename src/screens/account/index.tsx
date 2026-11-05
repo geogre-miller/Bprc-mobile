@@ -108,14 +108,14 @@ export function Account() {
           <View style={styles.headerRow}>
             <View style={styles.brand}>
               <Image
-                accessibilityLabel="Biểu trưng NôngSản Pro"
+                accessibilityLabel="Biểu trưng Mùa Vàng"
                 source={require('@/assets/images/nongsan-pro-logo.png')}
                 resizeMode="contain"
                 style={styles.brandLogo}
               />
               <View style={styles.brandCopy}>
                 <ThemedText type="titleMd" style={styles.brandTitle} numberOfLines={1}>
-                  NôngSản Pro
+                  Mùa Vàng
                 </ThemedText>
                 <View style={styles.regionLine}>
                   <Icon name="location_on" size={14} color={COLORS.secondary} />
@@ -408,7 +408,7 @@ export function Account() {
             </Pressable>
             <View style={styles.versionBlock}>
               <ThemedText type="bodySm" style={styles.versionText}>
-                NôngSản Pro v2.4.1
+                Mùa Vàng v2.4.1
               </ThemedText>
               <ThemedText type="labelSm" style={styles.legalText}>
                 Bản chuẩn cho Nông hộ & Hợp tác xã Việt Nam

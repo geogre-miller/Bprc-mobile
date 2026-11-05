@@ -83,7 +83,7 @@ export function CustomTabList({ compact = false, ...props }: CustomTabListProps)
         style={[styles.innerContainer, compact && styles.compactInnerContainer]}>
         {!compact && (
           <ThemedText type="smallBold" style={styles.brandText}>
-            Rẫy Giá
+            Mùa Vàng
           </ThemedText>
         )}
 

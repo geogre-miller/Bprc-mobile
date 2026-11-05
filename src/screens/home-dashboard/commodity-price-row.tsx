@@ -41,10 +41,23 @@ export function CommodityPriceRow({ row }: { row: PriceRow }) {
   const trendDirection = getPriceTrendDirection(row.changePercent);
   const flat = trendDirection === 'flat';
   const trendColor = flat ? theme.textSecondary : trendDirection === 'up' ? theme.gain : theme.loss;
+  const heldValue = row.latest && row.heldQuantity > 0 ? row.latest.pricePerUnit * row.heldQuantity : undefined;
+
+  // Screen readers get one sentence instead of a dozen fragments.
+  const a11yLabel = [
+    row.label,
+    row.latest && `${formatAmount(row.latest.pricePerUnit)} đồng một ${row.latest.unit}`,
+    flat
+      ? 'đứng giá'
+      : `${trendDirection === 'up' ? 'tăng' : 'giảm'} ${formatAmount(Math.abs(row.changeAmount!))} đồng`,
+    row.heldQuantity > 0 && `kho còn ${formatAmount(row.heldQuantity)} ký`,
+  ]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <Link href={{ pathname: '/commodity/[id]', params: { id: row.id } }} asChild>
-      <Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel={a11yLabel}>
         <ThemedView type="backgroundElement" style={[styles.row, { borderColor: theme.border }]}>
           <ThemedView type="backgroundElement" style={styles.left}>
             <ThemedView type="backgroundSelected" style={styles.iconTile}>
@@ -70,6 +83,7 @@ export function CommodityPriceRow({ row }: { row: PriceRow }) {
                     {formatAmount(row.heldQuantity)} kg
                   </ThemedText>
                 )}
+                {heldValue != null && ` · ≈ ${formatVnd(heldValue)}`}
               </ThemedText>
             </ThemedView>
           </ThemedView>

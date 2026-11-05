@@ -10,10 +10,9 @@ import { CommodityPriceRow } from './commodity-price-row';
 import { Icon } from './icons';
 import type { PriceRow } from './use-dashboard-data';
 
-type PriceFilter = 'all' | 'mine' | 'up' | 'down';
+type PriceFilter = 'all' | 'up' | 'down';
 
 function matchesFilter(row: PriceRow, filter: PriceFilter): boolean {
-  if (filter === 'mine') return row.heldQuantity > 0;
   if (filter === 'up') return (row.changePercent ?? 0) > 0;
   if (filter === 'down') return (row.changePercent ?? 0) < 0;
   return true;
@@ -26,16 +25,17 @@ export function PriceTracker({ rows }: { rows: PriceRow[] }) {
 
   const filters: [PriceFilter, string][] = [
     ['all', 'Tất cả'],
-    ['mine', `Của tôi (${rows.filter((row) => row.heldQuantity > 0).length})`],
-    ['up', 'Tăng mạnh ↗'],
-    ['down', 'Giảm ↘'],
+    ['up', 'Đang tăng'],
+    ['down', 'Đang giảm'],
   ];
 
   return (
     <ThemedView style={styles.section}>
       <ThemedView style={styles.headerRow}>
         <Icon name="analytics" size={20} color={theme.accent} />
-        <ThemedText type="headlineSm">Giá nông sản hôm nay</ThemedText>
+        <ThemedText type="headlineSm" accessibilityRole="header">
+          Bảng giá thị trường
+        </ThemedText>
       </ThemedView>
 
       <ScrollView
@@ -46,7 +46,11 @@ export function PriceTracker({ rows }: { rows: PriceRow[] }) {
         {filters.map(([value, label]) => {
           const selected = filter === value;
           return (
-            <Pressable key={value} onPress={() => setFilter(value)}>
+            <Pressable
+              key={value}
+              accessibilityRole="button"
+              accessibilityState={{ selected }}
+              onPress={() => setFilter(value)}>
               <ThemedView
                 type={selected ? undefined : 'backgroundSelected'}
                 style={[styles.pill, selected && { backgroundColor: theme.primary }]}>
@@ -90,9 +94,10 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.half,
   },
   pill: {
+    minHeight: 44,
+    justifyContent: 'center',
     borderRadius: Radius.sheet,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: Spacing.three,
   },
   list: {
     gap: Spacing.two,

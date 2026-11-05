@@ -184,7 +184,7 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const callBuyer = () => Linking.openURL(`tel:${PHONE}`);
   const shareBuyer = () => Share.share({
     title: 'Đại lý Toàn Thắng',
-    message: 'Đại lý Toàn Thắng đang thu mua nông sản tại Đắk Lắk trên NôngSản Pro.',
+    message: 'Đại lý Toàn Thắng đang thu mua nông sản tại Đắk Lắk trên Mùa Vàng.',
   });
 
   const submitSale = () => {
@@ -212,9 +212,9 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
       <View style={[styles.shell, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <View style={styles.brand}>
-            <Image accessibilityLabel="Biểu trưng NôngSản Pro" source={require('@/assets/images/nongsan-pro-logo.png')} resizeMode="contain" style={styles.brandLogo} />
+            <Image accessibilityLabel="Biểu trưng Mùa Vàng" source={require('@/assets/images/nongsan-pro-logo.png')} resizeMode="contain" style={styles.brandLogo} />
             <View style={styles.brandCopy}>
-              <ThemedText type="titleMd" style={styles.brandTitle}>NôngSản Pro</ThemedText>
+              <ThemedText type="titleMd" style={styles.brandTitle}>Mùa Vàng</ThemedText>
               <View style={styles.regionRow}>
                 <Icon name="location_on" size={14} color={COLORS.secondary} />
                 <ThemedText type="labelSm" style={styles.regionText}>Tây Nguyên • Đắk Lắk</ThemedText>

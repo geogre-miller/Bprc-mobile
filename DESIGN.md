@@ -441,7 +441,7 @@ The design system adopts a soft, disciplined shape language `roundedness: 1`). E
 
 ### Chips &amp; Commodity Badges
 
-- **Filter Chips:** 36px height, soft 6px radius, `outline-variant` `#C1C8C2` border on `surface-container-lowest` `#FFFFFF`. Selected state uses `primary-container` `#1B4332` with `on-primary` `#FFFFFF` text.
+- **Filter Chips:** 44px minimum height (per the touch target rule above), soft 6px radius, `outline-variant` `#C1C8C2` border on `surface-container-lowest` `#FFFFFF`. Selected state uses `primary-container` `#1B4332` with `on-primary` `#FFFFFF` text.
 
 - **Unit &amp; Grade Badges:** Small badges (e.g., "Grade A", "Robusta", "Độ ẩm 14%") use `label-sm` with `surface-container-highest` `#DFE4DF` background and `on-surface` `#181D1A` text.
 

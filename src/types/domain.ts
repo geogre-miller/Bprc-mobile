@@ -1,5 +1,5 @@
 /**
- * Core domain vocabulary for Rẫy Giá: agricultural price intelligence and
+ * Core domain vocabulary for Mùa Vàng: agricultural price intelligence and
  * local buyer/farmer supply-demand matching. Types only — no logic here.
  */
 

@@ -20,7 +20,7 @@ export function Onboarding() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ThemedText type="title" style={styles.title}>
-        Rẫy Giá
+        Mùa Vàng
       </ThemedText>
       <ThemedText themeColor="textSecondary" style={styles.subtitle}>
         Giá nông sản và đầu mối thu mua gần bạn

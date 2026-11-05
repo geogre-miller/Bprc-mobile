@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "artifactType": "StitchSourceManifest",
+  "projectId": "16177202758777999982",
+  "screenId": "3a110d9124cd41038e0c19c5b0ee6a33",
+  "retrievedAt": "2026-09-10T10:14:40.536Z",
+  "sourceFingerprint": "b7195fabf1b7dc8d8973b4af90a5b7e1b36a85852d2caa6cd8d9d1f736fca5a1",
+  "screenshot": {
+    "path": ".stitch/record-sale/reference.png",
+    "sha256": "4fe56e0454dfc8a1f270ce5df78b5c2e345693b6039635a40f876a31037d15f8",
+    "bytes": 24807,
+    "height": 512,
+    "width": 136
+  },
+  "html": {
+    "path": ".stitch/record-sale/source.html",
+    "sha256": "8486815515481aee0b3c7c6971e66b743da9c464b4ed2e749fe175e9bf526661",
+    "bytes": 25907
+  },
+  "assets": []
+}

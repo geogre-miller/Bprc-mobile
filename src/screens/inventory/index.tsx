@@ -372,7 +372,16 @@ export function Inventory() {
   const sellItem = (index: number) => {
     const current = items[index];
     if (!current) return;
-    showFeedback('Đã chọn lô ' + (presentationItems[index]?.name ?? 'hàng hóa') + ' để bán.');
+    const presentation = presentationItems[index];
+    router.push({
+      pathname: '/journal',
+      params: {
+        commodity: current.commodity,
+        stock: String(current.quantity),
+        price: String(presentation.marketPrice),
+        unitCost: String(presentation.costPerUnit),
+      },
+    });
   };
 
   const recordSale = () => {
@@ -403,14 +412,14 @@ export function Inventory() {
           <View style={styles.headerInner}>
             <View style={styles.brand}>
               <Image
-                accessibilityLabel="Biểu trưng NôngSản Pro"
+                accessibilityLabel="Biểu trưng Mùa Vàng"
                 source={require('@/assets/images/nongsan-pro-logo.png')}
                 resizeMode="contain"
                 style={styles.brandLogo}
               />
               <View style={styles.brandCopy}>
                 <ThemedText type="titleMd" style={styles.brandTitle} numberOfLines={1}>
-                  NôngSản Pro
+                  Mùa Vàng
                 </ThemedText>
                 <View style={styles.regionRow}>
                   <ScreenIcon name="location_on" size={14} color={COLORS.secondary} />
