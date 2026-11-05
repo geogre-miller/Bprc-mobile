@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Layout } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 import { CommodityPriceRow } from './commodity-price-row';
@@ -46,7 +46,7 @@ export function MyCommodities({ rows }: { rows: PriceRow[] }) {
 
 const styles = StyleSheet.create({
   section: {
-    gap: Spacing.two,
+    gap: Layout.gutter,
   },
   empty: {
     borderRadius: Radius.container,

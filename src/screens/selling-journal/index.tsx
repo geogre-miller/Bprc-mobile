@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFonts } from 'expo-font';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
+import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { BUYERS, COMMODITIES, PRICE_OBSERVATIONS, latestObservation } from '@/data/mock-data';
@@ -16,22 +16,6 @@ import type { Commodity, FarmerInventoryItem, SellingJournalEntry } from '@/type
 import { formatVnd } from '@/utils/format-price';
 
 const COLORS = LightPalette;
-
-const FONT = {
-  manropeSemiBold: 'RecordSaleManropeSemiBold',
-  publicSansRegular: 'RecordSalePublicSansRegular',
-  publicSansMedium: 'RecordSalePublicSansMedium',
-  publicSansSemiBold: 'RecordSalePublicSansSemiBold',
-  publicSansBold: 'RecordSalePublicSansBold',
-} as const;
-
-const fontMap = {
-  [FONT.manropeSemiBold]: require('../../../assets/fonts/Manrope-SemiBold.ttf'),
-  [FONT.publicSansRegular]: require('../../../assets/fonts/PublicSans-Regular.ttf'),
-  [FONT.publicSansMedium]: require('../../../assets/fonts/PublicSans-Medium.ttf'),
-  [FONT.publicSansSemiBold]: require('../../../assets/fonts/PublicSans-SemiBold.ttf'),
-  [FONT.publicSansBold]: require('../../../assets/fonts/PublicSans-Bold.ttf'),
-};
 
 type SaleCommodityOption = {
   id: Commodity;
@@ -271,7 +255,6 @@ export function SellingJournal() {
   }, [inventory, params.commodity, params.stock, params.price, params.unitCost]);
   const initialOption = saleOptions.find((option) => option.id === params.commodity) ?? saleOptions[0];
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/inventory'));
-  const [fontsLoaded, fontError] = useFonts(fontMap);
   const [entries, setEntries, isLoaded] = usePersistedState<SellingJournalEntry[]>('selling-journal', []);
   const [commodity, setCommodity] = useState<Commodity>(initialOption.id);
   const [buyerOptions, setBuyerOptions] = useState(() => {
@@ -444,7 +427,7 @@ export function SellingJournal() {
     setEntries((current) => current.filter((entry) => entry.id !== id));
   };
 
-  if ((!fontsLoaded && !fontError) || !isLoaded || !inventoryLoaded) {
+  if (!isLoaded || !inventoryLoaded) {
     return <ThemedView style={[styles.screen, { backgroundColor: theme.surface }]}><Stack.Screen options={{ headerShown: false }} /></ThemedView>;
   }
 
@@ -601,7 +584,7 @@ export function SellingJournal() {
               />
               {addingBuyer && (
                 <View style={styles.addBuyerPanel}>
-                  <TextInput
+                  <ThemedTextInput
                     accessibilityLabel="Tên thương lái hoặc đại lý mới"
                     testID="newBuyerName"
                     value={newBuyerName}
@@ -656,7 +639,7 @@ export function SellingJournal() {
                 }
               />
               <View style={styles.inputWithSuffix}>
-                <TextInput
+                <ThemedTextInput
                   accessibilityLabel="Khối lượng xuất bán"
                   accessibilityValue={{ min: 0, max: selectedCommodity.stock, now: metrics.weight }}
                   testID="saleWeight"
@@ -706,7 +689,7 @@ export function SellingJournal() {
                 }
               />
               <View style={styles.inputWithSuffix}>
-                <TextInput
+                <ThemedTextInput
                   accessibilityLabel="Đơn giá chốt bán"
                   testID="unitPrice"
                   value={priceInput}
@@ -735,7 +718,7 @@ export function SellingJournal() {
                 <ThemedText type="labelSm" themeColor="textSecondary" style={styles.compactLabel}>
                   Ngày chốt cân
                 </ThemedText>
-                <TextInput
+                <ThemedTextInput
                   accessibilityLabel="Ngày chốt cân"
                   testID="deliveryDate"
                   value={deliveryDate}
@@ -750,7 +733,7 @@ export function SellingJournal() {
                   Cước vận chuyển
                 </ThemedText>
                 <View style={styles.compactInputWrap}>
-                  <TextInput
+                  <ThemedTextInput
                     accessibilityLabel="Cước vận chuyển"
                     testID="shippingCost"
                     value={shippingInput}
@@ -773,7 +756,7 @@ export function SellingJournal() {
               <ThemedText type="labelSm" themeColor="textSecondary" style={styles.compactLabel}>
                 Ghi chú biên bản cân hàng
               </ThemedText>
-              <TextInput
+              <ThemedTextInput
                 accessibilityLabel="Ghi chú biên bản cân hàng"
                 testID="orderNote"
                 value={orderNote}
@@ -1017,7 +1000,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     flex: 1,
-    fontFamily: FONT.manropeSemiBold,
+    fontWeight: '600',
     color: COLORS.onSurface,
   },
   headerLogo: {
@@ -1101,11 +1084,11 @@ const styles = StyleSheet.create({
   eyebrow: {
     color: COLORS.secondary,
     textTransform: 'uppercase',
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   quickBannerTitle: {
     color: COLORS.primary,
-    fontFamily: FONT.manropeSemiBold,
+    fontWeight: '600',
   },
   quickBannerIcon: {
     width: 56,
@@ -1140,11 +1123,11 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   stockHint: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansMedium,
+    fontWeight: '500',
     flexShrink: 0,
   },
   addAction: {
@@ -1156,7 +1139,7 @@ const styles = StyleSheet.create({
   },
   addActionText: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   dropdownWrap: {
     position: 'relative',
@@ -1180,7 +1163,7 @@ const styles = StyleSheet.create({
   selectValue: {
     flex: 1,
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   dropdownMenu: {
     position: 'absolute',
@@ -1207,22 +1190,22 @@ const styles = StyleSheet.create({
   },
   dropdownOptionText: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   addBuyerPanel: {
-    padding: 10,
+    padding: 12,
     gap: 8,
     borderRadius: Radius.container,
     backgroundColor: COLORS.surfaceContainerLow,
   },
   inlineInput: {
     minHeight: 40,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     borderRadius: Radius.base,
     backgroundColor: COLORS.surfaceContainerLowest,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   addBuyerActions: {
     flexDirection: 'row',
@@ -1259,11 +1242,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     fontWeight: '600',
-    fontFamily: FONT.publicSansSemiBold,
-  },
+    },
   inputSuffix: {
     paddingHorizontal: 12,
-    fontFamily: FONT.publicSansMedium,
+    fontWeight: '500',
   },
   sellAllAction: {
     minHeight: 26,
@@ -1274,7 +1256,7 @@ const styles = StyleSheet.create({
   },
   sellAllText: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   presetGrid: {
     flexDirection: 'row',
@@ -1295,15 +1277,15 @@ const styles = StyleSheet.create({
   },
   presetText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansMedium,
+    fontWeight: '500',
   },
   presetTextSelected: {
     color: COLORS.onPrimaryFixed,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   marketHint: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     flexShrink: 0,
   },
   marketHintRow: {
@@ -1322,7 +1304,7 @@ const styles = StyleSheet.create({
   },
   inlineEmphasis: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   compactRow: {
     flexDirection: 'row',
@@ -1333,7 +1315,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   compactLabel: {
-    fontFamily: FONT.publicSansMedium,
+    fontWeight: '500',
   },
   compactInputWrap: {
     position: 'relative',
@@ -1345,7 +1327,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceContainerLowest,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
     shadowColor: '#000000',
     shadowOpacity: 0.06,
     shadowRadius: 3,
@@ -1367,7 +1349,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceContainerLowest,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
     shadowColor: '#000000',
     shadowOpacity: 0.06,
     shadowRadius: 3,
@@ -1405,14 +1387,14 @@ const styles = StyleSheet.create({
   },
   uppercaseLabel: {
     textTransform: 'uppercase',
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   marginBadge: {
     borderRadius: Radius.sheet,
     paddingHorizontal: 8,
     paddingVertical: 2,
     overflow: 'hidden',
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   marginBadgePositive: {
     color: COLORS.onSecondary,
@@ -1442,7 +1424,7 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     textAlign: 'right',
   },
   netProfitInset: {
@@ -1467,7 +1449,7 @@ const styles = StyleSheet.create({
   netProfitLabel: {
     color: COLORS.secondary,
     textTransform: 'uppercase',
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   netProfitValue: {
     alignItems: 'flex-end',
@@ -1475,11 +1457,11 @@ const styles = StyleSheet.create({
   },
   profitPositive: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   profitNegative: {
     color: COLORS.error,
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   unitProfitPositive: {
     color: COLORS.onSecondaryContainer,
@@ -1487,7 +1469,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.base,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   unitProfitNegative: {
     color: COLORS.onErrorContainer,
@@ -1495,7 +1477,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.base,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   stockProjection: {
     flexDirection: 'row',
@@ -1507,7 +1489,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: COLORS.error,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   primaryActionGroup: {
     gap: 8,
@@ -1536,7 +1518,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: COLORS.onPrimary,
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   submitHelper: {
     textAlign: 'center',
@@ -1544,7 +1526,7 @@ const styles = StyleSheet.create({
   },
   helperWeight: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   transparencyCard: {
     borderRadius: Radius.container,
@@ -1569,7 +1551,7 @@ const styles = StyleSheet.create({
   },
   transparencyTitle: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   savedJournalSection: {
     gap: 8,
@@ -1577,7 +1559,7 @@ const styles = StyleSheet.create({
   },
   savedJournalTitle: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   summaryCard: {
     borderRadius: Radius.container,
@@ -1629,7 +1611,7 @@ const styles = StyleSheet.create({
   },
   toastTitle: {
     color: COLORS.onPrimary,
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   toastBody: {
     color: COLORS.onPrimaryContainer,

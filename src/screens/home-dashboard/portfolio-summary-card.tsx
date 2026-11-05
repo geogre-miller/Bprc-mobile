@@ -82,7 +82,7 @@ export function PortfolioSummaryCard({
           <ThemedText type="smallBold" style={styles.metricValue}>
             {formatVnd(revenueThisMonth)}
           </ThemedText>
-          <ThemedText themeColor="textSecondary" style={styles.metricFootnote}>
+          <ThemedText type="labelSm" themeColor="textSecondary">
             {closedDealCount} giao dịch đã chốt
           </ThemedText>
         </ThemedView>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.container,
     borderWidth: 1,
     padding: Spacing.three,
-    gap: 10,
+    gap: 12,
   },
   topRow: {
     flexDirection: 'row',
@@ -158,17 +158,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.two,
     borderRadius: Radius.container,
-    padding: 10,
+    padding: 12,
   },
   metric: {
     flex: 1,
   },
   metricValue: {
     marginTop: Spacing.half,
-  },
-  metricFootnote: {
-    fontSize: 11,
-    lineHeight: 14,
   },
   actionRow: {
     flexDirection: 'row',

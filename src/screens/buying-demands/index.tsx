@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Layout } from '@/constants/theme';
 import { BUYERS, BUYING_DEMANDS, COMMODITIES } from '@/data/mock-data';
 import { expiryLabel, isPostActive, MY_BUYER_ID, useMyBuyerPosts, useMyBuyerProfile } from '@/hooks/use-buyer-posts';
 import { useTheme } from '@/hooks/use-theme';
@@ -114,8 +114,8 @@ function PostCard({ post, buyer, now }: { post: BuyingDemand; buyer?: BuyerProfi
 const styles = StyleSheet.create({
   loading: { flex: 1 },
   content: {
-    padding: Spacing.three,
-    gap: 12,
+    padding: Layout.screenMargin,
+    gap: Layout.gutter,
   },
   headerNote: { marginBottom: Spacing.one },
   pressed: { opacity: 0.85 },

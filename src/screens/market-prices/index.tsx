@@ -6,12 +6,12 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
+import { ThemedTextInput } from '@/components/themed-text-input';
 import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon } from '@/screens/home-dashboard/icons';
@@ -347,7 +347,7 @@ export function MarketPrices() {
         <View style={styles.searchRow}>
           <View style={[styles.searchField, { borderColor: theme.border, backgroundColor: SCREEN_COLORS.surface }]}>
             <Icon name="search" size={20} color={SCREEN_COLORS.outline} />
-            <TextInput
+            <ThemedTextInput
               value={query}
               onChangeText={setQuery}
               placeholder="Tìm cà phê, tiêu, lúa, sầu riêng..."
@@ -640,7 +640,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     borderRadius: Radius.container,
     shadowColor: SCREEN_COLORS.shadow,
     shadowOpacity: 0.04,
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.two,
     borderRadius: Radius.container,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 0,
   },
   bulletinText: {
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
   cta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     borderRadius: Radius.container,
     padding: 12,
   },
@@ -752,7 +752,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.one,
     borderRadius: Radius.container,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: Spacing.two,
   },
   modalRoot: {
@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: Radius.sheet,
     borderTopRightRadius: Radius.sheet,
     paddingHorizontal: Spacing.three,
-    paddingTop: 10,
+    paddingTop: 12,
     paddingBottom: 24,
     shadowColor: SCREEN_COLORS.shadow,
     shadowOpacity: 0.14,
@@ -813,7 +813,7 @@ const styles = StyleSheet.create({
   optionLabel: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   resetOption: {
     minHeight: 48,

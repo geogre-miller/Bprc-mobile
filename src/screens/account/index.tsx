@@ -13,12 +13,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
+import { BottomTabInset, LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 import { Icon } from '../home-dashboard/icons';
 
-import { PROFILE_FONTS, useProfileFonts } from './fonts';
 
 const COLORS = LightPalette;
 
@@ -67,7 +66,6 @@ function Card({ children, style }: { children: ReactNode; style?: object }) {
 
 export function Account() {
   const theme = useTheme();
-  const fontsReady = useProfileFonts();
   const [priceAlertsEnabled, setPriceAlertsEnabled] = useState(true);
 
   const showRegionFeedback = () => {
@@ -92,14 +90,6 @@ export function Account() {
       { text: 'Đăng xuất', style: 'destructive' },
     ]);
   };
-
-  if (!fontsReady) {
-    return (
-      <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]} edges={['top']}>
-        <View style={[styles.loadingScreen, { backgroundColor: theme.background }]} />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]} edges={['top']}>
@@ -154,7 +144,7 @@ export function Account() {
             </View>
           </View>
           <View style={styles.titleRow}>
-            <ThemedText type="headlineSm" style={styles.screenTitle}>
+            <ThemedText type="subtitle" accessibilityRole="header" style={styles.screenTitle}>
               Cá Nhân
             </ThemedText>
             <View style={styles.onlineBadge}>
@@ -505,7 +495,7 @@ const styles = StyleSheet.create({
   },
   brandTitle: {
     color: COLORS.primary,
-    fontFamily: PROFILE_FONTS.manropeSemiBold,
+    fontWeight: '600',
     lineHeight: 20,
   },
   regionLine: {
@@ -516,7 +506,7 @@ const styles = StyleSheet.create({
   },
   regionText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
     flexShrink: 1,
   },
   headerActions: {
@@ -566,7 +556,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.manropeSemiBold,
+    fontWeight: '600',
   },
   onlineBadge: {
     paddingHorizontal: Spacing.two,
@@ -576,17 +566,17 @@ const styles = StyleSheet.create({
   },
   onlineText: {
     color: COLORS.onSecondaryContainer,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
   },
   content: {
     width: '100%',
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.two,
+    paddingHorizontal: Layout.screenMargin,
+    paddingTop: Layout.screenMargin,
     paddingBottom: BottomTabInset + Spacing.four,
-    gap: Spacing.three,
+    gap: Layout.sectionGap,
   },
   card: {
     width: '100%',
@@ -640,7 +630,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.manropeSemiBold,
+    fontWeight: '600',
   },
   nicknameBadge: {
     flexShrink: 0,
@@ -652,7 +642,7 @@ const styles = StyleSheet.create({
   },
   nicknameText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   detailLine: {
     flexDirection: 'row',
@@ -664,11 +654,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansRegular,
+    fontWeight: '400',
   },
   farmerIdPanel: {
     minHeight: 60,
-    padding: 10,
+    padding: 12,
     borderRadius: Radius.base,
     backgroundColor: COLORS.surfaceLow,
     flexDirection: 'row',
@@ -682,18 +672,18 @@ const styles = StyleSheet.create({
   },
   mutedText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansRegular,
+    fontWeight: '400',
   },
   farmerId: {
     color: COLORS.primary,
-    fontFamily: PROFILE_FONTS.publicSansBold,
+    fontWeight: '700',
   },
   verifiedChip: {
     maxWidth: '58%',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: Radius.full,
     backgroundColor: COLORS.secondaryContainer,
@@ -701,7 +691,7 @@ const styles = StyleSheet.create({
   },
   verifiedText: {
     color: COLORS.onSecondaryContainer,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
     flexShrink: 1,
   },
   sectionCard: {
@@ -724,7 +714,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     flexShrink: 1,
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   seasonLine: {
     flexDirection: 'row',
@@ -734,7 +724,7 @@ const styles = StyleSheet.create({
   },
   seasonText: {
     color: COLORS.secondary,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   statGrid: {
     flexDirection: 'row',
@@ -743,7 +733,7 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     minWidth: 0,
-    padding: 10,
+    padding: 12,
     borderRadius: Radius.base,
     backgroundColor: COLORS.surfaceLow,
     alignItems: 'center',
@@ -752,21 +742,21 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   statValue: {
     color: COLORS.primary,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   cropValue: {
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   secondaryValue: {
     color: COLORS.secondary,
   },
   statDescription: {
     color: COLORS.outline,
-    fontFamily: PROFILE_FONTS.publicSansRegular,
+    fontWeight: '400',
   },
   changeButton: {
     minHeight: 44,
@@ -775,7 +765,7 @@ const styles = StyleSheet.create({
   },
   changeText: {
     color: COLORS.secondary,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   bankPanel: {
     padding: 12,
@@ -812,7 +802,7 @@ const styles = StyleSheet.create({
   },
   bankName: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   accountNumberChip: {
     flexShrink: 0,
@@ -823,7 +813,7 @@ const styles = StyleSheet.create({
   },
   accountNumber: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
     letterSpacing: 1,
   },
   linkedCallout: {
@@ -838,18 +828,18 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansRegular,
+    fontWeight: '400',
   },
   linkedId: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   preferenceRows: {
-    gap: 10,
+    gap: 12,
   },
   preferenceRow: {
     minHeight: 68,
-    padding: 10,
+    padding: 12,
     borderRadius: Radius.base,
     backgroundColor: COLORS.surfaceLow,
     flexDirection: 'row',
@@ -865,12 +855,12 @@ const styles = StyleSheet.create({
   },
   preferenceTitle: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   valueChip: {
     minHeight: 40,
     maxWidth: '44%',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: Radius.base,
     backgroundColor: COLORS.surfaceContainer,
@@ -882,11 +872,11 @@ const styles = StyleSheet.create({
   },
   primaryChipText: {
     color: COLORS.primary,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   unitText: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   switchHitbox: {
     minWidth: 48,
@@ -921,10 +911,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   supportRow: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
   },
   supportRowDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -945,11 +935,11 @@ const styles = StyleSheet.create({
   },
   supportTitle: {
     color: COLORS.onSurface,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   supportDescription: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansRegular,
+    fontWeight: '400',
   },
   footer: {
     alignItems: 'center',
@@ -969,7 +959,7 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: COLORS.error,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
   },
   versionBlock: {
     alignItems: 'center',
@@ -977,11 +967,11 @@ const styles = StyleSheet.create({
   },
   versionText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: PROFILE_FONTS.publicSansMedium,
+    fontWeight: '500',
   },
   legalText: {
     color: COLORS.outline,
-    fontFamily: PROFILE_FONTS.publicSansSemiBold,
+    fontWeight: '600',
     textAlign: 'center',
   },
   pressed: {

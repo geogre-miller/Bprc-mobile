@@ -1,6 +1,6 @@
-import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
+import { Platform, StyleSheet, Text, type TextProps, type TextStyle } from 'react-native';
 
-import { Colors, Fonts, ThemeColor } from '@/constants/theme';
+import { Colors, fontFamilyFor, Fonts, ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
@@ -23,8 +23,23 @@ export type ThemedTextProps = TextProps & {
   themeColor?: ThemeColor;
 };
 
+/** DESIGN.md: display and headline roles use Manrope; everything else uses Public Sans. */
+const MANROPE_TYPES = new Set<ThemedTextProps['type']>(['title', 'subtitle', 'headlineSm']);
+const NUMERIC_TYPES = new Set<ThemedTextProps['type']>(['numericLg', 'numericHero', 'smallBold']);
+
 export function ThemedText({ style, type = 'default', themeColor, ...rest }: ThemedTextProps) {
   const theme = useTheme();
+  const flat = StyleSheet.flatten([styles[type], style]) as TextStyle;
+
+  // A caller's explicit fontFamily wins (e.g. code). Otherwise the static file is chosen from the
+  // effective weight, and fontWeight is reset so platforms do not synthesize a second bold.
+  const typeface: TextStyle | undefined =
+    type === 'code' || flat.fontFamily
+      ? undefined
+      : {
+          fontFamily: fontFamilyFor(MANROPE_TYPES.has(type) ? 'manrope' : 'publicSans', Number(flat.fontWeight ?? 400)),
+          fontWeight: 'normal',
+        };
 
   return (
     <Text
@@ -45,7 +60,9 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
         type === 'link' && styles.link,
         type === 'linkPrimary' && styles.linkPrimary,
         type === 'code' && styles.code,
+        NUMERIC_TYPES.has(type) && styles.tabular,
         style,
+        typeface,
       ]}
       {...rest}
     />
@@ -143,6 +160,10 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontSize: 14,
     color: Colors.light.accent,
+  },
+  // DESIGN.md: all prices and metrics use tabular figures so columns align.
+  tabular: {
+    fontVariant: ['tabular-nums'],
   },
   code: {
     fontFamily: Fonts.mono,

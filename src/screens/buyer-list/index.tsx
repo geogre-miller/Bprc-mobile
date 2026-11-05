@@ -10,17 +10,16 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { BottomTabInset, LightPalette, Radius } from '@/constants/theme';
+import { ThemedTextInput } from '@/components/themed-text-input';
+import { BottomTabInset, Layout, LightPalette, Radius } from '@/constants/theme';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
-import { BUYER_DIRECTORY_FONTS, useBuyerDirectoryFonts } from './fonts';
 
 const COLORS = LightPalette;
 
@@ -140,7 +139,7 @@ type FilterSheetKind = 'product' | 'radius' | 'advanced';
 
 function FontText({ children, style, type = 'bodySm', ...props }: React.ComponentProps<typeof ThemedText>) {
   return (
-    <ThemedText {...props} type={type} style={[{ fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular }, style]}>
+    <ThemedText {...props} type={type} style={[{ fontWeight: '400' }, style]}>
       {children}
     </ThemedText>
   );
@@ -375,11 +374,11 @@ function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; o
             <Pressable accessibilityRole="button" accessibilityLabel="Chọn nông sản xuất bán" onPress={() => setCommodityOptionsOpen((value) => !value)} style={styles.selectField}><FontText type="bodySm" numberOfLines={1} style={styles.selectText}>{commodity}</FontText><Icon name="expand_more" size={20} color={COLORS.outline} /></Pressable>
             {commodityOptionsOpen && <View style={styles.selectOptions}>{options.map((option) => <Pressable key={option} accessibilityRole="button" onPress={() => { setCommodity(option); setCommodityOptionsOpen(false); }} style={styles.selectOption}><FontText type="bodySm" style={styles.optionText}>{option}</FontText></Pressable>)}</View>}
             <View style={styles.formGrid}>
-              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Ước tính sản lượng</FontText><View style={styles.inputWithSuffix}><TextInput accessibilityLabel="Ước tính sản lượng" keyboardType="decimal-pad" onChangeText={setQuantity} placeholder="3.5" placeholderTextColor={COLORS.outline} style={styles.formInput} value={quantity} /><FontText type="labelMd" style={styles.inputSuffix}>Tấn</FontText></View></View>
-              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Giá bạn mong muốn</FontText><View style={styles.inputWithSuffix}><TextInput accessibilityLabel="Giá bạn mong muốn" keyboardType="number-pad" onChangeText={setDesiredPrice} placeholder="121,000" placeholderTextColor={COLORS.outline} style={styles.formInput} value={desiredPrice} /><FontText type="labelSm" style={styles.inputSuffix}>₫/kg</FontText></View></View>
+              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Ước tính sản lượng</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Ước tính sản lượng" keyboardType="decimal-pad" onChangeText={setQuantity} placeholder="3.5" placeholderTextColor={COLORS.outline} style={styles.formInput} value={quantity} /><FontText type="labelMd" style={styles.inputSuffix}>Tấn</FontText></View></View>
+              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Giá bạn mong muốn</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Giá bạn mong muốn" keyboardType="number-pad" onChangeText={setDesiredPrice} placeholder="121,000" placeholderTextColor={COLORS.outline} style={styles.formInput} value={desiredPrice} /><FontText type="labelSm" style={styles.inputSuffix}>₫/kg</FontText></View></View>
             </View>
             <FontText type="labelMd" style={styles.fieldLabel}>Ghi chú thêm</FontText>
-            <TextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
+            <ThemedTextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
           </ScrollView>
           <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
         </View>
@@ -399,7 +398,6 @@ function TrustPanel({ onReport, onPolicy }: { onReport: () => void; onPolicy: ()
 }
 
 export function BuyerList() {
-  const fontsReady = useBuyerDirectoryFonts();
   const [query, setQuery] = useState('');
   const [sheet, setSheet] = useState<FilterSheetKind | null>(null);
   const [productFilter, setProductFilter] = useState<string | null>(null);
@@ -425,16 +423,15 @@ export function BuyerList() {
   const reportIssue = () => Alert.alert('Báo cáo sai phạm', 'Cảm ơn bạn. Đội ngũ Mùa Vàng sẽ kiểm tra thông tin này.');
   const showPolicy = () => Alert.alert('Điều khoản thu mua', 'Điều khoản thu mua và bảo vệ giao dịch sẽ được cập nhật trong phiên bản tiếp theo.');
 
-  if (!fontsReady) return <SafeAreaView style={styles.loadingScreen} edges={['top']} />;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.shell}>
         <BuyerDirectoryHeader />
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-          <View style={styles.titleRow}><View style={styles.titleCopy}><Icon name="verified_user" size={22} color={COLORS.secondary} /><FontText type="headlineSm" style={styles.screenTitle}>Thương lái & Đại lý thu mua</FontText></View><View style={styles.openBadge}><View style={styles.openDot} /><FontText type="labelSm" style={styles.openBadgeText}>38 đại lý mở kho</FontText></View></View>
+          <View style={styles.titleRow}><View style={styles.titleCopy}><Icon name="verified_user" size={22} color={COLORS.secondary} /><FontText type="subtitle" accessibilityRole="header" style={styles.screenTitle}>Thương lái & Đại lý thu mua</FontText></View><View style={styles.openBadge}><View style={styles.openDot} /><FontText type="labelSm" style={styles.openBadgeText}>38 đại lý mở kho</FontText></View></View>
           <View style={styles.searchRow}>
-            <View style={styles.searchField}><Icon name="search" size={20} color={COLORS.outline} /><TextInput accessibilityLabel="Tìm kiếm đại lý" onChangeText={setQuery} placeholder="Tìm tên đại lý, thương lái, HTX..." placeholderTextColor={COLORS.outline} returnKeyType="search" style={styles.searchInput} value={query} />{query.length > 0 && <Pressable accessibilityRole="button" accessibilityLabel="Xóa tìm kiếm" hitSlop={10} onPress={() => setQuery('')} style={styles.clearButton}><Icon name="close" size={16} color={COLORS.onSurfaceVariant} /></Pressable>}</View>
+            <View style={styles.searchField}><Icon name="search" size={20} color={COLORS.outline} /><ThemedTextInput accessibilityLabel="Tìm kiếm đại lý" onChangeText={setQuery} placeholder="Tìm tên đại lý, thương lái, HTX..." placeholderTextColor={COLORS.outline} returnKeyType="search" style={styles.searchInput} value={query} />{query.length > 0 && <Pressable accessibilityRole="button" accessibilityLabel="Xóa tìm kiếm" hitSlop={10} onPress={() => setQuery('')} style={styles.clearButton}><Icon name="close" size={16} color={COLORS.onSurfaceVariant} /></Pressable>}</View>
             <Pressable accessibilityRole="button" accessibilityLabel="Bộ lọc chuyên sâu" onPress={() => setSheet('advanced')} style={styles.filterButton}><Icon name="tune" size={20} color={filtersActive ? COLORS.secondary : COLORS.onSurface} /><View style={[styles.filterDot, !filtersActive && styles.hiddenDot]} /></Pressable>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow} style={styles.filterScroll}>
@@ -463,9 +460,9 @@ const styles = StyleSheet.create({
   brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
   logo: { width: 32, height: 32 },
   brandCopy: { flexShrink: 1 },
-  brandTitle: { color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold, lineHeight: 22 },
+  brandTitle: { color: COLORS.primary, fontWeight: '600', lineHeight: 22 },
   regionRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  regionText: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  regionText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   touchTarget: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   notificationButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceLow },
@@ -475,91 +472,91 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: BottomTabInset + 88, gap: 16 },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 },
   titleCopy: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
-  screenTitle: { flex: 1, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.manropeSemiBold, fontSize: 18, lineHeight: 24, letterSpacing: -0.09 },
-  openBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 10, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: COLORS.secondaryFixed, maxWidth: 130 },
+  screenTitle: { flex: 1, color: COLORS.onSurface },
+  openBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 4, borderRadius: Radius.full, backgroundColor: COLORS.secondaryFixed, maxWidth: 130 },
   openDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.secondary },
-  openBadgeText: { color: COLORS.onSecondaryFixedVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  openBadgeText: { color: COLORS.onSecondaryFixedVariant, fontWeight: '600' },
   searchRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   searchField: { flex: 1, height: 44, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  searchInput: { flex: 1, minWidth: 0, padding: 0, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular, fontSize: 14, lineHeight: 20 },
+  searchInput: { flex: 1, minWidth: 0, padding: 0, color: COLORS.onSurface, fontWeight: '400', fontSize: 14, lineHeight: 20 },
   clearButton: { width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
   filterButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
   filterDot: { position: 'absolute', width: 6, height: 6, top: 10, right: 10, borderRadius: 3, backgroundColor: COLORS.secondary },
   hiddenDot: { opacity: 0 },
   filterScroll: { marginHorizontal: -16 },
   filterRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 2 },
-  filterChip: { height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  filterChipText: { fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
+  filterChip: { minHeight: Layout.touchTarget, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
+  filterChipText: { fontWeight: '500' },
   filterChipSelected: { backgroundColor: COLORS.secondary },
   filterChipIdle: { backgroundColor: COLORS.surface },
   filterChipOrange: { backgroundColor: COLORS.surface },
-  safetyTip: { position: 'relative', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
+  safetyTip: { position: 'relative', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
   safetyIconWell: { width: 32, height: 32, marginTop: 2, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.secondaryContainer },
   safetyCopy: { flex: 1, minWidth: 0, gap: 2 },
   safetyHeadingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  safetyHeading: { color: COLORS.secondary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, textTransform: 'uppercase', letterSpacing: 0.44 },
-  safetyDate: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  safetyBody: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
+  safetyHeading: { color: COLORS.secondary, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.44 },
+  safetyDate: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  safetyBody: { color: COLORS.onSurface, fontWeight: '400' },
   buyerList: { gap: 12 },
   buyerCard: { position: 'relative', overflow: 'hidden', padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.06, shadowRadius: 4, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  cardTopRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 10 },
+  cardTopRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 12 },
   cardHeading: { flex: 1, minWidth: 0 },
   buyerNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 0 },
-  buyerName: { flex: 1, minWidth: 0, color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, fontSize: 15, lineHeight: 22 },
+  buyerName: { flex: 1, minWidth: 0, color: COLORS.primary, fontWeight: '700', fontSize: 15, lineHeight: 22 },
   metadataRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 2, minWidth: 0 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  ratingText: { color: COLORS.tertiaryCopy, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  ratingText: { color: COLORS.tertiaryCopy, fontWeight: '600' },
   metadataSeparator: { color: COLORS.outline },
   metadataItem: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
-  metadataText: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  secondaryMetadata: { color: COLORS.secondary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
-  cardBadge: { flexShrink: 1, maxWidth: 108, paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.base, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold, textAlign: 'center' },
+  metadataText: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  secondaryMetadata: { color: COLORS.secondary, fontWeight: '500' },
+  cardBadge: { flexShrink: 1, maxWidth: 108, paddingHorizontal: 8, paddingVertical: 2, borderRadius: Radius.base, fontWeight: '600', textAlign: 'center' },
   greenBadge: { color: COLORS.onSecondaryFixedVariant, backgroundColor: COLORS.secondaryFixed },
   orangeBadge: { color: COLORS.tertiaryCopy, backgroundColor: COLORS.tertiaryFixed },
   neutralBadge: { color: COLORS.onSurfaceVariant, backgroundColor: COLORS.surfaceContainer },
   trustStrip: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 32, marginBottom: 12, paddingHorizontal: 8, paddingVertical: 6, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
-  trustText: { flex: 1, minWidth: 0, color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  trustStrong: { fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, color: COLORS.onSurfaceVariant },
+  trustText: { flex: 1, minWidth: 0, color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  trustStrong: { fontWeight: '700', color: COLORS.onSurfaceVariant },
   priceGrid: { flexDirection: 'row', gap: 8, marginBottom: 12 },
-  priceWell: { flex: 1, minWidth: 0, minHeight: 92, padding: 10, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
+  priceWell: { flex: 1, minWidth: 0, minHeight: 92, padding: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
   priceLabelRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 4, minHeight: 28 },
-  priceLabel: { flex: 1, color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
-  priceBadge: { color: COLORS.onSecondaryContainer, backgroundColor: COLORS.secondaryContainer, paddingHorizontal: 4, borderRadius: 2, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold, fontSize: 10, lineHeight: 14 },
+  priceLabel: { flex: 1, color: COLORS.onSurfaceVariant, fontWeight: '600' },
+  priceBadge: { color: COLORS.onSecondaryContainer, backgroundColor: COLORS.secondaryContainer, paddingHorizontal: 4, borderRadius: 2, fontWeight: '600', fontSize: 10, lineHeight: 14 },
   priceValueRow: { flexDirection: 'row', alignItems: 'baseline', gap: 4, marginTop: 4 },
-  priceValue: { color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, fontVariant: ['tabular-nums'], letterSpacing: -0.18 },
-  priceUnit: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  priceNote: { marginTop: 2, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  priceValue: { color: COLORS.primary, fontWeight: '700', fontVariant: ['tabular-nums'], letterSpacing: -0.18 },
+  priceUnit: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  priceNote: { marginTop: 2, fontWeight: '600' },
   positiveText: { color: COLORS.secondary },
-  mutedText: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  detailStack: { gap: 6, marginBottom: 14 },
+  mutedText: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  detailStack: { gap: 6, marginBottom: 16 },
   detailLine: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 0 },
-  detailText: { flex: 1, minWidth: 0, color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
-  distanceText: { flexShrink: 0, maxWidth: '45%', color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  detailText: { flex: 1, minWidth: 0, color: COLORS.onSurfaceVariant, fontWeight: '400' },
+  distanceText: { flexShrink: 0, maxWidth: '45%', color: COLORS.primary, fontWeight: '600' },
   ctaGrid: { flexDirection: 'row', alignItems: 'stretch', gap: 8, paddingTop: 4 },
   ctaCell: { flex: 1, minWidth: 0, height: 44 },
   callButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.primaryContainer, shadowColor: COLORS.shadow, shadowOpacity: 0.05, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  callButtonText: { flexShrink: 1, color: COLORS.onPrimary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  callButtonText: { flexShrink: 1, color: COLORS.onPrimary, fontWeight: '600' },
   secondaryButton: { width: '100%', height: 44, minWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingHorizontal: 8, borderRadius: Radius.container, backgroundColor: COLORS.surfaceContainer, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  secondaryButtonText: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  secondaryButtonText: { color: COLORS.onSurface, fontWeight: '600' },
   emptyState: { minHeight: 72, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.container, backgroundColor: COLORS.surface },
   emptyStateText: { color: COLORS.onSurfaceVariant },
   trustPanel: { gap: 8, marginBottom: 8, padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surfaceHigh },
   trustPanelHeading: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  trustPanelTitle: { color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold },
-  trustPanelBody: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
+  trustPanelTitle: { color: COLORS.primary, fontWeight: '700' },
+  trustPanelBody: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
   trustPanelLinks: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingTop: 1 },
   inlineLink: { minHeight: 32, flexDirection: 'row', alignItems: 'center', gap: 4 },
-  inlineLinkText: { color: COLORS.secondary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  inlineLinkText: { color: COLORS.secondary, fontWeight: '600' },
   linkSeparator: { color: COLORS.outline },
-  policyLinkText: { color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
+  policyLinkText: { color: COLORS.onSurfaceVariant, fontWeight: '500' },
   modalRoot: { flex: 1, justifyContent: 'flex-end' },
   modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: COLORS.primaryScrim },
   sheet: { width: '100%', maxWidth: 430, maxHeight: '92%', alignSelf: 'center', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 16, shadowOffset: { width: 0, height: -4 }, elevation: 8 },
   sheetHandle: { width: 40, height: 4, alignSelf: 'center', marginBottom: 12, borderRadius: 2, backgroundColor: COLORS.outline, opacity: 0.45 },
   sheetHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 16 },
   sheetTitleCopy: { flex: 1, gap: 4 },
-  sheetTitle: { color: COLORS.primary, fontFamily: BUYER_DIRECTORY_FONTS.manropeBold },
-  quotationEyebrow: { color: COLORS.secondary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansBold, letterSpacing: 0.6 },
+  sheetTitle: { color: COLORS.primary, fontWeight: '700' },
+  quotationEyebrow: { color: COLORS.secondary, fontWeight: '700', letterSpacing: 0.6 },
   sheetClose: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.full, backgroundColor: COLORS.surfaceContainer },
   optionList: { gap: 8 },
   option: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
@@ -567,9 +564,9 @@ const styles = StyleSheet.create({
   optionLabel: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   optionText: { color: COLORS.onSurface },
   resetOption: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 12 },
-  resetText: { color: COLORS.error, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  resetText: { color: COLORS.error, fontWeight: '600' },
   quotationScroll: { flexGrow: 0, maxHeight: 420, marginBottom: 12 },
-  fieldLabel: { marginBottom: 4, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  fieldLabel: { marginBottom: 4, color: COLORS.onSurface, fontWeight: '600' },
   selectField: { minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
   selectText: { flex: 1, color: COLORS.onSurface },
   selectOptions: { gap: 4, marginTop: 4, padding: 4, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
@@ -577,15 +574,15 @@ const styles = StyleSheet.create({
   formGrid: { flexDirection: 'row', gap: 8, marginTop: 12 },
   formFieldHalf: { flex: 1, minWidth: 0 },
   inputWithSuffix: { minHeight: 44, flexDirection: 'row', alignItems: 'center', borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
-  formInput: { flex: 1, minWidth: 0, height: 44, paddingHorizontal: 12, paddingVertical: 0, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold, fontSize: 14 },
-  inputSuffix: { paddingRight: 10, color: COLORS.onSurfaceVariant, fontFamily: BUYER_DIRECTORY_FONTS.publicSansMedium },
-  noteInput: { height: 44, marginBottom: 4, paddingHorizontal: 12, paddingVertical: 0, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular, fontSize: 14 },
+  formInput: { flex: 1, minWidth: 0, height: 44, paddingHorizontal: 12, paddingVertical: 0, color: COLORS.onSurface, fontWeight: '600', fontSize: 14 },
+  inputSuffix: { paddingRight: 12, color: COLORS.onSurfaceVariant, fontWeight: '500' },
+  noteInput: { height: 44, marginBottom: 4, paddingHorizontal: 12, paddingVertical: 0, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, color: COLORS.onSurface, fontWeight: '400', fontSize: 14 },
   modalActions: { flexDirection: 'row', gap: 8, paddingTop: 4 },
   cancelButton: { flex: 1, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.container, backgroundColor: COLORS.surfaceContainer },
-  cancelButtonText: { color: COLORS.onSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
+  cancelButtonText: { color: COLORS.onSurface, fontWeight: '600' },
   submitButton: { flex: 1, height: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: Radius.container, backgroundColor: COLORS.primary },
-  submitButtonText: { color: COLORS.onPrimary, fontFamily: BUYER_DIRECTORY_FONTS.publicSansSemiBold },
-  toast: { position: 'absolute', alignSelf: 'center', bottom: BottomTabInset + 16, maxWidth: '92%', flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 10, borderRadius: Radius.full, backgroundColor: COLORS.inverseSurface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5 },
-  toastText: { color: COLORS.inverseOnSurface, fontFamily: BUYER_DIRECTORY_FONTS.publicSansRegular },
+  submitButtonText: { color: COLORS.onPrimary, fontWeight: '600' },
+  toast: { position: 'absolute', alignSelf: 'center', bottom: BottomTabInset + 16, maxWidth: '92%', flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 12, borderRadius: Radius.full, backgroundColor: COLORS.inverseSurface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5 },
+  toastText: { color: COLORS.inverseOnSurface, fontWeight: '400' },
   pressed: { opacity: 0.78 },
 });

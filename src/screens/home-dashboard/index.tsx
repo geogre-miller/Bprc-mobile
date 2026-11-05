@@ -1,7 +1,7 @@
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BottomTabInset, Spacing } from '@/constants/theme';
+import { BottomTabInset, Spacing, Layout } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 import { BuyerInquiryCard } from './buyer-inquiry-card';
@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    gap: Spacing.three,
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.three,
+    gap: Layout.sectionGap,
+    paddingHorizontal: Layout.screenMargin,
+    paddingTop: Layout.screenMargin,
     paddingBottom: BottomTabInset + Spacing.four,
   },
 });
