@@ -1,10 +1,11 @@
 import { Link, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Layout } from '@/constants/theme';
 import { COMMODITIES } from '@/data/mock-data';
 import { expiryLabel, isPostActive, useMyBuyerPosts, useMyBuyerProfile } from '@/hooks/use-buyer-posts';
 import { useTheme } from '@/hooks/use-theme';
@@ -55,7 +56,7 @@ function BuyerDashboardContent() {
           Hồ sơ đầu mối
         </ThemedText>
         <Labeled label="Tên đầu mối / doanh nghiệp">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Tên đầu mối hoặc doanh nghiệp"
             value={profile.name}
             onChangeText={(name) => setProfile((current) => ({ ...current, name }))}
@@ -65,7 +66,7 @@ function BuyerDashboardContent() {
           />
         </Labeled>
         <Labeled label="Số điện thoại liên hệ">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Số điện thoại liên hệ"
             value={profile.contactPhone}
             onChangeText={(contactPhone) => setProfile((current) => ({ ...current, contactPhone }))}
@@ -76,7 +77,7 @@ function BuyerDashboardContent() {
           />
         </Labeled>
         <Labeled label="Địa chỉ kho / điểm thu mua">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Địa chỉ kho hoặc điểm thu mua"
             value={profile.address.line}
             onChangeText={(line) => setProfile((current) => ({ ...current, address: { ...current.address, line } }))}
@@ -256,8 +257,8 @@ function Labeled({ label, children }: { label: string; children: React.ReactNode
 const styles = StyleSheet.create({
   loading: { flex: 1 },
   content: {
-    padding: Spacing.three,
-    gap: 12,
+    padding: Layout.screenMargin,
+    gap: Layout.gutter,
   },
   header: {
     gap: Spacing.three,

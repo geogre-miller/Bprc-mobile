@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Layout } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 import { CommodityPriceRow } from './commodity-price-row';
@@ -76,7 +76,7 @@ export function PriceTracker({ rows }: { rows: PriceRow[] }) {
 
 const styles = StyleSheet.create({
   section: {
-    gap: 10,
+    gap: 12,
   },
   headerRow: {
     flexDirection: 'row',
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
   },
   list: {
-    gap: Spacing.two,
+    gap: Layout.gutter,
   },
 });

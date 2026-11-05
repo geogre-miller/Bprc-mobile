@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Spacing, Layout } from '@/constants/theme';
 import { BUYERS, BUYING_DEMANDS, COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import type { SellingIntent } from '@/types/domain';
@@ -40,9 +40,6 @@ export function Match({ id }: { id?: string }) {
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
-      <ThemedText type="title" style={styles.title}>
-        So sánh đầu mối
-      </ThemedText>
       <ThemedText themeColor="textSecondary">
         {label} · {intent.quantity} {intent.unit}
       </ThemedText>
@@ -91,12 +88,8 @@ const styles = StyleSheet.create({
     padding: Spacing.four,
   },
   content: {
-    padding: Spacing.four,
-    gap: Spacing.two,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 34,
+    padding: Layout.screenMargin,
+    gap: Layout.gutter,
   },
   sectionTitle: {
     marginTop: Spacing.three,

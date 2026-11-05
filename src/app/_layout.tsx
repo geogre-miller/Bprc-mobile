@@ -1,8 +1,9 @@
+import { useFonts } from 'expo-font';
 import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { Colors } from '@/constants/theme';
+import { Colors, FontAssets, FontFamily } from '@/constants/theme';
 
 const AppNavigationTheme = {
   ...DefaultTheme,
@@ -20,10 +21,20 @@ const AppNavigationTheme = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts(FontAssets);
+  // The splash stays up until fonts resolve; a failed load falls back to system fonts instead of hanging.
+  if (!fontsLoaded && !fontError) return null;
+
   return (
     <ThemeProvider value={AppNavigationTheme}>
       <AnimatedSplashOverlay />
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          // DESIGN.md headline-sm, so pushed-screen titles match in-app section headings.
+          headerTitleStyle: { fontFamily: FontFamily.manropeSemiBold, fontSize: 18 },
+          headerBackTitleStyle: { fontFamily: FontFamily.publicSansMedium },
+        }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="journal" options={{ headerShown: true, title: 'Nhật ký bán hàng' }} />
         <Stack.Screen name="demands" options={{ headerShown: true, title: 'Đang cần mua' }} />

@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   timeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
     flexShrink: 0,
   },
   cardTitle: {

@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Spacing, Layout } from '@/constants/theme';
 
 type Role = 'farmer' | 'buyer';
 
@@ -19,7 +19,7 @@ export function Onboarding() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ThemedText type="title" style={styles.title}>
+      <ThemedText type="title" accessibilityRole="header">
         Mùa Vàng
       </ThemedText>
       <ThemedText themeColor="textSecondary" style={styles.subtitle}>
@@ -64,13 +64,9 @@ export function Onboarding() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
+    paddingHorizontal: Layout.screenMargin,
     paddingTop: Spacing.six,
     gap: Spacing.four,
-  },
-  title: {
-    fontSize: 32,
-    lineHeight: 38,
   },
   subtitle: {
     marginTop: -Spacing.three,

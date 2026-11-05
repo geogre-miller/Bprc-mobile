@@ -1,10 +1,11 @@
 import { Link } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, TextInput } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
+import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Spacing, Layout } from '@/constants/theme';
 import { COMMODITIES } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
@@ -45,9 +46,6 @@ export function SellingIntents() {
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
-      <ThemedText type="title" style={styles.title}>
-        Ý định bán
-      </ThemedText>
       <ThemedText themeColor="textSecondary">Đăng nông sản bạn muốn bán để so sánh các đầu mối.</ThemedText>
 
       {intents.map((intent) => {
@@ -78,7 +76,7 @@ export function SellingIntents() {
         );
       })}
 
-      <ThemedText type="subtitle" style={styles.sectionTitle}>
+      <ThemedText type="headlineSm" accessibilityRole="header" style={styles.sectionTitle}>
         Thêm ý định bán
       </ThemedText>
       <ThemedView style={styles.commodityPicker}>
@@ -94,7 +92,7 @@ export function SellingIntents() {
       </ThemedView>
 
       <ThemedView type="backgroundElement" style={styles.formColumn}>
-        <TextInput
+        <ThemedTextInput
           value={quantity}
           onChangeText={setQuantity}
           placeholder="Số kg muốn bán"
@@ -102,7 +100,7 @@ export function SellingIntents() {
           keyboardType="numeric"
           style={[styles.input, { color: theme.text }]}
         />
-        <TextInput
+        <ThemedTextInput
           value={desiredPrice}
           onChangeText={setDesiredPrice}
           placeholder="Giá mong muốn (đ/kg, tùy chọn)"
@@ -120,12 +118,8 @@ export function SellingIntents() {
 
 const styles = StyleSheet.create({
   content: {
-    padding: Spacing.four,
-    gap: Spacing.two,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 34,
+    padding: Layout.screenMargin,
+    gap: Layout.gutter,
   },
   row: {
     flexDirection: 'row',
@@ -138,8 +132,6 @@ const styles = StyleSheet.create({
     gap: Spacing.half,
   },
   sectionTitle: {
-    fontSize: 20,
-    lineHeight: 26,
     marginTop: Spacing.three,
   },
   commodityPicker: {

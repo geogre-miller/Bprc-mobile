@@ -191,6 +191,38 @@ export const Fonts = Platform.select({
   },
 });
 
+/**
+ * DESIGN.md type families, loaded once at the root (see src/app/_layout.tsx).
+ * Manrope carries display/headline roles; Public Sans carries body, labels and numbers.
+ * Static TTFs from Google Fonts, licensed under assets/fonts/OFL.txt.
+ */
+export const FontFamily = {
+  manropeSemiBold: 'Manrope-SemiBold',
+  manropeBold: 'Manrope-Bold',
+  publicSansRegular: 'PublicSans-Regular',
+  publicSansMedium: 'PublicSans-Medium',
+  publicSansSemiBold: 'PublicSans-SemiBold',
+  publicSansBold: 'PublicSans-Bold',
+} as const;
+
+export const FontAssets = {
+  [FontFamily.manropeSemiBold]: require('../../assets/fonts/Manrope-SemiBold.ttf'),
+  [FontFamily.manropeBold]: require('../../assets/fonts/Manrope-Bold.ttf'),
+  [FontFamily.publicSansRegular]: require('../../assets/fonts/PublicSans-Regular.ttf'),
+  [FontFamily.publicSansMedium]: require('../../assets/fonts/PublicSans-Medium.ttf'),
+  [FontFamily.publicSansSemiBold]: require('../../assets/fonts/PublicSans-SemiBold.ttf'),
+  [FontFamily.publicSansBold]: require('../../assets/fonts/PublicSans-Bold.ttf'),
+};
+
+/** Static font files carry their own weight; pick the file closest to the requested weight. */
+export function fontFamilyFor(face: 'manrope' | 'publicSans', weight: number): string {
+  if (face === 'manrope') return weight >= 700 ? FontFamily.manropeBold : FontFamily.manropeSemiBold;
+  if (weight >= 700) return FontFamily.publicSansBold;
+  if (weight >= 600) return FontFamily.publicSansSemiBold;
+  if (weight >= 500) return FontFamily.publicSansMedium;
+  return FontFamily.publicSansRegular;
+}
+
 export const Spacing = {
   half: 2,
   one: 4,
@@ -199,6 +231,27 @@ export const Spacing = {
   four: 24,
   five: 32,
   six: 64,
+} as const;
+
+/**
+ * Semantic layout tokens (DESIGN.md "Screen Grid & Ergonomics"). Use these instead of raw numbers
+ * so the same role gets the same space on every screen.
+ */
+export const Layout = {
+  /** Outer screen margin, left/right/top of scrolling content. */
+  screenMargin: 16,
+  /** Space between top-level sections of a screen. */
+  sectionGap: 16,
+  /** Space between sibling cards or rows in a list; also DESIGN.md's inner component gutter. */
+  gutter: 12,
+  /** Standard card padding. */
+  cardPadding: 16,
+  /** Padding of a tonal well or panel nested inside a card. */
+  wellPadding: 12,
+  /** Minimum interactive height (chips, rows, secondary actions). */
+  touchTarget: 44,
+  /** Primary and secondary button height. */
+  buttonHeight: 48,
 } as const;
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;

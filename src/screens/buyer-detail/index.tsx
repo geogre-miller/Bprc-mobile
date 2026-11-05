@@ -10,19 +10,18 @@ import {
   ScrollView,
   Share,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { LightPalette } from '@/constants/theme';
+import { ThemedTextInput } from '@/components/themed-text-input';
+import { LightPalette, Layout, Spacing } from '@/constants/theme';
 import { BUYERS } from '@/data/mock-data';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
-import { BUYER_DETAIL_FONTS as FONT, useBuyerDetailFonts } from './fonts';
 
 const COLORS = LightPalette;
 
@@ -172,7 +171,6 @@ function PolicyRow({ icon, title, description }: { icon: IconName; title: string
 export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const fontsReady = useBuyerDetailFonts();
   const buyer = BUYERS.find((item) => item.id === buyerId);
   const [saleOpen, setSaleOpen] = useState(false);
   const [commodityId, setCommodityId] = useState<CommodityChoice['id']>('coffee');
@@ -194,10 +192,6 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
       `Phiếu đề xuất bán ${formatNumber(Number(weight) || 0)} kg ${commodity.label} đã được gửi đến Đại lý Toàn Thắng.`,
     );
   };
-
-  if (!fontsReady) {
-    return <View style={styles.loading} />;
-  }
 
   if (!buyer) {
     return (
@@ -383,7 +377,7 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
                 <ThemedText type="labelSm" style={styles.availableText}>Có sẵn: 5,400 kg trong kho</ThemedText>
               </View>
               <View style={styles.inputWrap}>
-                <TextInput accessibilityLabel="Khối lượng bán" value={weight} onChangeText={setWeight} keyboardType="numeric" inputMode="numeric" style={styles.weightInput} />
+                <ThemedTextInput accessibilityLabel="Khối lượng bán" value={weight} onChangeText={setWeight} keyboardType="numeric" inputMode="numeric" style={styles.weightInput} />
                 <ThemedText type="labelMd" style={styles.inputUnit}>kg</ThemedText>
               </View>
             </View>
@@ -427,18 +421,18 @@ const styles = StyleSheet.create({
   brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
   brandLogo: { width: 36, height: 32, borderRadius: 4 },
   brandCopy: { flexShrink: 1 },
-  brandTitle: { color: COLORS.primary, fontFamily: FONT.publicSansSemiBold, lineHeight: 20 },
+  brandTitle: { color: COLORS.primary, fontWeight: '600', lineHeight: 20 },
   regionRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  regionText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
+  regionText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   notificationButton: { width: 44, height: 44, borderRadius: 8, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center' },
   notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: 999, backgroundColor: COLORS.error, borderColor: COLORS.background, borderWidth: 2 },
   headerAvatar: { width: 34, height: 34, borderRadius: 999 },
   scrollView: { flex: 1, backgroundColor: COLORS.background },
-  content: { paddingHorizontal: 16, paddingTop: 8, gap: 12 },
+  content: { paddingHorizontal: Layout.screenMargin, paddingTop: Spacing.two, gap: Layout.sectionGap },
   topNavigation: { minHeight: 56, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   backButton: { minHeight: 40, paddingRight: 8, flexDirection: 'row', alignItems: 'center', gap: 6 },
-  backText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansMedium },
+  backText: { color: COLORS.onSurfaceVariant, fontWeight: '500' },
   topActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   topIconButton: { width: 40, height: 40, borderRadius: 8, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center' },
   card: { borderRadius: 8, padding: 16, gap: 12, backgroundColor: COLORS.surfaceLowest, overflow: 'hidden', ...shadow },
@@ -449,25 +443,25 @@ const styles = StyleSheet.create({
   portrait: { width: 56, height: 56 },
   portraitVerified: { position: 'absolute', right: 0, bottom: 0, width: 16, height: 16, borderTopLeftRadius: 4, backgroundColor: COLORS.secondary, alignItems: 'center', justifyContent: 'center' },
   identityCopy: { flex: 1, minWidth: 0 },
-  buyerName: { color: COLORS.primary, fontFamily: FONT.manropeSemiBold },
-  ownerText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansRegular, marginTop: 2 },
-  licenseBadge: { alignSelf: 'flex-start', maxWidth: '100%', marginTop: 4, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3, flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: COLORS.secondaryContainer },
-  licenseText: { color: COLORS.onSecondaryContainer, fontFamily: FONT.publicSansSemiBold, flexShrink: 1, lineHeight: 14 },
-  quotaRow: { minHeight: 32, borderRadius: 4, paddingHorizontal: 10, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, backgroundColor: COLORS.surfaceLow },
+  buyerName: { color: COLORS.primary, fontWeight: '600' },
+  ownerText: { color: COLORS.onSurfaceVariant, fontWeight: '400', marginTop: 2 },
+  licenseBadge: { alignSelf: 'flex-start', maxWidth: '100%', marginTop: 4, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: COLORS.secondaryContainer },
+  licenseText: { color: COLORS.onSecondaryContainer, fontWeight: '600', flexShrink: 1, lineHeight: 14 },
+  quotaRow: { minHeight: 32, borderRadius: 4, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, backgroundColor: COLORS.surfaceLow },
   quotaLabel: { flexDirection: 'row', alignItems: 'center', gap: 4, flexShrink: 1 },
-  quotaValue: { color: COLORS.primary, fontFamily: FONT.publicSansSemiBold, fontWeight: '600' },
+  quotaValue: { color: COLORS.primary, fontWeight: '600' },
   trustGrid: { flexDirection: 'row', gap: 8, paddingTop: 4 },
   trustStat: { flex: 1, minHeight: 55, borderRadius: 4, padding: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
   inlineCompact: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  mutedLabel: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
-  semibold: { fontFamily: FONT.publicSansSemiBold, fontWeight: '600' },
-  section: { gap: 10 },
+  mutedLabel: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
+  semibold: { fontWeight: '600' },
+  section: { gap: 12 },
   sectionHeader: { minHeight: 24, paddingHorizontal: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   sectionHeading: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
-  sectionTitle: { color: COLORS.primary, fontFamily: FONT.publicSansSemiBold, flexShrink: 1 },
-  updatedBadge: { borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3, flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: COLORS.secondaryContainer },
+  sectionTitle: { color: COLORS.primary, fontWeight: '600', flexShrink: 1 },
+  updatedBadge: { borderRadius: 999, paddingHorizontal: 8, paddingVertical: 4, flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: COLORS.secondaryContainer },
   liveDot: { width: 6, height: 6, borderRadius: 999, backgroundColor: COLORS.secondary },
-  updatedText: { color: COLORS.onSecondaryContainer, fontFamily: FONT.publicSansSemiBold },
+  updatedText: { color: COLORS.onSecondaryContainer, fontWeight: '600' },
   quoteStack: { gap: 8 },
   quoteCard: { gap: 8 },
   compactQuote: { paddingVertical: 16, gap: 0 },
@@ -475,80 +469,80 @@ const styles = StyleSheet.create({
   compactQuoteTop: { alignItems: 'center' },
   quoteCopy: { flex: 1, minWidth: 0 },
   quoteTitleRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
-  quoteTitle: { color: COLORS.onSurface, fontFamily: FONT.publicSansBold },
+  quoteTitle: { color: COLORS.onSurface, fontWeight: '700' },
   gradeBadge: { borderRadius: 2, paddingHorizontal: 6, paddingVertical: 2, backgroundColor: COLORS.surfaceHigh },
-  gradeText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
-  quoteDescription: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansRegular, marginTop: 2 },
+  gradeText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
+  quoteDescription: { color: COLORS.onSurfaceVariant, fontWeight: '400', marginTop: 2 },
   quotePrice: { alignItems: 'flex-end', flexShrink: 0 },
-  price: { color: COLORS.primary, fontFamily: FONT.publicSansBold },
-  priceUnit: { color: COLORS.outline, fontFamily: FONT.publicSansRegular, fontWeight: '400' },
+  price: { color: COLORS.primary, fontWeight: '700' },
+  priceUnit: { color: COLORS.outline, fontWeight: '400' },
   gainBadge: { borderRadius: 2, paddingHorizontal: 6, paddingVertical: 2, backgroundColor: COLORS.gainContainer },
-  gainText: { color: COLORS.secondary, fontFamily: FONT.publicSansSemiBold },
-  marketNote: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold, marginTop: 1 },
+  gainText: { color: COLORS.secondary, fontWeight: '600' },
+  marketNote: { color: COLORS.onSurfaceVariant, fontWeight: '600', marginTop: 1 },
   warehouseCard: { height: 144, borderRadius: 8, overflow: 'hidden', backgroundColor: COLORS.surfaceContainer, ...shadow },
   warehouseImage: { width: '100%', height: '100%' },
   warehouseCaption: { position: 'absolute', left: 0, right: 0, bottom: 0, minHeight: 45, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: COLORS.primary },
-  warehouseText: { color: COLORS.onPrimary, fontFamily: FONT.publicSansMedium, flexShrink: 1 },
-  loyalText: { color: COLORS.secondary, fontFamily: FONT.publicSansMedium, textAlign: 'right', flexShrink: 1 },
+  warehouseText: { color: COLORS.onPrimary, fontWeight: '500', flexShrink: 1 },
+  loyalText: { color: COLORS.secondary, fontWeight: '500', textAlign: 'right', flexShrink: 1 },
   historySummary: { borderRadius: 8, overflow: 'hidden', padding: 16, paddingBottom: 0, gap: 8, backgroundColor: COLORS.primary, ...shadow },
   summaryTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  summaryLabel: { color: COLORS.onPrimaryContainer, fontFamily: FONT.publicSansSemiBold, letterSpacing: 1 },
-  dealBadge: { borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3, backgroundColor: COLORS.primaryContainer },
-  dealText: { color: COLORS.secondaryContainer, fontFamily: FONT.publicSansSemiBold },
-  summaryValue: { color: COLORS.onPrimary, fontFamily: FONT.publicSansBold },
-  summaryCurrency: { color: COLORS.onPrimaryContainer, fontFamily: FONT.publicSansSemiBold },
+  summaryLabel: { color: COLORS.onPrimaryContainer, fontWeight: '600', letterSpacing: 1 },
+  dealBadge: { borderRadius: 999, paddingHorizontal: 8, paddingVertical: 4, backgroundColor: COLORS.primaryContainer },
+  dealText: { color: COLORS.secondaryContainer, fontWeight: '600' },
+  summaryValue: { color: COLORS.onPrimary, fontWeight: '700' },
+  summaryCurrency: { color: COLORS.onPrimaryContainer, fontWeight: '600' },
   summaryFooter: { minHeight: 40, marginHorizontal: -16, marginTop: 2, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.primaryPressed },
-  summaryFooterText: { color: COLORS.onPrimary, fontFamily: FONT.publicSansRegular },
-  summaryFooterValue: { color: COLORS.onPrimary, fontFamily: FONT.publicSansBold },
+  summaryFooterText: { color: COLORS.onPrimary, fontWeight: '400' },
+  summaryFooterValue: { color: COLORS.onPrimary, fontWeight: '700' },
   transactionList: { borderRadius: 8, overflow: 'hidden', backgroundColor: COLORS.surfaceLowest, ...shadow },
   transactionRow: { padding: 16, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 },
   transactionCopy: { flex: 1, minWidth: 0 },
-  transactionTitle: { color: COLORS.onSurface, fontFamily: FONT.publicSansSemiBold },
-  transactionDetail: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold, marginTop: 2 },
+  transactionTitle: { color: COLORS.onSurface, fontWeight: '600' },
+  transactionDetail: { color: COLORS.onSurfaceVariant, fontWeight: '600', marginTop: 2 },
   transactionValueBlock: { maxWidth: '40%', alignItems: 'flex-end' },
-  transactionValue: { color: COLORS.primary, fontFamily: FONT.publicSansBold, textAlign: 'right' },
-  paidRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },
-  paidText: { color: COLORS.secondary, fontFamily: FONT.publicSansSemiBold, textAlign: 'right' },
+  transactionValue: { color: COLORS.primary, fontWeight: '700', textAlign: 'right' },
+  paidRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
+  paidText: { color: COLORS.secondary, fontWeight: '600', textAlign: 'right' },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: COLORS.surfaceContainer },
   policyCard: { gap: 12 },
-  policyStack: { gap: 10 },
-  policyRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  policyStack: { gap: 12 },
+  policyRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
   policyIcon: { width: 28, height: 28, borderRadius: 4, marginTop: 2, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceLow },
   policyCopy: { flex: 1 },
-  policyTitle: { color: COLORS.onSurface, fontFamily: FONT.publicSansMedium, fontWeight: '500' },
-  policyDescription: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansRegular },
+  policyTitle: { color: COLORS.onSurface, fontWeight: '500' },
+  policyDescription: { color: COLORS.onSurfaceVariant, fontWeight: '400' },
   ctaStack: { gap: 8, paddingBottom: 4 },
   primaryCta: { height: 48, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.primaryContainer, ...shadow },
-  primaryCtaText: { color: COLORS.onPrimary, fontFamily: FONT.publicSansSemiBold },
+  primaryCtaText: { color: COLORS.onPrimary, fontWeight: '600' },
   secondaryCta: { height: 48, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.surfaceLowest, ...shadow },
-  secondaryCtaText: { color: COLORS.primary, fontFamily: FONT.publicSansSemiBold },
+  secondaryCtaText: { color: COLORS.primary, fontWeight: '600' },
   pressed: { opacity: 0.68 },
   ctaPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
   modalRoot: { flex: 1, justifyContent: 'flex-end' },
   scrim: { ...StyleSheet.absoluteFill, backgroundColor: COLORS.surfaceScrim },
   sheet: { width: '100%', maxWidth: 430, alignSelf: 'center', borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 16, gap: 12, backgroundColor: COLORS.surfaceLowest },
   sheetHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  sheetTitle: { color: COLORS.primary, fontFamily: FONT.manropeSemiBold },
-  sheetSubtitle: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
+  sheetTitle: { color: COLORS.primary, fontWeight: '600' },
+  sheetSubtitle: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
   sheetClose: { width: 32, height: 32, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
   fieldGroup: { gap: 8 },
-  fieldLabel: { color: COLORS.onSurface, fontFamily: FONT.publicSansMedium },
+  fieldLabel: { color: COLORS.onSurface, fontWeight: '500' },
   commodityRow: { flexDirection: 'row', gap: 8 },
-  commodityChip: { flex: 1, minHeight: 42, borderRadius: 4, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, backgroundColor: COLORS.surfaceContainer },
+  commodityChip: { flex: 1, minHeight: 42, borderRadius: 4, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, backgroundColor: COLORS.surfaceContainer },
   commodityChipSelected: { backgroundColor: COLORS.secondaryContainer },
-  commodityText: { color: COLORS.onSurface, fontFamily: FONT.publicSansMedium, flexShrink: 1 },
+  commodityText: { color: COLORS.onSurface, fontWeight: '500', flexShrink: 1 },
   commodityTextSelected: { color: COLORS.onSecondaryContainer },
   inputHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  availableText: { color: COLORS.secondary, fontFamily: FONT.publicSansSemiBold, flexShrink: 1, textAlign: 'right' },
+  availableText: { color: COLORS.secondary, fontWeight: '600', flexShrink: 1, textAlign: 'right' },
   inputWrap: { height: 48, borderRadius: 4, justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
-  weightInput: { height: 48, paddingHorizontal: 12, paddingRight: 48, color: COLORS.onSurface, fontFamily: FONT.publicSansBold, fontSize: 18, lineHeight: 24 },
-  inputUnit: { position: 'absolute', right: 14, color: COLORS.outline, fontFamily: FONT.publicSansSemiBold },
+  weightInput: { height: 48, paddingHorizontal: 12, paddingRight: 48, color: COLORS.onSurface, fontWeight: '700', fontSize: 18, lineHeight: 24 },
+  inputUnit: { position: 'absolute', right: 14, color: COLORS.outline, fontWeight: '600' },
   estimateCard: { minHeight: 60, borderRadius: 4, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, backgroundColor: COLORS.surfaceLow },
-  estimateValue: { color: COLORS.primary, fontFamily: FONT.publicSansBold },
+  estimateValue: { color: COLORS.primary, fontWeight: '700' },
   currentBadge: { borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4, backgroundColor: COLORS.gainContainer },
   sheetActions: { flexDirection: 'row', gap: 8, paddingTop: 8 },
   cancelButton: { flex: 1, height: 48, borderRadius: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
-  cancelText: { color: COLORS.onSurfaceVariant, fontFamily: FONT.publicSansSemiBold },
+  cancelText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
   submitButton: { flex: 2, height: 48, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: COLORS.primary },
-  submitText: { color: COLORS.onPrimary, fontFamily: FONT.publicSansSemiBold },
+  submitText: { color: COLORS.onPrimary, fontWeight: '600' },
 });

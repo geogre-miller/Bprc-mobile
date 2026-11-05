@@ -1,4 +1,3 @@
-import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
@@ -14,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { LightPalette, Radius, Spacing } from '@/constants/theme';
+import { LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
 import { COMMODITIES, latestObservation } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
@@ -24,22 +23,6 @@ import { formatVnd } from '@/utils/format-price';
 import { Icon, type IconName } from '../home-dashboard/icons';
 
 const COLORS = LightPalette;
-
-const FONT = {
-  manropeSemiBold: 'InventoryManropeSemiBold',
-  publicSansRegular: 'InventoryPublicSansRegular',
-  publicSansMedium: 'InventoryPublicSansMedium',
-  publicSansSemiBold: 'InventoryPublicSansSemiBold',
-  publicSansBold: 'InventoryPublicSansBold',
-} as const;
-
-const fontMap = {
-  [FONT.manropeSemiBold]: require('../../../assets/fonts/Manrope-SemiBold.ttf'),
-  [FONT.publicSansRegular]: require('../../../assets/fonts/PublicSans-Regular.ttf'),
-  [FONT.publicSansMedium]: require('../../../assets/fonts/PublicSans-Medium.ttf'),
-  [FONT.publicSansSemiBold]: require('../../../assets/fonts/PublicSans-SemiBold.ttf'),
-  [FONT.publicSansBold]: require('../../../assets/fonts/PublicSans-Bold.ttf'),
-};
 
 const THUMBNAILS = {
   coffee: 'data:image/jpeg;base64,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',
@@ -321,7 +304,6 @@ export function Inventory() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [fontsLoaded, fontError] = useFonts(fontMap);
   const [items, setItems, isLoaded] = usePersistedState<FarmerInventoryItem[]>('inventory', DEFAULT_ITEMS);
   const [filterOpen, setFilterOpen] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -391,10 +373,6 @@ export function Inventory() {
   const addStock = () => {
     showFeedback('Đã chọn nhập kho mới.');
   };
-
-  if (!fontsLoaded && !fontError) {
-    return <ThemedView style={[styles.screen, { backgroundColor: theme.background }]} />;
-  }
 
   if (!isLoaded) {
     return <ThemedView style={[styles.screen, { backgroundColor: theme.background }]} />;
@@ -547,7 +525,7 @@ export function Inventory() {
 
           <View style={styles.inventorySection}>
             <View style={styles.inventorySectionHeader}>
-              <ThemedText type="titleMd" style={styles.sectionTitle}>
+              <ThemedText type="headlineSm" accessibilityRole="header" style={styles.sectionTitle}>
                 Danh mục hàng hóa đang giữ
               </ThemedText>
               <Pressable
@@ -652,17 +630,17 @@ const styles = StyleSheet.create({
   },
   brandTitle: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   regionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
     flexShrink: 1,
   },
   regionText: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     flexShrink: 1,
   },
   headerActions: {
@@ -702,13 +680,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.four,
-    gap: Spacing.three,
+    paddingHorizontal: Layout.screenMargin,
+    paddingTop: Layout.screenMargin,
+    gap: Layout.sectionGap,
     backgroundColor: COLORS.background,
   },
   titleMeta: {
-    paddingHorizontal: 4,
     gap: Spacing.one,
   },
   titleLine: {
@@ -719,10 +696,6 @@ const styles = StyleSheet.create({
   pageTitle: {
     flexShrink: 1,
     color: COLORS.onSurface,
-    fontFamily: FONT.manropeSemiBold,
-    fontSize: 22,
-    lineHeight: 28,
-    letterSpacing: -0.22,
   },
   statusCluster: {
     flexDirection: 'row',
@@ -744,7 +717,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     color: COLORS.onSecondaryContainer,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   timestampRow: {
     flexDirection: 'row',
@@ -754,7 +727,7 @@ const styles = StyleSheet.create({
   timestampText: {
     flex: 1,
     color: COLORS.outline,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   sectionCard: {
     borderRadius: Radius.container,
@@ -781,11 +754,11 @@ const styles = StyleSheet.create({
   },
   valuationHeadingText: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   valuationTotal: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansBold,
+    fontWeight: '700',
   },
   metricPanel: {
     minHeight: 64,
@@ -803,11 +776,11 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   metricProfit: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   changeBadge: {
     minHeight: 28,
@@ -821,7 +794,7 @@ const styles = StyleSheet.create({
   },
   changeBadgeText: {
     color: COLORS.onSecondaryContainer,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   quickActions: {
     flexDirection: 'row',
@@ -844,11 +817,11 @@ const styles = StyleSheet.create({
   },
   primaryActionText: {
     color: COLORS.onPrimary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   secondaryActionText: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   advisory: {
     borderRadius: Radius.base,
@@ -873,15 +846,15 @@ const styles = StyleSheet.create({
   },
   advisoryTitle: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   advisoryBody: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   emphasis: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   inventorySection: {
     gap: 12,
@@ -898,7 +871,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     flex: 1,
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
   },
   filterButton: {
     minHeight: 32,
@@ -914,7 +886,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   inventoryList: {
     gap: 12,
@@ -944,7 +916,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     color: COLORS.onSurface,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   metadataRow: {
     flexDirection: 'row',
@@ -958,12 +930,12 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     flexShrink: 1,
     overflow: 'hidden',
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   detailText: {
     flexShrink: 1,
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   quantityColumn: {
     alignItems: 'flex-end',
@@ -971,11 +943,11 @@ const styles = StyleSheet.create({
   },
   quantityLabel: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   quantityValue: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
     marginTop: 2,
   },
@@ -996,16 +968,16 @@ const styles = StyleSheet.create({
   },
   financialLabel: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   financialValue: {
     color: COLORS.primary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
   },
   financialNote: {
     color: COLORS.onSurfaceVariant,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
   },
   marketValueRow: {
     flexDirection: 'row',
@@ -1015,7 +987,7 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   changeText: {
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
   },
   cardFooter: {
@@ -1037,7 +1009,7 @@ const styles = StyleSheet.create({
   },
   pnlText: {
     color: COLORS.onSecondaryContainer,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
     fontVariant: ['tabular-nums'],
     flexShrink: 1,
   },
@@ -1053,7 +1025,7 @@ const styles = StyleSheet.create({
   },
   editText: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   sellButton: {
     borderRadius: Radius.base,
@@ -1063,17 +1035,17 @@ const styles = StyleSheet.create({
   },
   sellText: {
     color: COLORS.onPrimary,
-    fontFamily: FONT.publicSansSemiBold,
+    fontWeight: '600',
   },
   feedback: {
     color: COLORS.secondary,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
     textAlign: 'center',
   },
   footnote: {
     paddingBottom: 4,
     color: COLORS.outline,
-    fontFamily: FONT.publicSansRegular,
+    fontWeight: '400',
     textAlign: 'center',
   },
   pressed: {

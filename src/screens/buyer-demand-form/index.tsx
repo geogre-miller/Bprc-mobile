@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import { useState, type ReactNode } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
+import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Layout } from '@/constants/theme';
 import { COMMODITIES } from '@/data/mock-data';
 import { addDays, MY_BUYER_ID, useMyBuyerPosts, useMyBuyerProfile } from '@/hooks/use-buyer-posts';
 import { useTheme } from '@/hooks/use-theme';
@@ -122,7 +123,7 @@ function PostForm({
 
         <Field label="Giá thu mua" error={errors.price}>
           <View style={[styles.suffixInput, { borderColor: errors.price ? theme.loss : theme.border, backgroundColor: theme.backgroundElement }]}>
-            <TextInput
+            <ThemedTextInput
               accessibilityLabel="Giá thu mua, đồng một ký"
               value={groupDigits(price)}
               onChangeText={(value) => setPrice(digitsOnly(value))}
@@ -138,7 +139,7 @@ function PostForm({
         </Field>
 
         <Field label="Yêu cầu chất lượng" hint="Giá trên áp dụng cho hàng đạt yêu cầu này.">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Yêu cầu chất lượng"
             value={quality}
             onChangeText={setQuality}
@@ -149,7 +150,7 @@ function PostForm({
         </Field>
 
         <Field label="Giá theo chất lượng (không bắt buộc)">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Ghi chú giá theo chất lượng"
             value={priceNote}
             onChangeText={setPriceNote}
@@ -161,7 +162,7 @@ function PostForm({
 
         <Field label="Số lượng cần mua" hint="Để trống nếu thu mua không giới hạn." error={errors.quantity}>
           <View style={[styles.suffixInput, { borderColor: errors.quantity ? theme.loss : theme.border, backgroundColor: theme.backgroundElement }]}>
-            <TextInput
+            <ThemedTextInput
               accessibilityLabel="Số lượng cần mua, ký"
               value={groupDigits(quantity)}
               onChangeText={(value) => setQuantity(digitsOnly(value))}
@@ -177,7 +178,7 @@ function PostForm({
         </Field>
 
         <Field label="Khu vực thu mua">
-          <TextInput
+          <ThemedTextInput
             accessibilityLabel="Khu vực thu mua"
             value={area}
             onChangeText={setArea}
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   loading: { flex: 1 },
   content: {
-    padding: Spacing.three,
+    padding: Layout.screenMargin,
     gap: Spacing.four,
   },
   field: {

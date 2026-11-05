@@ -355,6 +355,20 @@ The YAML roles above are the source of truth for the shared light runtime palett
 
 The type system blends structural geometric precision `Manrope`) with the open counterforms and high legibility of `Public Sans`. All numerical values, prices, metrics, and currency units must utilize tabular figures `tnum`) and slashed zeros `zero`) to ensure strict vertical alignment across financial lists and balances.
 
+**Implementation (React Native).** Fonts load once in `src/app/_layout.tsx` from `FontAssets` in `src/constants/theme.ts`. Always render text through `ThemedText` (and inputs through `ThemedTextInput`): it maps each variant to its family (`title`, `subtitle`, `headlineSm` use Manrope; all others use Public Sans), picks the static font file from the effective weight, and applies tabular figures to numeric variants. Do not set `fontFamily` or `fontSize` in screen styles; choose the variant for the role instead:
+
+| Role | Variant |
+| --- | --- |
+| Onboarding / display hero | `title` (display-lg-mobile) |
+| Page title inside a screen | `subtitle` (headline-lg) |
+| Section heading on the screen canvas; navigator header title | `headlineSm` (headline-sm) |
+| Card title, row name, button label | `titleMd` (title-md) |
+| Body copy | `default` (body-lg) or `small` (body-md) |
+| Secondary copy, metadata | `bodySm` (body-sm) |
+| Field label, chip label | `labelMd` (label-md) |
+| Badge, timestamp, footnote | `labelSm` (label-sm), the smallest size allowed |
+| Prices and metrics | `numericLg`, `numericHero`, `smallBold` (numeric-md) |
+
 Rules for Vietnamese commodity and currency notation:
 
 - Currency symbol `₫` or `VND`) follows the numeric value separated by a non-breaking space (e.g., `125,500,000 ₫`).
@@ -374,6 +388,8 @@ The layout is built around a predictable mobile vertical rhythm, adhering to a 4
 - **Card Padding:** Standardized to `16px` vertically and `16px` horizontally. High-density balance cards expand to `20px` internal padding.
 
 - **Touch Targets:** Strictly enforcement of a `44px` `2.75rem`) minimum interactive height across all controls, buttons, row navigators, and filter chips.
+
+- **Layout Tokens (React Native):** use `Layout` from `src/constants/theme.ts` for these roles instead of raw numbers: `screenMargin` 16 (screen edges and top of scrolling content), `sectionGap` 16 (between top-level sections), `gutter` 12 (between sibling cards or rows), `cardPadding` 16, `wellPadding` 12 (tonal panel inside a card), `touchTarget` 44, `buttonHeight` 48. Other spacing stays on the 4px grid via `Spacing`.
 
 - **Bottom Navigation Anchor:** Permanent `64px` height baseline with safe area inset at the screen bottom, ensuring thumbs effortlessly reach primary switches: Markets, Inventory, Ledger, and Profile.
 

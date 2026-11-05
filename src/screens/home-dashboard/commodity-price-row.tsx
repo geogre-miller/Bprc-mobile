@@ -70,7 +70,7 @@ export function CommodityPriceRow({ row }: { row: PriceRow }) {
                 </ThemedText>
                 {row.latest?.location?.province && (
                   <ThemedView type="backgroundSelected" style={styles.gradeBadge}>
-                    <ThemedText type="labelSm" style={styles.gradeBadgeText}>
+                    <ThemedText type="labelSm">
                       {row.latest.location.province}
                     </ThemedText>
                   </ThemedView>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   left: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 8,
     flexShrink: 1,
   },
   iconTile: {
@@ -158,10 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     paddingHorizontal: 6,
     paddingVertical: 1,
-  },
-  gradeBadgeText: {
-    fontSize: 10,
-    lineHeight: 13,
   },
   figures: {
     alignItems: 'flex-end',

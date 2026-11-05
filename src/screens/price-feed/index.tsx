@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, Spacing } from '@/constants/theme';
+import { BottomTabInset, Spacing, Layout } from '@/constants/theme';
 import { COMMODITIES, latestObservation } from '@/data/mock-data';
 import { formatPricePerUnit } from '@/utils/format-price';
 import { CONFIDENCE_LABEL } from '@/utils/price-confidence';
@@ -17,7 +17,7 @@ export function PriceFeed() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ThemedText type="title" style={styles.title}>
+      <ThemedText type="subtitle" accessibilityRole="header">
         Giá nông sản
       </ThemedText>
       <ThemedText type="small" themeColor="textSecondary" style={styles.subtitle}>
@@ -55,19 +55,15 @@ export function PriceFeed() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 34,
+    paddingHorizontal: Layout.screenMargin,
+    paddingTop: Layout.screenMargin,
   },
   subtitle: {
     marginTop: Spacing.half,
     marginBottom: Spacing.three,
   },
   listContent: {
-    gap: Spacing.two,
+    gap: Layout.gutter,
     paddingBottom: BottomTabInset + Spacing.three,
   },
   pressed: {
