@@ -5,12 +5,16 @@ import type {
   BuyingDemand,
   Commodity,
   FarmerInventoryItem,
+  GeoLocation,
   PriceObservation,
   SellingJournalEntry,
 } from '@/types/domain';
 
+import { rankNearbyOffers } from './best-offer';
+
 export const HOME_REGION = 'Ngọc Hồi, Kon Tum';
-export const FARMER_NAME = 'Chú Năm';
+/** Mock: approximate Ngọc Hồi town centre until the seller's real location is captured. */
+export const HOME_LOCATION: GeoLocation = { latitude: 14.71, longitude: 107.65 };
 
 /** One commodity's market state, joined with how much of it the farmer holds. */
 export type PriceRow = {
@@ -24,9 +28,12 @@ export type PriceRow = {
 
 export type DemandHighlight = {
   demand: BuyingDemand;
-  buyer?: BuyerProfile;
+  buyer: BuyerProfile;
+  distanceKm: number;
   commodityLabel?: string;
   postedLabel: string;
+  /** Offer minus the latest reference market price; absent when no reference price exists. */
+  gapVsMarket?: number;
   otherCount: number;
 };
 
@@ -38,9 +45,12 @@ export type DashboardData = {
   revenueThisMonth: number;
   closedDealCount: number;
   priceRows: PriceRow[];
+  /** Rows for commodities the seller currently holds. */
+  myRows: PriceRow[];
   movers: PriceRow[];
-  topMover?: PriceRow;
   updatedLabel?: string;
+  /** True when no price was observed today, so the UI must not present prices as current. */
+  pricesStale: boolean;
   demandHighlight?: DemandHighlight;
 };
 
@@ -113,7 +123,16 @@ export function useDashboardData(): DashboardData | null {
     .sort()
     .at(-1);
 
-  const demand = BUYING_DEMANDS[0];
+  const myRows = priceRows.filter((row) => row.heldQuantity > 0);
+  const offers = rankNearbyOffers(
+    BUYING_DEMANDS,
+    BUYERS,
+    new Map(myRows.map((row) => [row.id, row.heldQuantity])),
+    HOME_LOCATION,
+    now,
+  );
+  const best = offers[0];
+  const bestReference = best && latestObservation(best.demand.commodity);
 
   return {
     now,
@@ -123,15 +142,19 @@ export function useDashboardData(): DashboardData | null {
     revenueThisMonth,
     closedDealCount: soldThisMonth.length,
     priceRows,
+    myRows,
     movers,
-    topMover: movers[0],
     updatedLabel: latestObservedAt ? formatRelativeTime(latestObservedAt, now) : undefined,
-    demandHighlight: demand && {
-      demand,
-      buyer: BUYERS.find((buyer) => buyer.id === demand.buyerId),
-      commodityLabel: COMMODITIES.find((c) => c.id === demand.commodity)?.label,
-      postedLabel: formatRelativeTime(demand.periodStart, now),
-      otherCount: Math.max(0, BUYING_DEMANDS.length - 1),
+    pricesStale: !latestObservedAt || new Date(latestObservedAt).toDateString() !== now.toDateString(),
+    demandHighlight: best && {
+      ...best,
+      commodityLabel: COMMODITIES.find((c) => c.id === best.demand.commodity)?.label,
+      postedLabel: formatRelativeTime(best.demand.periodStart, now),
+      gapVsMarket:
+        bestReference?.kind === 'reference_market'
+          ? best.demand.priceRangeMax - bestReference.pricePerUnit
+          : undefined,
+      otherCount: offers.length - 1,
     },
   };
 }

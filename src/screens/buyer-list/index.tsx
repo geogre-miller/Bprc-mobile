@@ -153,11 +153,11 @@ function BuyerDirectoryHeader() {
         <Image
           source={require('@/assets/images/nongsan-pro-logo.png')}
           contentFit="contain"
-          accessibilityLabel="Logo NôngSản Pro"
+          accessibilityLabel="Logo Mùa Vàng"
           style={styles.logo}
         />
         <View style={styles.brandCopy}>
-          <FontText type="titleMd" style={styles.brandTitle} numberOfLines={1}>NôngSản Pro</FontText>
+          <FontText type="titleMd" style={styles.brandTitle} numberOfLines={1}>Mùa Vàng</FontText>
           <View style={styles.regionRow}>
             <Icon name="location_on" size={14} color={COLORS.secondary} />
             <FontText type="labelSm" style={styles.regionText} numberOfLines={1}>Tây Nguyên • Đắk Lắk</FontText>
@@ -391,7 +391,7 @@ function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; o
 function TrustPanel({ onReport, onPolicy }: { onReport: () => void; onPolicy: () => void }) {
   return (
     <View style={styles.trustPanel}>
-      <View style={styles.trustPanelHeading}><Icon name="verified" size={22} color={COLORS.secondary} /><FontText type="titleMd" style={styles.trustPanelTitle}>Cam kết từ sàn NôngSản Pro</FontText></View>
+      <View style={styles.trustPanelHeading}><Icon name="verified" size={22} color={COLORS.secondary} /><FontText type="titleMd" style={styles.trustPanelTitle}>Cam kết từ sàn Mùa Vàng</FontText></View>
       <FontText type="bodySm" style={styles.trustPanelBody}>100% thương lái và đại lý trong danh bạ đều được đối soát căn cước công dân, giấy đăng ký kinh doanh và ký quỹ bảo chứng giao dịch với hiệp hội địa phương.</FontText>
       <View style={styles.trustPanelLinks}><Pressable accessibilityRole="button" hitSlop={6} onPress={onReport} style={styles.inlineLink}><FontText type="labelMd" style={styles.inlineLinkText}>Báo cáo sai phạm giá</FontText><Icon name="open_in_new" size={14} color={COLORS.secondary} /></Pressable><FontText type="bodySm" style={styles.linkSeparator}>•</FontText><Pressable accessibilityRole="button" hitSlop={8} onPress={onPolicy}><FontText type="labelMd" style={styles.policyLinkText}>Điều khoản thu mua</FontText></Pressable></View>
     </View>
@@ -422,7 +422,7 @@ export function BuyerList() {
 
   const filtersActive = Boolean(query.trim() || productFilter || radiusFilter || verifiedOnly || highestPrice);
   const showToast = (message: string) => { setToast(message); setTimeout(() => setToast(null), 2800); };
-  const reportIssue = () => Alert.alert('Báo cáo sai phạm', 'Cảm ơn bạn. Đội ngũ NôngSản Pro sẽ kiểm tra thông tin này.');
+  const reportIssue = () => Alert.alert('Báo cáo sai phạm', 'Cảm ơn bạn. Đội ngũ Mùa Vàng sẽ kiểm tra thông tin này.');
   const showPolicy = () => Alert.alert('Điều khoản thu mua', 'Điều khoản thu mua và bảo vệ giao dịch sẽ được cập nhật trong phiên bản tiếp theo.');
 
   if (!fontsReady) return <SafeAreaView style={styles.loadingScreen} edges={['top']} />;

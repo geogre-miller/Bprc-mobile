@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { Linking, Pressable, StyleSheet } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -7,6 +7,7 @@ import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { formatAmount, formatVnd } from '@/utils/format-price';
 
+import { NEARBY_RADIUS_KM } from './best-offer';
 import { Icon } from './icons';
 import type { DemandHighlight } from './use-dashboard-data';
 
@@ -20,94 +21,154 @@ function initialsFor(name: string): string {
     .toUpperCase();
 }
 
-/** The newest buying demand, with call and profile actions plus a link to the rest. */
-export function BuyerInquiryCard({ highlight }: { highlight: DemandHighlight }) {
+const formatKm = (km: number) => `${km.toLocaleString('vi-VN', { maximumFractionDigits: 1 })} km`;
+
+/** The highest open offer from a verified buyer near the seller, for a commodity they hold. */
+export function BuyerInquiryCard({ highlight }: { highlight?: DemandHighlight }) {
   const theme = useTheme();
-  const { demand, buyer, commodityLabel, postedLabel, otherCount } = highlight;
 
   return (
     <ThemedView type="backgroundElement" style={[styles.card, { borderColor: theme.border }]}>
-      <ThemedView type="backgroundElement" style={styles.cardHeader}>
-        <ThemedView type="backgroundElement" style={styles.headerRow}>
-          <Icon name="handshake" size={18} color={theme.accent} />
-          <ThemedText type="titleMd">Yêu cầu thu mua mới</ThemedText>
-        </ThemedView>
-        {buyer?.verified && (
-          <ThemedView style={[styles.verifiedBadge, { backgroundColor: theme.accentSoft }]}>
-            <ThemedText type="labelSm" style={{ color: theme.primary }}>
-              Khách xác thực
-            </ThemedText>
-          </ThemedView>
-        )}
-      </ThemedView>
+      <View style={styles.headerRow}>
+        <Icon name="handshake" size={20} color={theme.accent} />
+        <ThemedText type="titleMd">Giá tốt nhất gần bạn</ThemedText>
+      </View>
+      {highlight ? <Offer highlight={highlight} /> : <NoOffer />}
+    </ThemedView>
+  );
+}
 
+function NoOffer() {
+  const theme = useTheme();
+  return (
+    <>
+      <ThemedText type="bodySm" themeColor="textSecondary">
+        Chưa có thương lái xác thực nào trong bán kính {NEARBY_RADIUS_KM} km đang tìm mua mặt hàng bạn có.
+      </ThemedText>
+      <Link href="/demands" asChild>
+        <Pressable accessibilityRole="link" style={styles.seeMoreRow}>
+          <ThemedText type="labelMd" style={{ color: theme.accent }}>
+            Xem tất cả tin thu mua
+          </ThemedText>
+          <Icon name="arrow_forward" size={16} color={theme.accent} />
+        </Pressable>
+      </Link>
+    </>
+  );
+}
+
+function Offer({ highlight }: { highlight: DemandHighlight }) {
+  const theme = useTheme();
+  const { demand, buyer, distanceKm, commodityLabel, postedLabel, gapVsMarket, otherCount } = highlight;
+  const gapUp = gapVsMarket != null && gapVsMarket > 0;
+  const gapDown = gapVsMarket != null && gapVsMarket < 0;
+  const gapColor = gapUp ? theme.gain : gapDown ? theme.loss : theme.textSecondary;
+
+  const offerA11y = [
+    `${buyer.name}, khách xác thực, cách ${formatKm(distanceKm)}`,
+    `cần mua ${formatAmount(demand.remainingQuantity)} ${demand.unit} ${commodityLabel ?? ''}`,
+    `giá ${formatAmount(demand.priceRangeMax)} đồng một ${demand.unit}`,
+    gapVsMarket
+      ? `${gapUp ? 'cao hơn' : 'thấp hơn'} giá thị trường ${formatAmount(Math.abs(gapVsMarket))} đồng`
+      : undefined,
+  ]
+    .filter(Boolean)
+    .join(', ');
+
+  return (
+    <>
       <ThemedView type="backgroundSelected" style={styles.inner}>
-        <ThemedView type="backgroundSelected" style={styles.buyerRow}>
-          <ThemedView style={[styles.avatar, { backgroundColor: theme.accentSoft }]}>
-            <ThemedText type="titleMd" style={{ color: theme.primary }}>
-              {initialsFor(buyer?.name ?? 'Đầu mối')}
-            </ThemedText>
-          </ThemedView>
-          <ThemedView type="backgroundSelected" style={styles.buyerBody}>
-            <ThemedView type="backgroundSelected" style={styles.nameRow}>
-              <ThemedText type="titleMd" numberOfLines={1} style={styles.name}>
-                {buyer?.name ?? 'Đầu mối'}
-              </ThemedText>
-              <ThemedText type="labelSm" themeColor="textSecondary">
-                {postedLabel}
+        <View accessible accessibilityLabel={offerA11y} style={styles.offerBody}>
+          <View style={styles.buyerRow}>
+            <ThemedView style={[styles.avatar, { backgroundColor: theme.accentSoft }]}>
+              <ThemedText type="titleMd" style={{ color: theme.primary }}>
+                {initialsFor(buyer.name)}
               </ThemedText>
             </ThemedView>
-            <ThemedText type="small" themeColor="textSecondary" style={styles.copy}>
-              Cần thu mua{' '}
-              <ThemedText type="small" style={styles.strong}>
-                {formatAmount(demand.remainingQuantity)} {demand.unit} {commodityLabel}
-              </ThemedText>{' '}
-              với giá chào:{' '}
-              <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                {formatVnd(demand.priceRangeMax)}/{demand.unit}
+            <View style={styles.buyerText}>
+              <ThemedText type="titleMd">{buyer.name}</ThemedText>
+              <View style={styles.metaRow}>
+                <Icon name="verified" size={14} color={theme.accent} />
+                <ThemedText type="labelSm" style={{ color: theme.accent }}>
+                  Khách xác thực
+                </ThemedText>
+              </View>
+              <ThemedText type="labelSm" themeColor="textSecondary">
+                Cách {formatKm(distanceKm)} · Đăng {postedLabel}
               </ThemedText>
-              .
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
+            </View>
+          </View>
 
-        <ThemedView type="backgroundSelected" style={styles.actions}>
-          {buyer?.contactPhone && (
+          <View>
+            <ThemedText type="bodySm" themeColor="textSecondary">
+              Cần mua {formatAmount(demand.remainingQuantity)} {demand.unit} {commodityLabel}
+            </ThemedText>
+            <View style={styles.priceRow}>
+              <ThemedText type="numericLg">{formatAmount(demand.priceRangeMax)}</ThemedText>
+              <ThemedText type="bodySm" themeColor="textSecondary">
+                {' '}
+                ₫/{demand.unit}
+              </ThemedText>
+            </View>
+            {gapVsMarket != null && (
+              <View style={styles.metaRow}>
+                {(gapUp || gapDown) && (
+                  <Icon name={gapUp ? 'arrow_upward' : 'arrow_downward'} size={14} color={gapColor} />
+                )}
+                <ThemedText type="labelMd" style={{ color: gapColor }}>
+                  {gapVsMarket === 0
+                    ? 'Bằng giá thị trường'
+                    : `${gapUp ? '+' : '-'}${formatVnd(Math.abs(gapVsMarket))} so với giá thị trường`}
+                </ThemedText>
+              </View>
+            )}
+            {demand.qualityRequirements && (
+              <ThemedText type="labelSm" themeColor="textSecondary">
+                Yêu cầu: {demand.qualityRequirements}
+              </ThemedText>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.actions}>
+          {buyer.contactPhone && (
             <Pressable
-              style={[styles.button, { backgroundColor: theme.primary }]}
+              accessibilityRole="button"
+              accessibilityLabel={`Gọi ${buyer.name}`}
+              style={({ pressed }) => [
+                styles.button,
+                { backgroundColor: pressed ? theme.primaryPressed : theme.primary },
+              ]}
               onPress={() => Linking.openURL(`tel:${buyer.contactPhone}`)}>
-              <Icon name="call" size={16} color={theme.onPrimary} />
-              <ThemedText type="labelMd" style={[styles.buttonLabel, { color: theme.onPrimary }]}>
-                Gọi liên hệ
+              <Icon name="call" size={18} color={theme.onPrimary} />
+              <ThemedText type="titleMd" style={{ color: theme.onPrimary }}>
+                Gọi
               </ThemedText>
             </Pressable>
           )}
-          {buyer && (
-            <Link href={{ pathname: '/buyer/[id]', params: { id: buyer.id } }} asChild>
-              <Pressable style={styles.buttonWrapper}>
-                <ThemedView type="backgroundElement" style={[styles.button, { borderColor: theme.border }]}>
-                  <Icon name="handshake" size={16} color={theme.text} />
-                  <ThemedText type="labelMd" style={styles.buttonLabel}>
-                    Xem đầu mối
-                  </ThemedText>
-                </ThemedView>
-              </Pressable>
-            </Link>
-          )}
-        </ThemedView>
+          <Link href={{ pathname: '/buyer/[id]', params: { id: buyer.id } }} asChild>
+            <Pressable accessibilityRole="button" style={styles.buttonWrapper}>
+              <ThemedView type="backgroundElement" style={[styles.button, styles.outline, { borderColor: theme.outline }]}>
+                <ThemedText type="titleMd" themeColor="primary">
+                  Xem đầu mối
+                </ThemedText>
+              </ThemedView>
+            </Pressable>
+          </Link>
+        </View>
       </ThemedView>
 
       {otherCount > 0 && (
         <Link href="/demands" asChild>
-          <Pressable style={styles.seeMoreRow}>
+          <Pressable accessibilityRole="link" style={styles.seeMoreRow}>
             <ThemedText type="labelMd" style={{ color: theme.accent }}>
-              Xem thêm {otherCount} thương lái khác đang tìm mua
+              Xem thêm {otherCount} thương lái khác gần bạn
             </ThemedText>
             <Icon name="arrow_forward" size={16} color={theme.accent} />
           </Pressable>
         </Link>
       )}
-    </ThemedView>
+    </>
   );
 }
 
@@ -115,85 +176,76 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: Radius.container,
     borderWidth: 1,
-    padding: 14,
-    gap: 10,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
+    padding: Spacing.three,
+    gap: 12,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-  },
-  verifiedBadge: {
-    borderRadius: 2,
-    paddingHorizontal: Spacing.two,
-    paddingVertical: Spacing.half,
+    gap: Spacing.two,
   },
   inner: {
     borderRadius: Radius.container,
     padding: 12,
-    gap: Spacing.two,
+    gap: 12,
+  },
+  offerBody: {
+    gap: 12,
   },
   buyerRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
+    alignItems: 'center',
+    gap: 12,
   },
   avatar: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buyerBody: {
+  buyerText: {
     flex: 1,
   },
-  nameRow: {
+  metaRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
+    gap: Spacing.one,
   },
-  name: {
-    flexShrink: 1,
-  },
-  copy: {
-    marginTop: Spacing.half,
-  },
-  strong: {
-    fontWeight: '700',
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    flexWrap: 'wrap',
   },
   actions: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: Spacing.two,
-    marginTop: Spacing.one,
   },
   buttonWrapper: {
     flex: 1,
+    minWidth: 140,
   },
   button: {
     flex: 1,
-    height: 36,
+    minWidth: 120,
+    minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.one,
-    borderRadius: Radius.base,
+    gap: 6,
+    paddingHorizontal: 12,
+    borderRadius: Radius.container,
   },
-  buttonLabel: {
-    fontWeight: '600',
+  outline: {
+    borderWidth: 1.5,
   },
   seeMoreRow: {
+    minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.one,
-    paddingVertical: Spacing.one,
   },
 });

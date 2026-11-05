@@ -169,7 +169,7 @@ export function CommodityDetail({
   const shareMarket = () =>
     Share.share({
       title: `Giá ${label}`,
-      message: `${label} Đắk Lắk đang ở mức ${formatCommodityPrice(displayPrice)} ₫/kg trên NôngSản Pro.`,
+      message: `${label} Đắk Lắk đang ở mức ${formatCommodityPrice(displayPrice)} ₫/kg trên Mùa Vàng.`,
     });
 
   return (
@@ -178,14 +178,14 @@ export function CommodityDetail({
         <View style={styles.header}>
           <View style={styles.brand}>
             <Image
-              accessibilityLabel="Biểu trưng NôngSản Pro"
+              accessibilityLabel="Biểu trưng Mùa Vàng"
               source={require('@/assets/images/nongsan-pro-logo.png')}
               resizeMode="contain"
               style={styles.brandLogo}
             />
             <View>
               <ThemedText type="titleMd" style={[styles.brandTitle, { color: SCREEN_COLORS.primary }]}>
-                NôngSản Pro
+                Mùa Vàng
               </ThemedText>
               <View style={styles.inlineRow}>
                 <Icon name="location_on" size={14} color={SCREEN_COLORS.secondary} />

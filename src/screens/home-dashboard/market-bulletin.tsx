@@ -9,7 +9,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { Icon } from './icons';
 import type { PriceRow } from './use-dashboard-data';
 
-/** Single-line flash of the day's two biggest movers, linking to the largest one. */
+/** The day's two biggest movers as static, wrapping text (no ticker), linking to the largest one. */
 export function MarketBulletin({ movers }: { movers: PriceRow[] }) {
   const theme = useTheme();
   const lead = movers[0];
@@ -22,13 +22,13 @@ export function MarketBulletin({ movers }: { movers: PriceRow[] }) {
 
   return (
     <Link href={{ pathname: '/commodity/[id]', params: { id: lead.id } }} asChild>
-      <Pressable>
+      <Pressable accessibilityRole="link">
         <ThemedView style={[styles.bulletin, { backgroundColor: theme.pendingContainer }]}>
           <ThemedView style={[styles.icon, { backgroundColor: theme.pending }]}>
             <Icon name="bolt" size={15} color={theme.onPrimary} />
           </ThemedView>
-          <ThemedText type="labelSm" numberOfLines={1} style={[styles.text, { color: theme.pending }]}>
-            <ThemedText type="labelSm" style={[styles.lead, { color: theme.pending }]}>
+          <ThemedText type="labelMd" style={[styles.text, { color: theme.pending }]}>
+            <ThemedText type="labelMd" style={[styles.lead, { color: theme.pending }]}>
               Thị trường:{' '}
             </ThemedText>
             {summary}
@@ -42,6 +42,7 @@ export function MarketBulletin({ movers }: { movers: PriceRow[] }) {
 
 const styles = StyleSheet.create({
   bulletin: {
+    minHeight: 48,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,

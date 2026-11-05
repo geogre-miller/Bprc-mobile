@@ -17,14 +17,14 @@ export function DashboardHeader() {
     <ThemedView style={[styles.header, { borderBottomColor: theme.borderSubtle }]}>
       <ThemedView style={styles.brand}>
         <Image
-          accessibilityLabel="Biểu trưng NôngSản Pro"
+          accessibilityLabel="Biểu trưng Mùa Vàng"
           source={require('@/assets/images/nongsan-pro-logo.png')}
           resizeMode="contain"
           style={styles.brandMark}
         />
         <ThemedView>
           <ThemedText type="titleMd" themeColor="primary">
-            NôngSản Pro
+            Mùa Vàng
           </ThemedText>
           <ThemedView style={styles.regionRow}>
             <Icon name="location_on" size={14} color={theme.accent} />

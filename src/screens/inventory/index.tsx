@@ -412,14 +412,14 @@ export function Inventory() {
           <View style={styles.headerInner}>
             <View style={styles.brand}>
               <Image
-                accessibilityLabel="Biểu trưng NôngSản Pro"
+                accessibilityLabel="Biểu trưng Mùa Vàng"
                 source={require('@/assets/images/nongsan-pro-logo.png')}
                 resizeMode="contain"
                 style={styles.brandLogo}
               />
               <View style={styles.brandCopy}>
                 <ThemedText type="titleMd" style={styles.brandTitle} numberOfLines={1}>
-                  NôngSản Pro
+                  Mùa Vàng
                 </ThemedText>
                 <View style={styles.regionRow}>
                   <ScreenIcon name="location_on" size={14} color={COLORS.secondary} />

@@ -110,12 +110,12 @@ function MarketHeader() {
         <Image
           source={require('@/assets/images/nongsan-pro-logo.png')}
           contentFit="contain"
-          accessibilityLabel="Logo NôngSản Pro"
+          accessibilityLabel="Logo Mùa Vàng"
           style={styles.logo}
         />
         <View>
           <ThemedText type="titleMd" style={{ color: SCREEN_COLORS.primary }}>
-            NôngSản Pro
+            Mùa Vàng
           </ThemedText>
           <View style={styles.regionRow}>
             <Icon name="location_on" size={14} color={SCREEN_COLORS.secondary} />

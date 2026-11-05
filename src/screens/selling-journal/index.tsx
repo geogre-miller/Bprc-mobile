@@ -466,7 +466,7 @@ export function SellingJournal() {
           </Pressable>
           <View style={styles.headerBrand}>
             <Image
-              accessibilityLabel="Biểu trưng NôngSản Pro"
+              accessibilityLabel="Biểu trưng Mùa Vàng"
               source={require('@/assets/images/nongsan-pro-logo.png')}
               resizeMode="contain"
               style={styles.headerLogo}
