@@ -31,7 +31,7 @@ export function Match({ id }: { id?: string }) {
         (o) => o.buyerId === buyer.id && o.commodity === intent.commodity,
       )?.pricePerUnit;
       const demand = BUYING_DEMANDS.find((d) => d.buyerId === buyer.id && d.commodity === intent.commodity);
-      const effectivePrice = price ?? demand?.priceRangeMax;
+      const effectivePrice = price ?? demand?.pricePerUnit;
       if (effectivePrice == null) return null;
       return { buyer, price: effectivePrice, demand, estimatedValue: effectivePrice * intent.quantity };
     })
@@ -65,7 +65,7 @@ export function Match({ id }: { id?: string }) {
               <ThemedText type="small" themeColor="textSecondary">
                 Ước tính thu về {formatVnd(estimatedValue)}
               </ThemedText>
-              {demand && (
+              {demand?.remainingQuantity != null && (
                 <ThemedText type="small" themeColor="textSecondary">
                   Còn cần {demand.remainingQuantity} {demand.unit}
                 </ThemedText>

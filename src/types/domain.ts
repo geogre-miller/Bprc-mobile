@@ -58,26 +58,23 @@ export interface BuyerProfile {
   reputationScore?: number;
 }
 
-/** A buyer's normal current market offer, distinct from a specific BuyingDemand. */
-export interface CurrentBuyingPrice {
-  buyerId: string;
-  commodity: Commodity;
-  pricePerUnit: number;
-  unit: Unit;
-  updatedAt: string;
-}
-
-/** A buyer's specific, time-bound purchasing requirement (quantity, period, quality). */
+/**
+ * A buyer's post ("tin thu mua"): one firm price for a stated quality, valid until periodEnd.
+ * Without a quantity it is a standing price; with one it is a bounded demand.
+ */
 export interface BuyingDemand {
   id: string;
   buyerId: string;
   commodity: Commodity;
-  priceRangeMin: number;
-  priceRangeMax: number;
+  pricePerUnit: number;
   unit: Unit;
-  desiredQuantity: number;
-  remainingQuantity: number;
+  desiredQuantity?: number;
+  remainingQuantity?: number;
   qualityRequirements?: string;
+  /** Optional note on how the price changes with quality, e.g. "-1.000 ₫/kg mỗi 1% ẩm trên 13%". */
+  priceNote?: string;
+  /** Where the buyer purchases, in the buyer's words (e.g. "Ngọc Hồi, Đắk Tô"). */
+  area?: string;
   periodStart: string;
   periodEnd?: string;
 }

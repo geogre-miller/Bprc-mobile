@@ -66,8 +66,10 @@ function Offer({ highlight }: { highlight: DemandHighlight }) {
 
   const offerA11y = [
     `${buyer.name}, khách xác thực, cách ${formatKm(distanceKm)}`,
-    `cần mua ${formatAmount(demand.remainingQuantity)} ${demand.unit} ${commodityLabel ?? ''}`,
-    `giá ${formatAmount(demand.priceRangeMax)} đồng một ${demand.unit}`,
+    demand.remainingQuantity != null
+      ? `cần mua ${formatAmount(demand.remainingQuantity)} ${demand.unit} ${commodityLabel ?? ''}`
+      : `thu mua ${commodityLabel ?? ''}`,
+    `giá ${formatAmount(demand.pricePerUnit)} đồng một ${demand.unit}`,
     gapVsMarket
       ? `${gapUp ? 'cao hơn' : 'thấp hơn'} giá thị trường ${formatAmount(Math.abs(gapVsMarket))} đồng`
       : undefined,
@@ -101,10 +103,12 @@ function Offer({ highlight }: { highlight: DemandHighlight }) {
 
           <View>
             <ThemedText type="bodySm" themeColor="textSecondary">
-              Cần mua {formatAmount(demand.remainingQuantity)} {demand.unit} {commodityLabel}
+              {demand.remainingQuantity != null
+                ? `Cần mua ${formatAmount(demand.remainingQuantity)} ${demand.unit} ${commodityLabel ?? ''}`
+                : `Thu mua ${commodityLabel ?? ''}, không giới hạn số lượng`}
             </ThemedText>
             <View style={styles.priceRow}>
-              <ThemedText type="numericLg">{formatAmount(demand.priceRangeMax)}</ThemedText>
+              <ThemedText type="numericLg">{formatAmount(demand.pricePerUnit)}</ThemedText>
               <ThemedText type="bodySm" themeColor="textSecondary">
                 {' '}
                 ₫/{demand.unit}

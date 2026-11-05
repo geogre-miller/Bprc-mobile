@@ -7,7 +7,7 @@ export type RankedOffer = {
   demand: BuyingDemand;
   buyer: BuyerProfile;
   distanceKm: number;
-  /** What the seller could earn from this offer: price × min(held stock, quantity still wanted). */
+  /** What the seller could earn: price × min(held stock, quantity still wanted); a standing price takes it all. */
   potentialRevenue: number;
 };
 
@@ -38,14 +38,15 @@ export function rankNearbyOffers(
   const offers: RankedOffer[] = [];
   for (const demand of demands) {
     const heldQuantity = held.get(demand.commodity) ?? 0;
-    if (heldQuantity <= 0 || demand.remainingQuantity <= 0) continue;
+    const wanted = demand.remainingQuantity ?? Infinity;
+    if (heldQuantity <= 0 || wanted <= 0) continue;
     if (demand.periodEnd && new Date(demand.periodEnd) < now) continue;
     const buyer = buyers.find((candidate) => candidate.id === demand.buyerId);
     const location = buyer?.address.location;
     if (!buyer?.verified || !location) continue;
     const distance = distanceKm(home, location);
     if (distance > radiusKm) continue;
-    const potentialRevenue = demand.priceRangeMax * Math.min(heldQuantity, demand.remainingQuantity);
+    const potentialRevenue = demand.pricePerUnit * Math.min(heldQuantity, wanted);
     offers.push({ demand, buyer, distanceKm: distance, potentialRevenue });
   }
   return offers.sort((a, b) => b.potentialRevenue - a.potentialRevenue || a.distanceKm - b.distanceKm);

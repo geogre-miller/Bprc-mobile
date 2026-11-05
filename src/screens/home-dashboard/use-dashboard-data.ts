@@ -152,7 +152,7 @@ export function useDashboardData(): DashboardData | null {
       postedLabel: formatRelativeTime(best.demand.periodStart, now),
       gapVsMarket:
         bestReference?.kind === 'reference_market'
-          ? best.demand.priceRangeMax - bestReference.pricePerUnit
+          ? best.demand.pricePerUnit - bestReference.pricePerUnit
           : undefined,
       otherCount: offers.length - 1,
     },
