@@ -7,14 +7,6 @@ import type { Commodity, FarmerInventoryItem, SellingJournalEntry } from '@/type
 const JOURNAL_KEY = 'selling-journal';
 const INVENTORY_KEY = 'inventory';
 
-/** Starting stock shown before the farmer has saved any inventory of their own. */
-export const DEFAULT_INVENTORY: FarmerInventoryItem[] = [
-  { commodity: 'coffee', quantity: 2500, unit: 'kg' },
-  { commodity: 'pepper', quantity: 800, unit: 'kg' },
-  { commodity: 'fruit', quantity: 1200, unit: 'kg' },
-  { commodity: 'rice', quantity: 5000, unit: 'kg' },
-];
-
 export function reconcileInventory(
   items: FarmerInventoryItem[],
   commodity: Commodity,
@@ -54,7 +46,7 @@ export function useSaleLedger() {
   const recordSale = useCallback(
     async ({ entry, commodity, quantity, fallbackStock }: SaleInput) => {
       const nextEntries = [entry, ...entries];
-      const nextInventory = reconcileInventory(inventory ?? DEFAULT_INVENTORY, commodity, quantity, fallbackStock);
+      const nextInventory = reconcileInventory(inventory ?? [], commodity, quantity, fallbackStock);
       const journalKey = persistedStorageKey(JOURNAL_KEY);
 
       await AsyncStorage.setItem(journalKey, JSON.stringify(nextEntries));

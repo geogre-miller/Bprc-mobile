@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   Image,
@@ -15,13 +15,16 @@ import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
-import { COMMODITIES, latestObservation } from '@/data/mock-data';
+import { COMMODITIES, latestObservation, previousObservation } from '@/data/mock-data';
 import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
-import type { FarmerInventoryItem } from '@/types/domain';
+import type { Commodity, FarmerInventoryItem } from '@/types/domain';
 import { formatVnd } from '@/utils/format-price';
 
+import { COMMODITY_ICON } from '../home-dashboard/commodity-price-row';
 import { Icon, type IconName } from '../home-dashboard/icons';
+import { addStock, removeStock, setStock, type StockInput } from './inventory-ops';
+import { StockSheet } from './stock-sheet';
 
 const COLORS = LightPalette;
 
@@ -62,95 +65,21 @@ function IconFallback({
   return <SymbolView name={{ ios: name.ios, android: name.other, web: name.other }} size={size} tintColor={color} />;
 }
 
-const DEFAULT_ITEMS: FarmerInventoryItem[] = [
-  { commodity: 'coffee', quantity: 2500, unit: 'kg' },
-  { commodity: 'pepper', quantity: 800, unit: 'kg' },
-  { commodity: 'fruit', quantity: 1200, unit: 'kg' },
-  { commodity: 'rice', quantity: 5000, unit: 'kg' },
-];
-
-type ItemPresentation = {
-  id: string;
-  name: string;
-  chip: string;
-  chipSurface?: string;
-  chipText?: string;
-  detail: string;
-  costLabel: string;
-  costPerUnit: number;
-  marketLabel: string;
-  marketPrice: number;
-  change: string;
-  changeDirection: 'up' | 'down' | 'flat';
-  currentLabel: string;
-  pnlPercent: string;
-  thumbnail: ImageSourcePropType;
+/** Photos exist for four commodities. Others get a glyph tile. */
+const THUMBNAIL_FOR: Partial<Record<Commodity, string>> = {
+  coffee: THUMBNAILS.coffee,
+  pepper: THUMBNAILS.pepper,
+  fruit: THUMBNAILS.durian,
+  rice: THUMBNAILS.rice,
 };
 
-const PRESENTATIONS: ItemPresentation[] = [
-  {
-    id: 'robusta',
-    name: 'Cà phê Robusta',
-    chip: 'Niên vụ 2023 - 2024',
-    detail: 'Nhân xô',
-    costLabel: 'Giá vốn nhập/sản xuất',
-    costPerUnit: 78000,
-    marketLabel: 'Giá thị trường hôm nay',
-    marketPrice: 118500,
-    change: '▲ 2.8%',
-    changeDirection: 'up',
-    currentLabel: 'Hiện tại',
-    pnlPercent: '(+51.9%)',
-    thumbnail: { uri: THUMBNAILS.coffee },
-  },
-  {
-    id: 'black-pepper',
-    name: 'Tiêu đen khô',
-    chip: 'Chư Sê',
-    detail: '16 bao 50kg',
-    costLabel: 'Giá vốn đầu tư',
-    costPerUnit: 110000,
-    marketLabel: 'Giá thị trường hôm nay',
-    marketPrice: 148000,
-    change: '▲ 1.4%',
-    changeDirection: 'up',
-    currentLabel: 'Hiện tại',
-    pnlPercent: '(+34.5%)',
-    thumbnail: { uri: THUMBNAILS.pepper },
-  },
-  {
-    id: 'durian-ri6',
-    name: 'Sầu riêng Ri6',
-    chip: 'Thu hoạch đợt 2',
-    chipSurface: COLORS.tertiaryFixed,
-    chipText: COLORS.onTertiaryFixed,
-    detail: 'Cơm vàng hạt lép',
-    costLabel: 'Giá vốn sản xuất',
-    costPerUnit: 65000,
-    marketLabel: 'Giá thị trường hôm nay',
-    marketPrice: 88000,
-    change: '▼ 2.2%',
-    changeDirection: 'down',
-    currentLabel: 'Hiện tại',
-    pnlPercent: '(+35.4%)',
-    thumbnail: { uri: THUMBNAILS.durian },
-  },
-  {
-    id: 'rice-st25',
-    name: 'Lúa khô ST25',
-    chip: 'Đang giữ giá',
-    detail: 'Lưu kho an toàn',
-    costLabel: 'Giá vốn thu mua',
-    costPerUnit: 10200,
-    marketLabel: 'Giá thị trường hôm nay',
-    marketPrice: 11500,
-    change: '▬ 0.0%',
-    changeDirection: 'flat',
-    currentLabel: 'Hiện tại',
-    pnlPercent: '(+12.7%)',
-    thumbnail: { uri: THUMBNAILS.rice },
-  },
-];
+type RowData = {
+  name: string;
+  marketPrice?: number;
+  changePercent?: number;
+  thumbnail?: ImageSourcePropType;
+  glyph: IconName;
+};
 
 function formatQuantity(value: number) {
   return value.toLocaleString('en-US');
@@ -179,51 +108,42 @@ function formatPercent(value: number, base: number) {
 type InventoryCardProps = {
   item: FarmerInventoryItem;
   index: number;
-  presentation: ItemPresentation;
+  data: RowData;
   onEdit: (index: number) => void;
   onSell: (index: number) => void;
 };
 
-function InventoryCard({ item, index, presentation, onEdit, onSell }: InventoryCardProps) {
-  const cost = presentation.costPerUnit * item.quantity;
-  const current = presentation.marketPrice * item.quantity;
-  const pnl = formatPnl(current - cost, cost);
-  const changeColor =
-    presentation.changeDirection === 'down'
-      ? COLORS.error
-      : presentation.changeDirection === 'flat'
-        ? COLORS.outline
-        : COLORS.secondary;
+function InventoryCard({ item, index, data, onEdit, onSell }: InventoryCardProps) {
+  const cost = item.unitCost != null ? item.unitCost * item.quantity : undefined;
+  const current = data.marketPrice != null ? data.marketPrice * item.quantity : undefined;
+  const pnl = cost != null && current != null ? formatPnl(current - cost, cost) : null;
+  const change = data.changePercent;
+  const changeColor = change == null || change === 0 ? COLORS.outline : change < 0 ? COLORS.error : COLORS.secondary;
+  const changeText = change == null ? '' : (change > 0 ? '▲ ' : change < 0 ? '▼ ' : '▬ ') + Math.abs(change).toFixed(1) + '%';
+  const sellable = item.quantity > 0;
 
   return (
     <ThemedView style={styles.inventoryCard}>
       <View style={styles.cardTopRow}>
-        <Image
-          accessibilityLabel={'Ảnh ' + presentation.name}
-          source={presentation.thumbnail}
-          resizeMode="cover"
-          style={styles.thumbnail}
-        />
+        {data.thumbnail ? (
+          <Image
+            accessibilityLabel={'Ảnh ' + data.name}
+            source={data.thumbnail}
+            resizeMode="cover"
+            style={styles.thumbnail}
+          />
+        ) : (
+          <View style={[styles.thumbnail, styles.glyphTile]}>
+            <Icon name={data.glyph} size={26} color={COLORS.onSecondaryContainer} />
+          </View>
+        )}
         <View style={styles.cardCopy}>
           <ThemedText type="titleMd" style={styles.itemName} numberOfLines={1}>
-            {presentation.name}
+            {data.name}
           </ThemedText>
-          <View style={styles.metadataRow}>
-            <ThemedText
-              type="labelSm"
-              style={[
-                styles.chipText,
-                {
-                  backgroundColor: presentation.chipSurface ?? COLORS.secondaryContainer,
-                  color: presentation.chipText ?? COLORS.onSecondaryContainer,
-                },
-              ]}>
-              {presentation.chip}
-            </ThemedText>
-            <ThemedText type="bodySm" style={styles.detailText} numberOfLines={1}>
-              • {presentation.detail}
-            </ThemedText>
-          </View>
+          <ThemedText type="bodySm" style={styles.detailText} numberOfLines={1}>
+            {item.unitCost != null ? 'Đã nhập giá vốn' : 'Chưa nhập giá vốn'}
+          </ThemedText>
         </View>
         <View style={styles.quantityColumn}>
           <ThemedText type="labelSm" style={styles.quantityLabel}>
@@ -238,44 +158,50 @@ function InventoryCard({ item, index, presentation, onEdit, onSell }: InventoryC
       <View style={styles.financialStrip}>
         <View style={styles.financialColumn}>
           <ThemedText type="bodySm" style={styles.financialLabel} numberOfLines={1}>
-            {presentation.costLabel}
+            Giá vốn
           </ThemedText>
           <ThemedText type="labelMd" style={styles.financialValue} numberOfLines={1}>
-            {formatVndPerKg(presentation.costPerUnit)}
+            {item.unitCost != null ? formatVndPerKg(item.unitCost) : '—'}
           </ThemedText>
           <ThemedText type="bodySm" style={styles.financialNote} numberOfLines={1}>
-            Vốn: {formatVnd(cost)}
+            {cost != null ? 'Vốn: ' + formatVnd(cost) : 'Sửa số cân để thêm'}
           </ThemedText>
         </View>
         <View style={[styles.financialColumn, styles.marketColumn]}>
           <ThemedText type="bodySm" style={styles.financialLabel} numberOfLines={1}>
-            {presentation.marketLabel}
+            Giá thị trường hôm nay
           </ThemedText>
           <View style={styles.marketValueRow}>
             <ThemedText type="labelMd" style={styles.financialValue} numberOfLines={1}>
-              {formatVndPerKg(presentation.marketPrice)}
+              {data.marketPrice != null ? formatVndPerKg(data.marketPrice) : 'Chưa có giá'}
             </ThemedText>
-            <ThemedText type="labelSm" style={[styles.changeText, { color: changeColor }]}>
-              {presentation.change}
-            </ThemedText>
+            {changeText !== '' && (
+              <ThemedText type="labelSm" style={[styles.changeText, { color: changeColor }]}>
+                {changeText}
+              </ThemedText>
+            )}
           </View>
           <ThemedText type="bodySm" style={styles.financialNote} numberOfLines={1}>
-            {presentation.currentLabel}: {formatVnd(current)}
+            {current != null ? 'Hiện tại: ' + formatVnd(current) : ''}
           </ThemedText>
         </View>
       </View>
 
       <View style={styles.cardFooter}>
-        <View style={styles.pnlBadge}>
-          <ScreenIcon name="trending_up" size={16} color={COLORS.onSecondaryContainer} />
-          <ThemedText type="labelSm" style={styles.pnlText} numberOfLines={1}>
-            {pnl.amount} {pnl.percent}
-          </ThemedText>
-        </View>
+        {pnl ? (
+          <View style={styles.pnlBadge}>
+            <ScreenIcon name="trending_up" size={16} color={COLORS.onSecondaryContainer} />
+            <ThemedText type="labelSm" style={styles.pnlText} numberOfLines={1}>
+              {pnl.amount} {pnl.percent}
+            </ThemedText>
+          </View>
+        ) : (
+          <View />
+        )}
         <View style={styles.cardActions}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={'Sửa số cân ' + presentation.name}
+            accessibilityLabel={'Sửa số cân ' + data.name}
             onPress={() => onEdit(index)}
             style={({ pressed }) => [styles.editButton, pressed && styles.pressed]}>
             <ThemedText type="labelMd" style={styles.editText}>
@@ -284,9 +210,11 @@ function InventoryCard({ item, index, presentation, onEdit, onSell }: InventoryC
           </Pressable>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={'Bán lô này ' + presentation.name}
+            accessibilityLabel={'Bán lô này ' + data.name}
+            accessibilityState={{ disabled: !sellable }}
+            disabled={!sellable}
             onPress={() => onSell(index)}
-            style={({ pressed }) => [styles.sellButton, pressed && styles.actionPressed]}>
+            style={({ pressed }) => [styles.sellButton, pressed && styles.actionPressed, !sellable && styles.disabled]}>
             <ThemedText type="labelMd" style={styles.sellText}>
               Bán lô này
             </ThemedText>
@@ -305,74 +233,96 @@ export function Inventory() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [items, setItems, isLoaded] = usePersistedState<FarmerInventoryItem[]>('inventory', DEFAULT_ITEMS);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const { add } = useLocalSearchParams<{ add?: string }>();
+  // Starts empty: Home and this screen read the same stock, so neither invents sample goods.
+  const [items, setItems, isLoaded] = usePersistedState<FarmerInventoryItem[]>('inventory', []);
+  const [openSheet, setOpenSheet] = useState<{ mode: 'add' } | { mode: 'edit'; index: number } | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const presentationItems = useMemo(
+  // Home's "Nhập kho" buttons open this screen with ?add=1, which shows the add sheet straight away.
+  const sheet = openSheet ?? (add === '1' ? ({ mode: 'add' } as const) : null);
+  const setSheet = (next: typeof openSheet) => {
+    setOpenSheet(next);
+    if (next === null && add === '1') router.setParams({ add: '' });
+  };
+
+  const labelOf = (commodity: Commodity) => COMMODITIES.find((option) => option.id === commodity)?.label ?? commodity;
+
+  const rows = useMemo<RowData[]>(
     () =>
-      items.map((item, index) => {
-        const base = PRESENTATIONS[index % PRESENTATIONS.length];
-        const latestPrice = latestObservation(item.commodity)?.pricePerUnit;
+      items.map((item) => {
+        const latest = latestObservation(item.commodity);
+        const previous = previousObservation(item.commodity);
+        const thumbnail = THUMBNAIL_FOR[item.commodity];
         return {
-          ...base,
-          name: index < PRESENTATIONS.length ? base.name : COMMODITIES.find((option) => option.id === item.commodity)?.label ?? base.name,
-          marketPrice: latestPrice ?? base.marketPrice,
-          thumbnail: base.thumbnail,
+          name: COMMODITIES.find((option) => option.id === item.commodity)?.label ?? item.commodity,
+          marketPrice: latest?.pricePerUnit,
+          changePercent:
+            latest && previous && previous.pricePerUnit
+              ? ((latest.pricePerUnit - previous.pricePerUnit) / previous.pricePerUnit) * 100
+              : undefined,
+          thumbnail: thumbnail ? { uri: thumbnail } : undefined,
+          glyph: COMMODITY_ICON[item.commodity],
         };
       }),
     [items],
   );
 
   const valuation = useMemo(() => {
-    return presentationItems.reduce(
-      (totals, presentation, index) => {
-        const quantity = items[index]?.quantity ?? 0;
-        const capital = presentation.costPerUnit * quantity;
-        const current = presentation.marketPrice * quantity;
-        totals.current += current;
-        totals.capital += capital;
-        return totals;
-      },
-      { current: 0, capital: 0 },
-    );
-  }, [items, presentationItems]);
+    const totals = { current: 0, capital: 0, costedCurrent: 0, hasCost: false };
+    items.forEach((item, index) => {
+      const price = rows[index]?.marketPrice;
+      if (price == null) return;
+      totals.current += price * item.quantity;
+      if (item.unitCost != null) {
+        totals.hasCost = true;
+        totals.capital += item.unitCost * item.quantity;
+        totals.costedCurrent += price * item.quantity;
+      }
+    });
+    return totals;
+  }, [items, rows]);
+  const profit = valuation.costedCurrent - valuation.capital;
+  const hasStock = items.some((item) => item.quantity > 0);
 
-  const showFeedback = (message: string) => setFeedback(message);
-
-  const updateItem = (index: number, quantity: number) => {
-    setItems((current) => current.map((item, itemIndex) => (itemIndex === index ? { ...item, quantity } : item)));
+  const saveStock = (input: StockInput) => {
+    if (!sheet) return;
+    const name = labelOf(input.commodity);
+    if (sheet.mode === 'add') {
+      setItems((current) => addStock(current, input));
+      setFeedback('Đã nhập ' + formatQuantity(input.quantity) + ' kg ' + name + ' vào kho.');
+    } else {
+      setItems((current) => setStock(current, sheet.index, input));
+      setFeedback('Đã cập nhật số cân ' + name + ': ' + formatQuantity(input.quantity) + ' kg.');
+    }
+    setSheet(null);
   };
 
-  const editItem = (index: number) => {
-    const current = items[index];
-    if (!current) return;
-    const next = Math.max(0, current.quantity);
-    updateItem(index, next);
-    showFeedback('Đã sẵn sàng chỉnh sửa số cân.');
+  const deleteStock = () => {
+    if (!sheet || sheet.mode !== 'edit') return;
+    const name = labelOf(items[sheet.index]?.commodity);
+    setItems((current) => removeStock(current, sheet.index));
+    setFeedback('Đã xóa ' + name + ' khỏi kho.');
+    setSheet(null);
   };
 
   const sellItem = (index: number) => {
     const current = items[index];
     if (!current) return;
-    const presentation = presentationItems[index];
+    const price = rows[index]?.marketPrice;
     router.push({
       pathname: '/journal',
       params: {
         commodity: current.commodity,
         stock: String(current.quantity),
-        price: String(presentation.marketPrice),
-        unitCost: String(presentation.costPerUnit),
+        ...(price != null ? { price: String(price) } : {}),
+        ...(current.unitCost != null ? { unitCost: String(current.unitCost) } : {}),
       },
     });
   };
 
   const recordSale = () => {
     router.navigate('/journal');
-  };
-
-  const addStock = () => {
-    showFeedback('Đã chọn nhập kho mới.');
   };
 
   if (!isLoaded) {
@@ -414,6 +364,12 @@ export function Inventory() {
             </View>
           </View>
 
+          {feedback ? (
+            <ThemedText accessibilityLiveRegion="polite" type="bodySm" style={styles.feedback}>
+              {feedback}
+            </ThemedText>
+          ) : null}
+
           <SectionCard>
             <View style={styles.decorativeCircle} />
             <View style={styles.valuationHeading}>
@@ -431,22 +387,35 @@ export function Inventory() {
                   Lợi nhuận tạm tính
                 </ThemedText>
                 <ThemedText type="numericLg" style={styles.metricProfit}>
-                  {formatSignedVnd(valuation.current - valuation.capital)}
+                  {valuation.hasCost ? formatSignedVnd(profit) : '—'}
                 </ThemedText>
               </View>
-              <View style={styles.changeBadge}>
-                <ScreenIcon name="trending_up" size={15} color={COLORS.onSecondaryContainer} />
-                <ThemedText type="labelSm" style={styles.changeBadgeText}>
-                  {formatPercent(valuation.current - valuation.capital, valuation.capital)}
+              {valuation.hasCost ? (
+                <View style={styles.changeBadge}>
+                  <ScreenIcon name="trending_up" size={15} color={COLORS.onSecondaryContainer} />
+                  <ThemedText type="labelSm" style={styles.changeBadgeText}>
+                    {formatPercent(profit, valuation.capital)}
+                  </ThemedText>
+                </View>
+              ) : (
+                <ThemedText type="labelSm" style={styles.metricLabel}>
+                  Nhập giá vốn để tính lãi
                 </ThemedText>
-              </View>
+              )}
             </View>
             <View style={styles.quickActions}>
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Ghi nhận bán"
+                accessibilityState={{ disabled: !hasStock }}
+                disabled={!hasStock}
                 onPress={recordSale}
-                style={({ pressed }) => [styles.quickAction, styles.primaryAction, pressed && styles.actionPressed]}>
+                style={({ pressed }) => [
+                  styles.quickAction,
+                  styles.primaryAction,
+                  pressed && styles.actionPressed,
+                  !hasStock && styles.disabled,
+                ]}>
                 <ScreenIcon name="point_of_sale" size={18} color={COLORS.onPrimary} />
                 <ThemedText type="labelMd" style={styles.primaryActionText}>
                   Ghi nhận bán
@@ -455,7 +424,7 @@ export function Inventory() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Nhập kho mới"
-                onPress={addStock}
+                onPress={() => setSheet({ mode: 'add' })}
                 style={({ pressed }) => [styles.quickAction, styles.secondaryAction, pressed && styles.actionPressed]}>
                 <ScreenIcon name="add_box" size={18} color={COLORS.secondary} />
                 <ThemedText type="labelMd" style={styles.secondaryActionText}>
@@ -465,64 +434,65 @@ export function Inventory() {
             </View>
           </SectionCard>
 
-          <View style={styles.advisory}>
-            <View style={styles.advisoryIconWell}>
-              <ScreenIcon name="nest_eco_leaf" size={18} color={COLORS.onSecondaryContainer} />
+          {items.some((item) => item.commodity === 'coffee' && item.quantity > 0) && (
+            <View style={styles.advisory}>
+              <View style={styles.advisoryIconWell}>
+                <ScreenIcon name="nest_eco_leaf" size={18} color={COLORS.onSecondaryContainer} />
+              </View>
+              <View style={styles.advisoryCopy}>
+                <ThemedText type="titleMd" style={styles.advisoryTitle}>
+                  Khuyến nghị kỹ thuật kho
+                </ThemedText>
+                <ThemedText type="bodySm" style={styles.advisoryBody}>
+                  Độ ẩm kho cà phê hiện tại <ThemedText type="bodySm" style={styles.emphasis}>13.2%</ThemedText> — Đạt chuẩn lưu trữ hạt xô an toàn, không sinh nấm mốc.
+                </ThemedText>
+              </View>
             </View>
-            <View style={styles.advisoryCopy}>
-              <ThemedText type="titleMd" style={styles.advisoryTitle}>
-                Khuyến nghị kỹ thuật kho
-              </ThemedText>
-              <ThemedText type="bodySm" style={styles.advisoryBody}>
-                Độ ẩm kho cà phê hiện tại <ThemedText type="bodySm" style={styles.emphasis}>13.2%</ThemedText> — Đạt chuẩn lưu trữ hạt xô an toàn, không sinh nấm mốc.
-              </ThemedText>
-            </View>
-          </View>
+          )}
 
           <View style={styles.inventorySection}>
             <View style={styles.inventorySectionHeader}>
               <ThemedText type="headlineSm" accessibilityRole="header" style={styles.sectionTitle}>
                 Danh mục hàng hóa đang giữ
               </ThemedText>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Bộ lọc"
-                accessibilityState={{ expanded: filterOpen }}
-                onPress={() => {
-                  setFilterOpen((open) => !open);
-                  showFeedback(filterOpen ? 'Đã bỏ bộ lọc.' : 'Đã mở bộ lọc.');
-                }}
-                style={({ pressed }) => [
-                  styles.filterButton,
-                  filterOpen && styles.filterButtonActive,
-                  pressed && styles.pressed,
-                ]}>
-                <ScreenIcon name="tune" size={14} color={filterOpen ? COLORS.primaryContainer : COLORS.secondary} />
-                <ThemedText type="labelMd" style={styles.filterText}>
-                  Bộ lọc
+            </View>
+
+            {items.length === 0 ? (
+              <View style={styles.emptyStock}>
+                <ThemedText type="bodySm" style={styles.emptyStockText}>
+                  Kho đang trống. Nhập lô hàng đầu tiên để xem giá trị kho, lãi tạm tính và thương lái gần bạn đang trả giá bao nhiêu.
                 </ThemedText>
-              </Pressable>
-            </View>
-
-            <View style={styles.inventoryList}>
-              {presentationItems.map((presentation, index) => (
-                <InventoryCard
-                  key={presentation.id + '-' + index}
-                  item={items[index]}
-                  index={index}
-                  presentation={presentation}
-                  onEdit={editItem}
-                  onSell={sellItem}
-                />
-              ))}
-            </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Nhập lô hàng đầu tiên"
+                  onPress={() => setSheet({ mode: 'add' })}
+                  style={({ pressed }) => [
+                    styles.quickAction,
+                    styles.primaryAction,
+                    styles.emptyStockButton,
+                    pressed && styles.actionPressed,
+                  ]}>
+                  <ScreenIcon name="add_box" size={18} color={COLORS.onPrimary} />
+                  <ThemedText type="labelMd" style={styles.primaryActionText}>
+                    Nhập kho
+                  </ThemedText>
+                </Pressable>
+              </View>
+            ) : (
+              <View style={styles.inventoryList}>
+                {items.map((item, index) => (
+                  <InventoryCard
+                    key={item.commodity + '-' + index}
+                    item={item}
+                    index={index}
+                    data={rows[index]}
+                    onEdit={(rowIndex) => setSheet({ mode: 'edit', index: rowIndex })}
+                    onSell={sellItem}
+                  />
+                ))}
+              </View>
+            )}
           </View>
-
-          {feedback ? (
-            <ThemedText accessibilityLiveRegion="polite" type="bodySm" style={styles.feedback}>
-              {feedback}
-            </ThemedText>
-          ) : null}
 
           <ThemedText type="bodySm" style={styles.footnote}>
             Định giá cập nhật tự động từ sàn giao dịch nông sản Tây Nguyên.
@@ -530,6 +500,15 @@ export function Inventory() {
         </ScrollView>
 
       </SafeAreaView>
+
+      {sheet && (
+        <StockSheet
+          existing={sheet.mode === 'edit' ? items[sheet.index] : undefined}
+          onSave={saveStock}
+          onDelete={sheet.mode === 'edit' ? deleteStock : undefined}
+          onClose={() => setSheet(null)}
+        />
+      )}
     </ThemedView>
   );
 }
@@ -748,21 +727,26 @@ const styles = StyleSheet.create({
     flex: 1,
     color: COLORS.onSurface,
   },
-  filterButton: {
-    minHeight: 32,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: Radius.base,
-    flexDirection: 'row',
+  glyphTile: {
     alignItems: 'center',
-    gap: 4,
-  },
-  filterButtonActive: {
+    justifyContent: 'center',
     backgroundColor: COLORS.secondaryContainer,
   },
-  filterText: {
-    color: COLORS.secondary,
-    fontWeight: '600',
+  disabled: {
+    opacity: 0.45,
+  },
+  emptyStock: {
+    gap: Layout.gutter,
+    padding: Layout.cardPadding,
+    borderRadius: Radius.container,
+    backgroundColor: COLORS.surfaceLowest,
+    ...cardShadow,
+  },
+  emptyStockButton: {
+    minHeight: Layout.touchTarget,
+  },
+  emptyStockText: {
+    color: COLORS.onSurfaceVariant,
   },
   inventoryList: {
     gap: 12,
@@ -792,20 +776,6 @@ const styles = StyleSheet.create({
   },
   itemName: {
     color: COLORS.onSurface,
-    fontWeight: '600',
-  },
-  metadataRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    minWidth: 0,
-  },
-  chipText: {
-    borderRadius: 2,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    flexShrink: 1,
-    overflow: 'hidden',
     fontWeight: '600',
   },
   detailText: {

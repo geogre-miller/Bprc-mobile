@@ -83,6 +83,8 @@ export interface FarmerInventoryItem {
   commodity: Commodity;
   quantity: number;
   unit: Unit;
+  /** What the farmer paid or spent per unit. Optional: profit is only shown when it is known. */
+  unitCost?: number;
 }
 
 export interface PriceAlert {

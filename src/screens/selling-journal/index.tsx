@@ -12,7 +12,7 @@ import { Icon, type IconName } from '@/screens/home-dashboard/icons';
 import type { Commodity, SellingJournalEntry } from '@/types/domain';
 import { formatVnd } from '@/utils/format-price';
 
-import { DEFAULT_INVENTORY, useSaleLedger } from './use-sale-ledger';
+import { useSaleLedger } from './use-sale-ledger';
 
 const COLORS = LightPalette;
 
@@ -207,19 +207,20 @@ export function SellingJournal() {
       })),
     ];
     return options.map((option) => {
-      const savedStock = inventory == null
-        ? DEFAULT_INVENTORY.find((item) => item.commodity === option.id && item.unit === option.unit)?.quantity ?? option.stock
-        : inventory
-            .filter((item) => item.commodity === option.id && item.unit === option.unit)
-            .reduce((sum, item) => sum + Math.max(0, item.quantity), 0);
+      const held = (inventory ?? []).filter((item) => item.commodity === option.id && item.unit === option.unit);
+      const savedStock = held.reduce((sum, item) => sum + Math.max(0, item.quantity), 0);
+      // The farmer's own cost when they entered one, else the option's estimate.
+      const costed = held.find((item) => item.unitCost != null && item.quantity > 0);
       const selected = option.id === params.commodity;
+      // First render happens before storage has loaded (inventory is null); the link's stock bridges it.
       const stock = selected && inventory == null ? readNumber(params.stock, savedStock) : savedStock;
+      const knownCost = costed?.unitCost ?? option.unitCost;
       return {
         ...option,
         stock,
         label: option.label.replace(/\(Tồn:.*\)/, `(Tồn: ${formatQuantity(stock)} kg)`),
         marketPrice: selected ? readNumber(params.price, option.marketPrice) : option.marketPrice,
-        unitCost: selected ? readNumber(params.unitCost, option.unitCost) : option.unitCost,
+        unitCost: selected ? readNumber(params.unitCost, knownCost) : knownCost,
       };
     });
   }, [inventory, params.commodity, params.stock, params.price, params.unitCost]);
@@ -336,6 +337,10 @@ export function SellingJournal() {
 
     if (!rawWeight || rawWeight <= 0) {
       setValidationError('Vui lòng nhập khối lượng xuất bán lớn hơn 0 kg.');
+      return;
+    }
+    if (selectedCommodity.stock <= 0) {
+      setValidationError('Kho chưa có mặt hàng này. Hãy nhập kho trước khi ghi nhận bán.');
       return;
     }
     if (rawWeight > selectedCommodity.stock) {

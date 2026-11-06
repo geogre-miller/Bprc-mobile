@@ -12,7 +12,7 @@ import { formatAmount, formatVnd } from '@/utils/format-price';
 import { Icon, type IconName } from './icons';
 import type { PriceRow } from './use-dashboard-data';
 
-const COMMODITY_ICON: Record<Commodity, IconName> = {
+export const COMMODITY_ICON: Record<Commodity, IconName> = {
   coffee: 'coffee',
   pepper: 'grain',
   cassava: 'nutrition',

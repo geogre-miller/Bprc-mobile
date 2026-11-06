@@ -103,7 +103,7 @@ export function PortfolioSummaryCard({
             )}
           </Pressable>
         </Link>
-        <Link href="/inventory" asChild>
+        <Link href={{ pathname: '/inventory', params: { add: '1' } }} asChild>
           <Pressable style={styles.secondaryWrapper}>
             <ThemedView type="backgroundSelected" style={styles.buttonSecondary}>
               <Icon name="post_add" size={18} color={theme.primary} />

@@ -26,7 +26,7 @@ export function MyCommodities({ rows }: { rows: PriceRow[] }) {
           <ThemedText type="bodySm" themeColor="textSecondary">
             Bạn chưa có hàng trong kho. Nhập kho để xem giá trị hàng và thương lái gần bạn đang trả giá bao nhiêu.
           </ThemedText>
-          <Link href="/inventory" asChild>
+          <Link href={{ pathname: '/inventory', params: { add: '1' } }} asChild>
             <Pressable accessibilityRole="button">
               {({ pressed }) => (
                 <View style={[styles.button, { backgroundColor: pressed ? theme.primaryPressed : theme.primary }]}>
