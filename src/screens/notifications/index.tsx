@@ -4,97 +4,23 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ThemedText } from '@/components/themed-text';
 import { BottomTabInset, Radius, Spacing } from '@/constants/theme';
+import { NOTIFICATIONS, type NotificationCategory, type NotificationItem } from '@/data/notifications';
+import { useReadNotifications } from '@/hooks/use-unread-notifications';
 import { useTheme } from '@/hooks/use-theme';
 
 import { DashboardHeader } from '../home-dashboard/dashboard-header';
-import { Icon, type IconName } from '../home-dashboard/icons';
+import { Icon } from '../home-dashboard/icons';
 
-type NotificationCategory = 'price' | 'buyer' | 'system';
 type NotificationFilter = 'all' | NotificationCategory;
 
-type NotificationItem = {
-  id: string;
-  category: NotificationCategory;
-  icon: IconName;
-  iconBackground: string;
-  iconColor: string;
-  label: string;
-  time: string;
-  title: string;
-  body: string;
-  metric?: string;
-  metricIcon?: IconName;
-  verified?: string;
-  status?: string;
-  actions?: readonly string[];
-  unread: boolean;
-};
 
 const FILTERS: readonly { key: NotificationFilter; label: string }[] = [
-  { key: 'all', label: 'Tất cả 5' },
+  { key: 'all', label: `Tất cả ${NOTIFICATIONS.length}` },
   { key: 'price', label: 'Biến động giá' },
   { key: 'buyer', label: 'Yêu cầu mua' },
   { key: 'system', label: 'Hệ thống' },
 ];
 
-const INITIAL_NOTIFICATIONS: readonly NotificationItem[] = [
-  {
-    id: 'urgent-price',
-    category: 'price',
-    icon: 'trending_up',
-    iconBackground: '#AEEECB',
-    iconColor: '#316E52',
-    label: 'BIẾN ĐỘNG KHẨN CẤP',
-    time: '15 phút trước',
-    title: 'Cà phê Robusta đạt đỉnh mới 118,500 ₫/kg!',
-    body: 'Giá tăng +3,200 ₫ so với hôm qua tại Đắk Lắk. Kho dự trữ 2,500 kg của nhà bạn tăng giá trị ước tính thêm:',
-    metric: 'Lợi nhuận gia tăng: +8,000,000 ₫',
-    metricIcon: 'trending_up',
-    actions: ['Xem chi tiết giá sàn'],
-    unread: true,
-  },
-  {
-    id: 'buyer-inquiry',
-    category: 'buyer',
-    icon: 'handshake',
-    iconBackground: '#FFDCC3',
-    iconColor: '#2F1500',
-    label: 'THƯƠNG LÁI HỎI MUA',
-    time: '45 phút trước',
-    title: 'Đại lý Thành Công gửi báo giá thu mua',
-    body: 'Đề nghị mua 2,000 kg (2 tấn) Robusta với đơn giá 119,000 ₫/kg. Xe tải bốc trực tiếp tại vườn.',
-    verified: 'Đại lý Nông sản Thành Công — Đã xác minh uy tín • Trả tiền mặt ngay',
-    actions: ['Xem đề nghị', 'Liên hệ ngay'],
-    unread: true,
-  },
-  {
-    id: 'payment-complete',
-    category: 'system',
-    icon: 'receipt_long',
-    iconBackground: '#E5E9E4',
-    iconColor: '#414844',
-    label: 'THANH TOÁN HOÀN TẤT',
-    time: '2 giờ trước',
-    title: 'Đã nhận thanh toán 142,200,000 ₫',
-    body: 'Giao dịch bán 1,200 kg cà phê cho Đại lý Toàn Thắng đã khớp lệnh thành công vào tài khoản Vietcombank (*4821). Mã GD: #TX-984218',
-    status: 'Thành công',
-    unread: false,
-  },
-  {
-    id: 'storage-warning',
-    category: 'system',
-    icon: 'water_drop',
-    iconBackground: '#FFDAD6',
-    iconColor: '#93000A',
-    label: 'CẢNH BÁO KHO BÃI',
-    time: '1 ngày trước',
-    title: 'Cảnh báo độ ẩm sau mưa bão',
-    body: 'Độ ẩm không khí tại trạm Krông Búk đang vượt 88%. Nguy cơ cà phê hút ẩm lại làm giảm chuẩn chất lượng xuất khẩu. Hãy kiểm tra bạt phủ và chạy máy quạt sấy.',
-    metric: 'Độ ẩm mục tiêu: <14.5% · Hiện tại: 16.2%',
-    metricIcon: 'water_drop',
-    unread: false,
-  },
-];
 
 function NotificationCard({ item, onAction }: { item: NotificationItem; onAction: (label: string) => void }) {
   const theme = useTheme();
@@ -204,22 +130,23 @@ function NotificationCard({ item, onAction }: { item: NotificationItem; onAction
 export function Notifications() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const [notifications, setNotifications] = useState<readonly NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const { readIds, unreadCount, markAllRead, isLoaded } = useReadNotifications();
   const [filter, setFilter] = useState<NotificationFilter>('all');
 
-  const unreadCount = notifications.filter((notification) => notification.unread).length;
+  const notifications = useMemo(
+    () => NOTIFICATIONS.map((item) => ({ ...item, unread: item.unread && !readIds.includes(item.id) })),
+    [readIds],
+  );
   const filteredNotifications = useMemo(
     () => notifications.filter((notification) => filter === 'all' || notification.category === filter),
     [filter, notifications],
   );
 
-  const markAllRead = () => {
-    setNotifications((current) => current.map((notification) => ({ ...notification, unread: false })));
-  };
-
   const handleAction = (_label: string) => {
     // These actions intentionally stay local until their destination flows are defined.
   };
+
+  if (!isLoaded) return null;
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]} edges={['top']}>

@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { Layout, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useReadNotifications } from '@/hooks/use-unread-notifications';
 import { Icon } from '@/screens/home-dashboard/icons';
 
 const DEFAULT_REGION = 'Tây Nguyên • Đắk Lắk';
@@ -26,6 +27,7 @@ type AppHeaderProps = {
 export function AppHeader({ region = DEFAULT_REGION, accountSelected = false }: AppHeaderProps) {
   const theme = useTheme();
   const router = useRouter();
+  const { unreadCount } = useReadNotifications();
 
   return (
     <View
@@ -64,7 +66,7 @@ export function AppHeader({ region = DEFAULT_REGION, accountSelected = false }: 
       <View style={styles.actions}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Thông báo"
+          accessibilityLabel={unreadCount > 0 ? `Thông báo, ${unreadCount} chưa đọc` : 'Thông báo'}
           onPress={() => router.push('/alerts')}
           style={({ pressed }) => [
             styles.touch,
@@ -72,9 +74,11 @@ export function AppHeader({ region = DEFAULT_REGION, accountSelected = false }: 
             pressed && styles.pressed,
           ]}>
           <Icon name="notifications" size={22} color={theme.textSecondary} />
-          <View
-            style={[styles.badgeDot, { backgroundColor: theme.loss, borderColor: theme.background }]}
-          />
+          {unreadCount > 0 && (
+            <View
+              style={[styles.badgeDot, { backgroundColor: theme.loss, borderColor: theme.background }]}
+            />
+          )}
         </Pressable>
         <Pressable
           accessibilityRole="button"

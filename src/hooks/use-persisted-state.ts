@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /** AsyncStorage key for a `usePersistedState` key, for code that must write several keys together. */
 export const persistedStorageKey = (key: string) => `rayGia:${key}`;
 
+/** Every mounted instance of a key, so a write in one screen reaches the others (tabs stay mounted). */
+const listeners = new Map<string, Set<(value: unknown) => void>>();
+
 /** Local-only persistence until accounts/backend exist, swap for a server sync later. */
 export function usePersistedState<T>(key: string, initialValue: T) {
   const [value, setValue] = useState(initialValue);
@@ -13,6 +16,14 @@ export function usePersistedState<T>(key: string, initialValue: T) {
   const valueRef = useRef(value);
 
   useEffect(() => {
+    const apply = (next: unknown) => {
+      valueRef.current = next as T;
+      setValue(next as T);
+    };
+    const group = listeners.get(storageKey) ?? new Set();
+    group.add(apply);
+    listeners.set(storageKey, group);
+
     let cancelled = false;
     AsyncStorage.getItem(storageKey)
       .then((stored) => {
@@ -33,6 +44,7 @@ export function usePersistedState<T>(key: string, initialValue: T) {
       });
     return () => {
       cancelled = true;
+      group.delete(apply);
     };
   }, [storageKey]);
 
@@ -41,6 +53,7 @@ export function usePersistedState<T>(key: string, initialValue: T) {
       const resolved = typeof next === 'function' ? (next as (current: T) => T)(valueRef.current) : next;
       valueRef.current = resolved;
       setValue(resolved);
+      listeners.get(storageKey)?.forEach((notify) => notify(resolved));
       AsyncStorage.setItem(storageKey, JSON.stringify(resolved)).catch(() => {
         // Write failed: in-memory state stays correct for this session.
       });
