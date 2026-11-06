@@ -8,7 +8,7 @@ import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { Chip } from '@/components/ui/chip';
 import { LightPalette, Radius, Spacing } from '@/constants/theme';
-import { COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
+import { COMMODITIES, getBuyer, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import type { Commodity } from '@/types/domain';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
@@ -26,6 +26,7 @@ type BuyerCardData = {
   verified: boolean;
   badge?: string;
   rating?: number;
+  phone?: string;
   details: { icon: IconName; text: string }[];
   primaryAction: string;
   primaryIcon: IconName;
@@ -83,18 +84,28 @@ const CHART_DATA: Record<
   },
 };
 
+/** Name, verified state, rating and phone come from the shared roster, so a card always matches the buyer page. */
+const rosterFields = (id: string) => {
+  const buyer = getBuyer(id);
+  if (!buyer) throw new Error(`BUYERS has no record for commodity card ${id}`);
+  return {
+    id,
+    name: buyer.name,
+    initials: buyer.name.split(/\s+/).slice(-2).map((word) => word[0]?.toUpperCase() ?? '').join(''),
+    verified: buyer.verified,
+    rating: buyer.reputationScore,
+    phone: buyer.contactPhone?.replace(/\s/g, ''),
+  };
+};
+
 const BUYER_CARDS: BuyerCardData[] = [
   {
-    id: 'b1',
-    initials: 'TC',
-    name: 'Đại lý Nông sản Thành Công',
-    price: 119000,
-    priceNote: '+500 ₫ thị trường',
-    distance: 4.5,
-    verified: true,
-    rating: 4.9,
+    ...rosterFields('b1'),
+    price: 119200,
+    priceNote: '+1,200 ₫ so với hôm qua',
+    distance: 3.8,
     details: [
-      { icon: 'location_on', text: "Huyện Cư M'gar (cách 4.5 km)" },
+      { icon: 'location_on', text: 'Km 14, Quốc lộ 14, TX. Buôn Hồ (cách 3.8 km)' },
       { icon: 'scale', text: 'Thu mua tối thiểu: 500 kg • Cân điện tử chuẩn' },
     ],
     primaryAction: 'Chốt bán ngay',
@@ -103,22 +114,18 @@ const BUYER_CARDS: BuyerCardData[] = [
     secondaryIcon: 'call',
   },
   {
-    id: 'b2',
-    initials: 'TL',
-    name: 'HTX Nông nghiệp Tân Lập',
+    ...rosterFields('b4'),
     price: 118500,
     priceNote: 'Bằng giá sàn',
-    distance: 7.2,
-    verified: false,
-    badge: 'Đã bán 3 lần (Đối tác quen)',
+    distance: 8.2,
     details: [
-      { icon: 'local_shipping', text: 'Hỗ trợ xe tải vào bốc tận vườn • Cách 7.2 km' },
-      { icon: 'payments', text: 'Chuyển khoản ngay 100% khi cân xong' },
+      { icon: 'location_on', text: 'Xã Ea Tu, TP. Buôn Ma Thuột (cách 8.2 km)' },
+      { icon: 'payments', text: 'Hợp đồng bao tiêu dài hạn, tạm ứng trước phân bón hữu cơ' },
     ],
     primaryAction: 'Xem hồ sơ HTX',
     primaryIcon: 'store',
-    secondaryAction: 'Liên hệ Zalo',
-    secondaryIcon: 'chat',
+    secondaryAction: 'Gọi trực tiếp',
+    secondaryIcon: 'call',
   },
 ];
 
@@ -429,11 +436,7 @@ export function CommodityDetail({
                     ? goToSell(buyer)
                     : router.push({ pathname: '/buyer/[id]', params: { id: buyer.id } })
                 }
-                onSecondary={() =>
-                  buyer.id === 'b1'
-                    ? Linking.openURL('tel:0905123456')
-                    : Linking.openURL('https://zalo.me/0905123456')
-                }
+                onSecondary={() => buyer.phone && Linking.openURL(`tel:${buyer.phone}`)}
               />
             ))}
           </View>

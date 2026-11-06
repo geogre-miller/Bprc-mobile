@@ -74,12 +74,12 @@ const SALE_COMMODITIES: SaleCommodityOption[] = [
   },
 ];
 
-const DEFAULT_BUYERS: SaleBuyerOption[] = [
-  { id: 'b1', label: '🏢 Đại lý Toàn Thắng (Buôn Hồ - Đắk Lắk)', name: 'Đại lý Toàn Thắng' },
-  { id: 'b2', label: '🏪 Thu mua nông sản Phát Đạt (Gia Lai)', name: 'Thu mua nông sản Phát Đạt' },
-  { id: 'b3', label: '🚢 Cty XNK Simexco Đắk Lắk', name: 'Cty XNK Simexco Đắk Lắk' },
-  { id: 'b4', label: '👤 Thương lái lẻ: Chị Bích (Cư M\'gar)', name: 'Thương lái lẻ: Chị Bích' },
-];
+/** The shared roster, so a buyer picked here is the same id and name as everywhere else. */
+const DEFAULT_BUYERS: SaleBuyerOption[] = BUYERS.map((buyer) => ({
+  id: buyer.id,
+  name: buyer.name,
+  label: `🏢 ${buyer.name}`,
+}));
 
 const DEFAULT_DATE = '2024-10-24';
 

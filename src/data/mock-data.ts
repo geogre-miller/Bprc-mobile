@@ -134,6 +134,10 @@ export const PRICE_OBSERVATIONS: PriceObservation[] = [
   },
 ];
 
+/**
+ * The one buyer roster. Every screen that shows a buyer's name, phone, rating or verified state
+ * reads it from here (directly or via `getBuyer`), so the same id is always the same business.
+ */
 export const BUYERS: BuyerProfile[] = [
   {
     id: 'b1',
@@ -175,6 +179,24 @@ export const BUYERS: BuyerProfile[] = [
     contactPhone: '0987 222 111',
     verified: false,
   },
+  {
+    id: 'b4',
+    name: 'HTX Cà Phê Bền Vững Ea Tu',
+    address: { line: 'Xã Ea Tu', district: 'TP. Buôn Ma Thuột', province: 'Đắk Lắk' },
+    commodities: ['coffee'],
+    contactPhone: '0943 187 291',
+    verified: true,
+    reputationScore: 4.8,
+  },
+  {
+    id: 'b5',
+    name: 'Kho Nông Sản XK An Phát',
+    address: { line: 'Huyện Krông Pắk', province: 'Đắk Lắk' },
+    commodities: ['fruit'],
+    contactPhone: '0905 112 233',
+    verified: true,
+    reputationScore: 4.7,
+  },
 ];
 
 export const BUYING_DEMANDS: BuyingDemand[] = [
@@ -201,3 +223,5 @@ export const BUYING_DEMANDS: BuyingDemand[] = [
     periodStart: '2026-09-03T00:00:00Z',
   },
 ];
+
+export const getBuyer = (id: string | undefined) => BUYERS.find((buyer) => buyer.id === id);

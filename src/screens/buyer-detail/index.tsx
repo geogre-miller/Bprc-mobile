@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
-  Alert,
   Image,
   Linking,
   Pressable,
@@ -13,26 +12,18 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/app-header';
-import { BottomSheet } from '@/components/ui/bottom-sheet';
 import { Card } from '@/components/ui/card';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedTextInput } from '@/components/themed-text-input';
 import { LightPalette, Layout, Spacing } from '@/constants/theme';
-import { BUYERS } from '@/data/mock-data';
+import { BUYER_DIRECTORY } from '@/data/buyer-directory';
+import { BUYER_EXTRAS, buildBuyerQuotes, type BuyerPolicy, type BuyerQuote } from '@/data/buyer-profiles';
+import { getBuyer } from '@/data/mock-data';
+import type { BuyerProfile } from '@/types/domain';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
 
 
 const COLORS = LightPalette;
-
-type CommodityChoice = { id: 'coffee' | 'pepper'; label: string; price: number };
-
-const COMMODITY_CHOICES: CommodityChoice[] = [
-  { id: 'coffee', label: 'Robusta Nhân xô', price: 119200 },
-  { id: 'pepper', label: 'Tiêu Đen', price: 148500 },
-];
-
-const formatNumber = (value: number) => value.toLocaleString('en-US');
 
 function TrustStat({ icon, value, label, color }: { icon: IconName; value: string; label: string; color: string }) {
   return (
@@ -77,25 +68,8 @@ function Price({ value, compact }: { value: string; compact?: boolean }) {
   );
 }
 
-function QuoteCard({
-  title,
-  badge,
-  description,
-  price,
-  priceNote,
-  quota,
-  urgent,
-  compact,
-}: {
-  title: string;
-  badge: string;
-  description: string;
-  price: string;
-  priceNote?: string;
-  quota?: string;
-  urgent?: boolean;
-  compact?: boolean;
-}) {
+function QuoteCard({ quote }: { quote: BuyerQuote }) {
+  const { title, badge, description, price, priceNote, gain, quota, urgent, compact } = quote;
   return (
     <Card style={compact ? styles.compactQuote : styles.quoteCard}>
       <View style={[styles.quoteTop, compact && styles.compactQuoteTop]}>
@@ -104,19 +78,23 @@ function QuoteCard({
             <ThemedText type="titleMd" style={styles.quoteTitle}>
               {title}
             </ThemedText>
-            <View style={styles.gradeBadge}>
-              <ThemedText type="labelSm" style={styles.gradeText}>
-                {badge}
-              </ThemedText>
-            </View>
+            {badge && (
+              <View style={styles.gradeBadge}>
+                <ThemedText type="labelSm" style={styles.gradeText}>
+                  {badge}
+                </ThemedText>
+              </View>
+            )}
           </View>
-          <ThemedText type="bodySm" style={styles.quoteDescription}>
-            {description}
-          </ThemedText>
+          {description && (
+            <ThemedText type="bodySm" style={styles.quoteDescription}>
+              {description}
+            </ThemedText>
+          )}
         </View>
         <View style={styles.quotePrice}>
-          <Price value={price} compact={compact} />
-          {priceNote === '+700 ₫ so với sàn' ? (
+          <Price value={price.toLocaleString('en-US')} compact={compact} />
+          {priceNote && gain ? (
             <View style={styles.gainBadge}>
               <ThemedText type="labelSm" style={styles.gainText}>{priceNote}</ThemedText>
             </View>
@@ -162,30 +140,24 @@ function PolicyRow({ icon, title, description }: { icon: IconName; title: string
   );
 }
 
+const TONE_COLORS = { amber: COLORS.amber, primary: COLORS.primary, secondary: COLORS.secondary } as const;
+
+const initialsOf = (name: string) =>
+  name
+    .split(/\s+/)
+    .slice(-2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+
+const formatAddress = (address: BuyerProfile['address']) =>
+  [address.line, address.district, address.province].filter(Boolean).join(', ');
+
 export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const buyer = BUYERS.find((item) => item.id === buyerId);
-  const [saleOpen, setSaleOpen] = useState(false);
-  const [commodityId, setCommodityId] = useState<CommodityChoice['id']>('coffee');
-  const [weight, setWeight] = useState('2000');
-  const commodity = COMMODITY_CHOICES.find((item) => item.id === commodityId) ?? COMMODITY_CHOICES[0];
-  const estimate = useMemo(() => (Number(weight) || 0) * commodity.price, [commodity.price, weight]);
-
-  const goBack = () => (router.canGoBack() ? router.back() : router.replace('/buyers'));
-  const callBuyer = () => Linking.openURL(`tel:${(buyer?.contactPhone ?? '').replace(/\s/g, '')}`);
-  const shareBuyer = () => Share.share({
-    title: 'Đại lý Toàn Thắng',
-    message: 'Đại lý Toàn Thắng đang thu mua nông sản tại Đắk Lắk trên Mùa Vàng.',
-  });
-
-  const submitSale = () => {
-    setSaleOpen(false);
-    Alert.alert(
-      'Đã gửi yêu cầu chốt',
-      `Phiếu đề xuất bán ${formatNumber(Number(weight) || 0)} kg ${commodity.label} đã được gửi đến Đại lý Toàn Thắng.`,
-    );
-  };
+  const buyer = getBuyer(buyerId);
+  const now = useMemo(() => new Date(), []);
+  const quotes = useMemo(() => (buyer ? buildBuyerQuotes(buyer.id, now) : []), [buyer, now]);
 
   if (!buyer) {
     return (
@@ -194,6 +166,32 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
       </View>
     );
   }
+
+  const extras = BUYER_EXTRAS[buyer.id];
+  const directory = BUYER_DIRECTORY.find((entry) => entry.id === buyer.id);
+  const policies: BuyerPolicy[] =
+    extras?.policies ??
+    (directory ? [{ icon: directory.policyIcon, title: 'Chính sách thu mua', description: directory.policy }] : []);
+  const phone = buyer.contactPhone?.replace(/\s/g, '');
+
+  const goBack = () => (router.canGoBack() ? router.back() : router.replace('/buyers'));
+  const callBuyer = () => phone && Linking.openURL(`tel:${phone}`);
+  const shareBuyer = () => Share.share({
+    title: buyer.name,
+    message: `${buyer.name} đang thu mua nông sản trên Mùa Vàng.`,
+  });
+  // The journal records the sale; it takes the buyer and the first priced commodity as defaults.
+  const startSale = () => {
+    const first = quotes.find((quote) => quote.commodity);
+    router.push({
+      pathname: '/journal',
+      params: {
+        buyerId: buyer.id,
+        buyerName: buyer.name,
+        ...(first?.commodity ? { commodity: first.commodity, price: String(first.price) } : {}),
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
@@ -207,10 +205,12 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
               <ThemedText type="labelMd" style={styles.backText}>Danh bạ</ThemedText>
             </Pressable>
             <View style={styles.topActions}>
-              <Pressable accessibilityRole="button" accessibilityLabel="Gọi Đại lý Toàn Thắng" onPress={callBuyer} style={({ pressed }) => [styles.topIconButton, pressed && styles.pressed]}>
-                <Icon name="call" size={20} color={COLORS.secondary} />
-              </Pressable>
-              <Pressable accessibilityRole="button" accessibilityLabel="Chia sẻ hồ sơ Đại lý Toàn Thắng" onPress={shareBuyer} style={({ pressed }) => [styles.topIconButton, pressed && styles.pressed]}>
+              {phone && (
+                <Pressable accessibilityRole="button" accessibilityLabel={`Gọi ${buyer.name}`} onPress={callBuyer} style={({ pressed }) => [styles.topIconButton, pressed && styles.pressed]}>
+                  <Icon name="call" size={20} color={COLORS.secondary} />
+                </Pressable>
+              )}
+              <Pressable accessibilityRole="button" accessibilityLabel={`Chia sẻ hồ sơ ${buyer.name}`} onPress={shareBuyer} style={({ pressed }) => [styles.topIconButton, pressed && styles.pressed]}>
                 <Icon name="share" size={20} color={COLORS.onSurfaceVariant} />
               </Pressable>
             </View>
@@ -220,24 +220,41 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
             <View style={styles.brandGlow} />
             <View style={styles.identityRow}>
               <View style={styles.portraitWrap}>
-                <Image accessibilityLabel="Anh Trần Toàn Thắng tại kho nông sản" source={require('@/assets/images/buyer-detail-portrait.jpg')} resizeMode="cover" style={styles.portrait} />
-                <View style={styles.portraitVerified}><Icon name="verified" size={11} color={COLORS.onPrimary} /></View>
+                {extras ? (
+                  <Image accessibilityLabel={extras.portraitLabel} source={require('@/assets/images/buyer-detail-portrait.jpg')} resizeMode="cover" style={styles.portrait} />
+                ) : (
+                  <View style={[styles.portrait, styles.initialsTile]}>
+                    <ThemedText type="titleMd" style={styles.initialsText}>{initialsOf(buyer.name)}</ThemedText>
+                  </View>
+                )}
+                {buyer.verified && <View style={styles.portraitVerified}><Icon name="verified" size={11} color={COLORS.onPrimary} /></View>}
               </View>
               <View style={styles.identityCopy}>
-                <ThemedText type="headlineSm" style={styles.buyerName} numberOfLines={1}>Đại lý Toàn Thắng</ThemedText>
-                <ThemedText type="bodySm" style={styles.ownerText}>Chủ cơ sở: Anh Trần Toàn Thắng</ThemedText>
+                <ThemedText type="headlineSm" style={styles.buyerName} numberOfLines={2}>{buyer.name}</ThemedText>
+                {extras && <ThemedText type="bodySm" style={styles.ownerText}>{extras.owner}</ThemedText>}
+                <ThemedText type="bodySm" style={styles.ownerText}>{formatAddress(buyer.address)}</ThemedText>
                 <View style={styles.licenseBadge}>
-                  <Icon name="check_circle" size={13} color={COLORS.secondary} />
-                  <ThemedText type="labelSm" style={styles.licenseText} numberOfLines={2}>Cấp phép bởi Sở Công Thương Đắk Lắk</ThemedText>
+                  <Icon name={buyer.verified ? 'check_circle' : 'shield'} size={13} color={COLORS.secondary} />
+                  <ThemedText type="labelSm" style={styles.licenseText} numberOfLines={2}>
+                    {extras?.license ?? (buyer.verified ? 'Đã xác thực' : 'Chưa xác thực')}
+                  </ThemedText>
                 </View>
               </View>
             </View>
-            <QuotaRow value="Đang cần 3 tấn" />
-            <View style={styles.trustGrid}>
-              <TrustStat icon="star" value="4.9" label="48 đánh giá" color={COLORS.amber} />
-              <TrustStat icon="history" value="8 năm" label="Thâm niên" color={COLORS.primary} />
-              <TrustStat icon="payments" value="100%" label="Đúng hạn" color={COLORS.secondary} />
-            </View>
+            {extras && <QuotaRow value={extras.quota} />}
+            {extras ? (
+              <View style={styles.trustGrid}>
+                {extras.stats.map((stat) => (
+                  <TrustStat key={stat.label} icon={stat.icon} value={stat.value} label={stat.label} color={TONE_COLORS[stat.tone]} />
+                ))}
+              </View>
+            ) : (
+              buyer.reputationScore != null && (
+                <View style={styles.trustGrid}>
+                  <TrustStat icon="star" value={buyer.reputationScore.toFixed(1)} label="Điểm uy tín" color={COLORS.amber} />
+                </View>
+              )
+            )}
           </Card>
 
           <View style={styles.section}>
@@ -246,124 +263,91 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
                 <Icon name="price_change" size={20} color={COLORS.primary} />
                 <ThemedText type="titleMd" style={styles.sectionTitle}>Giá thu mua hôm nay</ThemedText>
               </View>
-              <View style={styles.updatedBadge}>
-                <View style={styles.liveDot} />
-                <ThemedText type="labelSm" style={styles.updatedText}>Cập nhật 08:30</ThemedText>
+              {extras && (
+                <View style={styles.updatedBadge}>
+                  <View style={styles.liveDot} />
+                  <ThemedText type="labelSm" style={styles.updatedText}>Cập nhật 08:30</ThemedText>
+                </View>
+              )}
+            </View>
+            {quotes.length > 0 ? (
+              <View style={styles.quoteStack}>
+                {quotes.map((quote) => <QuoteCard key={quote.key} quote={quote} />)}
+              </View>
+            ) : (
+              <ThemedText type="bodySm" style={styles.mutedLabel}>
+                Đầu mối này chưa công bố giá. Hãy gọi để hỏi giá trước khi chở hàng.
+              </ThemedText>
+            )}
+          </View>
+
+          {extras && (
+            <View style={styles.warehouseCard}>
+              <Image accessibilityLabel={extras.warehouseLabel} source={require('@/assets/images/buyer-detail-warehouse.jpg')} resizeMode="cover" style={styles.warehouseImage} />
+              <View style={styles.warehouseCaption}>
+                <Icon name="warehouse" size={18} color={COLORS.onPrimary} />
+                <ThemedText type="labelMd" style={styles.warehouseText}>{extras.warehouseCaption}</ThemedText>
               </View>
             </View>
-            <View style={styles.quoteStack}>
-              <QuoteCard title="Cà phê Robusta" badge="Nhân xô" description="Yêu cầu ẩm ≤ 15% • Tạp chất ≤ 1%" price="119,200" priceNote="+700 ₫ so với sàn" quota="Cần gấp 10 tấn" urgent />
-              <QuoteCard title="Hồ tiêu đen" badge="Dung trọng 550g/l" description="Tiêu khô đều, không ẩm mốc" price="148,500" priceNote="Bằng giá thị trường" quota="Đang cần 3 tấn" />
-              <QuoteCard title="Cà phê quả tươi" badge="Hái chín >85%" description="Cân xô tại vườn hoặc tại kho" price="24,500" compact />
-            </View>
-          </View>
+          )}
 
-          <View style={styles.warehouseCard}>
-            <Image accessibilityLabel="Kho tổng Buôn Hồ" source={require('@/assets/images/buyer-detail-warehouse.jpg')} resizeMode="cover" style={styles.warehouseImage} />
-            <View style={styles.warehouseCaption}>
-              <Icon name="warehouse" size={18} color={COLORS.onPrimary} />
-              <ThemedText type="labelMd" style={styles.warehouseText}>Kho tổng Buôn Hồ • Sức chứa 2,500 tấn</ThemedText>
+          {extras && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.sectionHeading}>
+                  <Icon name="receipt_long" size={20} color={COLORS.primary} />
+                  <ThemedText type="titleMd" style={styles.sectionTitle}>Lịch sử giao dịch của bạn</ThemedText>
+                </View>
+                <ThemedText type="labelSm" style={styles.loyalText}>{extras.history.note}</ThemedText>
+              </View>
+              <View style={styles.historySummary}>
+                <View style={styles.summaryTop}>
+                  <ThemedText type="labelSm" style={styles.summaryLabel}>TỔNG GIÁ TRỊ ĐÃ GIAO DỊCH</ThemedText>
+                  <View style={styles.dealBadge}><ThemedText type="labelSm" style={styles.dealText}>{extras.history.dealsLabel}</ThemedText></View>
+                </View>
+                <ThemedText type="numericHero" style={styles.summaryValue}>{extras.history.total} <ThemedText type="titleMd" style={styles.summaryCurrency}>₫</ThemedText></ThemedText>
+                <View style={styles.summaryFooter}>
+                  <ThemedText type="bodySm" style={styles.summaryFooterText}>Tổng sản lượng cung ứng:</ThemedText>
+                  <ThemedText type="labelMd" style={styles.summaryFooterValue}>{extras.history.volume}</ThemedText>
+                </View>
+              </View>
+              <View style={styles.transactionList}>
+                {extras.history.rows.map((row, index) => (
+                  <View key={row.title}>
+                    {index > 0 && <View style={styles.divider} />}
+                    <TransactionRow title={row.title} detail={row.detail} value={row.value} />
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>
+          )}
 
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
+          {policies.length > 0 && (
+            <Card style={styles.policyCard}>
               <View style={styles.sectionHeading}>
-                <Icon name="receipt_long" size={20} color={COLORS.primary} />
-                <ThemedText type="titleMd" style={styles.sectionTitle}>Lịch sử giao dịch của bạn</ThemedText>
+                <Icon name="verified_user" size={20} color={COLORS.secondary} />
+                <ThemedText type="titleMd" style={styles.sectionTitle}>Quy chuẩn thu mua & Hỗ trợ</ThemedText>
               </View>
-              <ThemedText type="labelSm" style={styles.loyalText}>Khách hàng thân thiết</ThemedText>
-            </View>
-            <View style={styles.historySummary}>
-              <View style={styles.summaryTop}>
-                <ThemedText type="labelSm" style={styles.summaryLabel}>TỔNG GIÁ TRỊ ĐÃ GIAO DỊCH</ThemedText>
-                <View style={styles.dealBadge}><ThemedText type="labelSm" style={styles.dealText}>4 vụ đã chốt</ThemedText></View>
+              <View style={styles.policyStack}>
+                {policies.map((policy) => <PolicyRow key={policy.title} icon={policy.icon} title={policy.title} description={policy.description} />)}
               </View>
-              <ThemedText type="numericHero" style={styles.summaryValue}>1,480,000,000 <ThemedText type="titleMd" style={styles.summaryCurrency}>₫</ThemedText></ThemedText>
-              <View style={styles.summaryFooter}>
-                <ThemedText type="bodySm" style={styles.summaryFooterText}>Tổng sản lượng cung ứng:</ThemedText>
-                <ThemedText type="labelMd" style={styles.summaryFooterValue}>14.2 tấn</ThemedText>
-              </View>
-            </View>
-            <View style={styles.transactionList}>
-              <TransactionRow title="3,500 kg Cà phê Robusta" detail="Ngày 18/09/2024 • Đơn giá 116,000 ₫/kg" value="406,000,000 ₫" />
-              <View style={styles.divider} />
-              <TransactionRow title="1,200 kg Tiêu đen" detail="Ngày 05/06/2024 • Đơn giá 142,000 ₫/kg" value="170,400,000 ₫" />
-            </View>
-          </View>
-
-          <Card style={styles.policyCard}>
-            <View style={styles.sectionHeading}>
-              <Icon name="verified_user" size={20} color={COLORS.secondary} />
-              <ThemedText type="titleMd" style={styles.sectionTitle}>Quy chuẩn thu mua & Hỗ trợ</ThemedText>
-            </View>
-            <View style={styles.policyStack}>
-              <PolicyRow icon="water_drop" title="Độ ẩm & Tạp chất" description="Độ ẩm tiêu chuẩn: Cà phê ≤ 15%, Tạp chất ≤ 1%. Kiểm tra bằng máy Kett điện tử trước mặt chủ vườn." />
-              <PolicyRow icon="scale" title="Cân điện tử kiểm định" description="Hệ thống cân điện tử 80 tấn và cân bàn có tem kiểm định định kỳ của Chi cục Tiêu chuẩn Đo lường Chất lượng." />
-              <PolicyRow icon="local_shipping" title="Vận chuyển bốc hàng miễn phí" description="Có đội xe tải 2.5 - 5 tấn hỗ trợ bốc hàng tận kho vườn miễn phí trong bán kính 15 km (từ 1 tấn trở lên)." />
-            </View>
-          </Card>
+            </Card>
+          )}
 
           <View style={styles.ctaStack}>
-            <Pressable accessibilityRole="button" accessibilityLabel="Gọi ngay 0914.829.xxx" onPress={callBuyer} style={({ pressed }) => [styles.primaryCta, pressed && styles.ctaPressed]}>
-              <Icon name="call" size={20} color={COLORS.onPrimary} />
-              <ThemedText type="titleMd" style={styles.primaryCtaText}>Gọi ngay 0914.829.xxx</ThemedText>
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="Tạo phiếu bán cho đại lý này" onPress={() => setSaleOpen(true)} style={({ pressed }) => [styles.secondaryCta, pressed && styles.pressed]}>
+            {phone && (
+              <Pressable accessibilityRole="button" accessibilityLabel={`Gọi ${buyer.name}`} onPress={callBuyer} style={({ pressed }) => [styles.primaryCta, pressed && styles.ctaPressed]}>
+                <Icon name="call" size={20} color={COLORS.onPrimary} />
+                <ThemedText type="titleMd" style={styles.primaryCtaText} numberOfLines={1}>Gọi {buyer.name}</ThemedText>
+              </Pressable>
+            )}
+            <Pressable accessibilityRole="button" accessibilityLabel="Tạo phiếu bán cho đại lý này" onPress={startSale} style={({ pressed }) => [styles.secondaryCta, pressed && styles.pressed]}>
               <Icon name="post_add" size={20} color={COLORS.secondary} />
               <ThemedText type="titleMd" style={styles.secondaryCtaText}>Tạo phiếu bán cho đại lý này</ThemedText>
             </Pressable>
           </View>
         </ScrollView>
-
       </View>
-
-      {saleOpen && (
-        <BottomSheet title="Tạo phiếu chốt giá" subtitle="Gửi trực tiếp đến Đại lý Toàn Thắng" closeLabel="Đóng phiếu chốt giá" onClose={() => setSaleOpen(false)}>
-          <View style={styles.sheetBody}>
-        <View style={styles.fieldGroup}>
-          <ThemedText type="labelMd" style={styles.fieldLabel}>Chọn nông sản xuất kho:</ThemedText>
-          <View accessibilityRole="tablist" style={styles.commodityRow}>
-            {COMMODITY_CHOICES.map((item) => {
-              const selected = item.id === commodityId;
-              return (
-                <Pressable key={item.id} accessibilityRole="tab" accessibilityState={{ selected }} aria-selected={selected} onPress={() => setCommodityId(item.id)} style={[styles.commodityChip, selected && styles.commodityChipSelected]}>
-                  <ThemedText type="labelMd" style={[styles.commodityText, selected && styles.commodityTextSelected]}>{item.label}</ThemedText>
-                  {selected && <Icon name="check_circle" size={16} color={COLORS.onSecondaryContainer} />}
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
-        <View style={styles.fieldGroup}>
-          <View style={styles.inputHeader}>
-            <ThemedText type="labelMd" style={styles.fieldLabel}>Khối lượng bán (kg):</ThemedText>
-            <ThemedText type="labelSm" style={styles.availableText}>Có sẵn: 5,400 kg trong kho</ThemedText>
-          </View>
-          <View style={styles.inputWrap}>
-            <ThemedTextInput accessibilityLabel="Khối lượng bán" value={weight} onChangeText={setWeight} keyboardType="numeric" inputMode="numeric" style={styles.weightInput} />
-            <ThemedText type="labelMd" style={styles.inputUnit}>kg</ThemedText>
-          </View>
-        </View>
-        <View style={styles.estimateCard}>
-          <View>
-            <ThemedText type="labelSm" style={styles.mutedLabel}>Ước tính thành tiền:</ThemedText>
-            <ThemedText type="numericLg" style={styles.estimateValue}>{formatNumber(estimate)} ₫</ThemedText>
-          </View>
-          <View style={styles.currentBadge}><ThemedText type="labelSm" style={styles.updatedText}>Theo giá hiện tại</ThemedText></View>
-        </View>
-        <View style={styles.sheetActions}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Hủy tạo phiếu" onPress={() => setSaleOpen(false)} style={styles.cancelButton}>
-            <ThemedText type="titleMd" style={styles.cancelText}>Hủy</ThemedText>
-          </Pressable>
-          <Pressable accessibilityRole="button" accessibilityLabel="Gửi yêu cầu chốt" onPress={submitSale} style={styles.submitButton}>
-            <Icon name="send" size={18} color={COLORS.onPrimary} />
-            <ThemedText type="titleMd" style={styles.submitText}>Gửi yêu cầu chốt</ThemedText>
-          </Pressable>
-        </View>
-          </View>
-        </BottomSheet>
-      )}
     </SafeAreaView>
   );
 }
@@ -392,6 +376,8 @@ const styles = StyleSheet.create({
   brandGlow: { position: 'absolute', width: 112, height: 112, borderRadius: 999, right: -32, top: -32, backgroundColor: COLORS.secondaryContainer },
   identityRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   portraitWrap: { width: 56, height: 56, borderRadius: 8, overflow: 'hidden', backgroundColor: COLORS.surfaceHigh },
+  initialsTile: { alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.secondaryContainer },
+  initialsText: { color: COLORS.onSecondaryContainer, fontWeight: '700' },
   portrait: { width: 56, height: 56 },
   portraitVerified: { position: 'absolute', right: 0, bottom: 0, width: 16, height: 16, borderTopLeftRadius: 4, backgroundColor: COLORS.secondary, alignItems: 'center', justifyContent: 'center' },
   identityCopy: { flex: 1, minWidth: 0 },
@@ -470,25 +456,4 @@ const styles = StyleSheet.create({
   secondaryCtaText: { color: COLORS.primary, fontWeight: '600' },
   pressed: { opacity: 0.68 },
   ctaPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
-  sheetBody: { gap: 12 },
-  fieldGroup: { gap: 8 },
-  fieldLabel: { color: COLORS.onSurface, fontWeight: '500' },
-  commodityRow: { flexDirection: 'row', gap: 8 },
-  commodityChip: { flex: 1, minHeight: 42, borderRadius: 4, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, backgroundColor: COLORS.surfaceContainer },
-  commodityChipSelected: { backgroundColor: COLORS.secondaryContainer },
-  commodityText: { color: COLORS.onSurface, fontWeight: '500', flexShrink: 1 },
-  commodityTextSelected: { color: COLORS.onSecondaryContainer },
-  inputHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  availableText: { color: COLORS.secondary, fontWeight: '600', flexShrink: 1, textAlign: 'right' },
-  inputWrap: { height: 48, borderRadius: 4, justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
-  weightInput: { height: 48, paddingHorizontal: 12, paddingRight: 48, color: COLORS.onSurface, fontWeight: '700', fontSize: 18, lineHeight: 24 },
-  inputUnit: { position: 'absolute', right: 14, color: COLORS.outline, fontWeight: '600' },
-  estimateCard: { minHeight: 60, borderRadius: 4, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, backgroundColor: COLORS.surfaceLow },
-  estimateValue: { color: COLORS.primary, fontWeight: '700' },
-  currentBadge: { borderRadius: 4, paddingHorizontal: 8, paddingVertical: 4, backgroundColor: COLORS.gainContainer },
-  sheetActions: { flexDirection: 'row', gap: 8, paddingTop: 8 },
-  cancelButton: { flex: 1, height: 48, borderRadius: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
-  cancelText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
-  submitButton: { flex: 2, height: 48, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: COLORS.primary },
-  submitText: { color: COLORS.onPrimary, fontWeight: '600' },
 });
