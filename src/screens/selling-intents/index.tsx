@@ -18,10 +18,17 @@ export function SellingIntents() {
   const [commodity, setCommodity] = useState<Commodity>(COMMODITIES[0].id);
   const [quantity, setQuantity] = useState('');
   const [desiredPrice, setDesiredPrice] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const addIntent = () => {
     const parsedQuantity = Number(quantity);
-    if (!parsedQuantity || parsedQuantity <= 0) return;
+    if (!parsedQuantity || parsedQuantity <= 0) {
+      setNotice(null);
+      setError('Nhập số kg muốn bán lớn hơn 0.');
+      return;
+    }
     setIntents((current) => [
       {
         id: String(Date.now()),
@@ -36,10 +43,14 @@ export function SellingIntents() {
     ]);
     setQuantity('');
     setDesiredPrice('');
+    setError(null);
+    setNotice('Đã lưu ý định bán. Bấm "So sánh đầu mối" để xem ai trả giá cao nhất.');
   };
 
   const removeIntent = (id: string) => {
     setIntents((current) => current.filter((intent) => intent.id !== id));
+    setConfirmingId(null);
+    setNotice('Đã xóa ý định bán.');
   };
 
   if (!isLoaded) return null;
@@ -47,6 +58,11 @@ export function SellingIntents() {
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <ThemedText themeColor="textSecondary">Đăng nông sản bạn muốn bán để so sánh các đầu mối.</ThemedText>
+      {notice && (
+        <ThemedText type="small" accessibilityRole="alert" style={{ color: theme.primary }}>
+          {notice}
+        </ThemedText>
+      )}
 
       {intents.map((intent) => {
         const label = COMMODITIES.find((c) => c.id === intent.commodity)?.label ?? intent.commodity;
@@ -67,11 +83,30 @@ export function SellingIntents() {
                 </Pressable>
               </Link>
             </ThemedView>
-            <Pressable onPress={() => removeIntent(intent.id)}>
-              <ThemedText type="small" themeColor="textSecondary">
-                Xóa
-              </ThemedText>
-            </Pressable>
+            {confirmingId === intent.id ? (
+              <ThemedView type="backgroundElement" style={styles.confirmColumn}>
+                <Pressable accessibilityRole="button" onPress={() => removeIntent(intent.id)} style={styles.textAction}>
+                  <ThemedText type="small" style={{ color: theme.error }}>
+                    Xác nhận xóa
+                  </ThemedText>
+                </Pressable>
+                <Pressable accessibilityRole="button" onPress={() => setConfirmingId(null)} style={styles.textAction}>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Hủy
+                  </ThemedText>
+                </Pressable>
+              </ThemedView>
+            ) : (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Xóa ý định bán ${label}`}
+                onPress={() => setConfirmingId(intent.id)}
+                style={styles.textAction}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Xóa
+                </ThemedText>
+              </Pressable>
+            )}
           </ThemedView>
         );
       })}
@@ -108,7 +143,12 @@ export function SellingIntents() {
           keyboardType="numeric"
           style={[styles.input, { color: theme.text }]}
         />
-        <Pressable onPress={addIntent}>
+        {error && (
+          <ThemedText type="small" accessibilityRole="alert" style={{ color: theme.error }}>
+            {error}
+          </ThemedText>
+        )}
+        <Pressable accessibilityRole="button" onPress={addIntent} style={styles.textAction}>
           <ThemedText type="linkPrimary">Lưu</ThemedText>
         </Pressable>
       </ThemedView>
@@ -130,6 +170,13 @@ const styles = StyleSheet.create({
   },
   rowLeft: {
     gap: Spacing.half,
+  },
+  confirmColumn: {
+    alignItems: 'flex-end',
+  },
+  textAction: {
+    minHeight: Layout.touchTarget,
+    justifyContent: 'center',
   },
   sectionTitle: {
     marginTop: Spacing.three,

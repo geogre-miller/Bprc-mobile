@@ -78,7 +78,7 @@ function TrustCopy({ text, highlight }: { text: string; highlight?: string }) {
   );
 }
 
-function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryEntry; onQuote: (buyerName: string) => void }) {
+function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryEntry; onQuote: (buyer: BuyerDirectoryEntry) => void }) {
   const callBuyer = () => { void Linking.openURL(`tel:${buyer.phone}`).catch(() => undefined); };
 
   return (
@@ -134,7 +134,7 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryEntry; onQuote: (b
         </View>
         <View style={styles.ctaCell}>
           {buyer.quote ? (
-            <Pressable accessibilityRole="button" accessibilityLabel="Gửi báo giá" onPress={() => onQuote(buyer.name)} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
+            <Pressable accessibilityRole="button" accessibilityLabel="Gửi báo giá" onPress={() => onQuote(buyer)} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
               <Icon name="send" size={18} color={COLORS.onSurface} /><FontText type="titleMd" numberOfLines={1} style={styles.secondaryButtonText}>Gửi báo giá</FontText>
             </Pressable>
           ) : (
@@ -215,13 +215,21 @@ function FilterSheet({ kind, productFilter, radiusFilter, verifiedOnly, highestP
   );
 }
 
-function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; onClose: () => void; onSubmit: () => void }) {
+function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; onClose: () => void; onSubmit: (message: string) => void }) {
   const [commodity, setCommodity] = useState('Cà phê Robusta xô chín (Đã phơi giàn)');
   const [quantity, setQuantity] = useState('');
   const [desiredPrice, setDesiredPrice] = useState('');
   const [note, setNote] = useState('');
   const [commodityOptionsOpen, setCommodityOptionsOpen] = useState(false);
   const options = ['Cà phê Robusta xô chín (Đã phơi giàn)', 'Cà phê Robusta tươi (Hái xô)', 'Tiêu đen chuẩn xuất khẩu', 'Sầu riêng Dona cắt vườn'];
+  const message = [
+    `Chào ${buyerName}, tôi muốn bán ${commodity}.`,
+    quantity && `Sản lượng ước tính: ${quantity} tấn.`,
+    desiredPrice && `Giá mong muốn: ${desiredPrice} đ/kg.`,
+    note.trim(),
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <BottomSheet eyebrow="CHÀO HÀNG TRỰC TIẾP" title={buyerName} closeLabel="Đóng báo giá" onClose={onClose}>
@@ -236,7 +244,7 @@ function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; o
         <FontText type="labelMd" style={styles.fieldLabel}>Ghi chú thêm</FontText>
         <ThemedTextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
       </ScrollView>
-      <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
+      <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={() => onSubmit(message)} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Soạn tin nhắn</FontText></Pressable></View>
     </BottomSheet>
   );
 }
@@ -258,7 +266,7 @@ export function BuyerList() {
   const [radiusFilter, setRadiusFilter] = useState<number | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [highestPrice, setHighestPrice] = useState(false);
-  const [quotationBuyer, setQuotationBuyer] = useState<string | null>(null);
+  const [quotationBuyer, setQuotationBuyer] = useState<BuyerDirectoryEntry | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
   const visibleBuyers = useMemo(() => {
@@ -306,7 +314,21 @@ export function BuyerList() {
         </ScrollView>
       </View>
       {sheet && <FilterSheet kind={sheet} productFilter={productFilter} radiusFilter={radiusFilter} verifiedOnly={verifiedOnly} highestPrice={highestPrice} onClose={() => setSheet(null)} onProductChange={setProductFilter} onRadiusChange={setRadiusFilter} onVerifiedChange={setVerifiedOnly} onHighestPriceChange={setHighestPrice} onReset={() => { setProductFilter(null); setRadiusFilter(null); setVerifiedOnly(false); setHighestPrice(false); setSheet(null); }} />}
-      {quotationBuyer && <QuotationSheet buyerName={quotationBuyer} onClose={() => setQuotationBuyer(null)} onSubmit={() => { setQuotationBuyer(null); showToast('Đại lý sẽ gọi lại trong 15 phút!'); }} />}
+      {quotationBuyer && (
+        <QuotationSheet
+          buyerName={quotationBuyer.name}
+          onClose={() => setQuotationBuyer(null)}
+          onSubmit={(message) => {
+            const { name, phone } = quotationBuyer;
+            setQuotationBuyer(null);
+            // Nothing is sent from the app: it opens the phone's messages with the offer written out.
+            Linking.openURL(`sms:${phone}?body=${encodeURIComponent(message)}`).then(
+              () => showToast(`Đã mở tin nhắn tới ${name}. Hãy bấm gửi trong ứng dụng tin nhắn.`),
+              () => showToast('Không mở được tin nhắn. Hãy gọi trực tiếp cho đại lý.'),
+            );
+          }}
+        />
+      )}
       {toast && <View accessibilityRole="alert" style={styles.toast}><Icon name="check_circle" size={20} color={COLORS.secondaryContainer} /><FontText type="bodySm" style={styles.toastText}>{toast}</FontText></View>}
     </SafeAreaView>
   );
