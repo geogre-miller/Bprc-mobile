@@ -137,7 +137,7 @@ export const PRICE_OBSERVATIONS: PriceObservation[] = [
 export const BUYERS: BuyerProfile[] = [
   {
     id: 'b1',
-    name: 'Đại lý Nông sản Minh Tâm',
+    name: 'Đại lý Toàn Thắng',
     address: {
       line: 'QL40, Thôn 1',
       district: 'Ngọc Hồi',
@@ -145,9 +145,9 @@ export const BUYERS: BuyerProfile[] = [
       location: { latitude: 14.7, longitude: 107.68 },
     },
     commodities: ['coffee', 'pepper'],
-    contactPhone: '0905 123 456',
+    contactPhone: '0914 829 102',
     verified: true,
-    reputationScore: 4.6,
+    reputationScore: 4.9,
   },
   {
     id: 'b2',

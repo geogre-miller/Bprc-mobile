@@ -2,138 +2,27 @@ import { Link } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
-  KeyboardAvoidingView,
   Linking,
-  Modal,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/app-header';
+import { BottomSheet, SheetOption, SheetOptions, SheetResetOption } from '@/components/ui/bottom-sheet';
+import { Chip } from '@/components/ui/chip';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
-import { BottomTabInset, Layout, LightPalette, Radius } from '@/constants/theme';
+import { BottomTabInset, LightPalette, Radius } from '@/constants/theme';
 
-import { Icon, type IconName } from '../home-dashboard/icons';
+import { BUYER_DIRECTORY, type BuyerDirectoryEntry, type BuyerPrice } from '@/data/buyer-directory';
+
+import { Icon } from '../home-dashboard/icons';
 
 
 const COLORS = LightPalette;
-
-type Price = {
-  label: string;
-  value: string;
-  note: string;
-  noteTone?: 'positive' | 'muted';
-  badge?: string;
-};
-
-type BuyerDirectoryCard = {
-  id: 'b1' | 'b2' | 'b3';
-  name: string;
-  verified: boolean;
-  verificationIcon: IconName;
-  rating: string;
-  metadata: string[];
-  badge: string;
-  badgeTone: 'green' | 'orange' | 'neutral';
-  trust?: string;
-  trustIcon?: IconName;
-  trustTone?: 'green' | 'orange';
-  prices: [Price, Price];
-  addressIcon: IconName;
-  address: string;
-  distance: string;
-  policyIcon: IconName;
-  policy: string;
-  phone: string;
-  callLabel: string;
-  quote?: boolean;
-  productTags: string[];
-  distanceKm: number;
-};
-
-const BUYER_CARDS: BuyerDirectoryCard[] = [
-  {
-    id: 'b1',
-    name: 'Đại lý Nông Sản Toàn Thắng',
-    verified: true,
-    verificationIcon: 'verified',
-    rating: '4.9',
-    metadata: ['48 lượt đánh giá'],
-    badge: 'Đã chốt 4 vụ',
-    badgeTone: 'green',
-    trust: 'Bạn đã bán thành công 14.2 tấn với đại lý này',
-    trustIcon: 'handshake',
-    trustTone: 'green',
-    prices: [
-      { label: 'Cà phê nhân xô (Xô đẹp)', value: '119,200', note: '+1,200₫ so với hôm qua', noteTone: 'positive' },
-      { label: 'Tiêu đen khô (Dung trọng 550)', value: '148,500', note: 'Ổn định', noteTone: 'muted' },
-    ],
-    addressIcon: 'pin_drop',
-    address: 'Km 14, Quốc lộ 14, TX. Buôn Hồ',
-    distance: '(Cách bạn 3.8 km)',
-    policyIcon: 'payments',
-    policy: 'Tiền mặt / Chuyển khoản trong 5 phút. Xe bốc tận vườn.',
-    phone: '0914829102',
-    callLabel: '0914.829.xxx',
-    productTags: ['coffee', 'pepper'],
-    distanceKm: 3.8,
-  },
-  {
-    id: 'b2',
-    name: 'HTX Cà Phê Bền Vững Ea Tu',
-    verified: true,
-    verificationIcon: 'workspace_premium',
-    rating: '4.8',
-    metadata: ['82 nông hộ liên kết', 'Uy tín 6 năm'],
-    badge: 'Xuất khẩu & OCOP',
-    badgeTone: 'orange',
-    trust: 'Ưu tiên thu mua quả chín cây tự nhiên, bảo trợ giá sàn 1 năm',
-    trustIcon: 'local_florist',
-    trustTone: 'orange',
-    prices: [
-      { label: 'Hái chín > 90%', value: '122,000', note: '+3,500₫ chênh lệch', noteTone: 'positive', badge: 'Cộng thưởng' },
-      { label: 'Robusta Tiêu Chuẩn', value: '118,500', note: 'Nhân sàn 16/18', noteTone: 'muted' },
-    ],
-    addressIcon: 'location_on',
-    address: 'Xã Ea Tu, TP. Buôn Ma Thuột',
-    distance: '(Cách bạn 8.2 km)',
-    policyIcon: 'fact_check',
-    policy: 'Hợp đồng bao tiêu dài hạn, tạm ứng trước phân bón hữu cơ.',
-    phone: '0943187291',
-    callLabel: 'Gọi HTX Ea Tu',
-    quote: true,
-    productTags: ['coffee'],
-    distanceKm: 8.2,
-  },
-  {
-    id: 'b3',
-    name: 'Kho Nông Sản XK An Phát',
-    verified: true,
-    verificationIcon: 'verified',
-    rating: '4.7',
-    metadata: ['Thương vụ lớn (> 2 tấn)'],
-    badge: 'Thu mua số lượng',
-    badgeTone: 'neutral',
-    prices: [
-      { label: 'Sầu riêng Dona (Loại 1)', value: '107,000', note: 'Hái theo lứa cắt', noteTone: 'muted' },
-      { label: 'Sầu riêng Ri6 (Loại A)', value: '89,000', note: 'Cần 15 tấn gấp', noteTone: 'positive' },
-    ],
-    addressIcon: 'place',
-    address: 'Huyện Krông Pắk, Đắk Lắk',
-    distance: '(Cách bạn 14.5 km)',
-    policyIcon: 'local_shipping',
-    policy: 'Điều đội xe container & thợ cắt chuyên nghiệp đến tận lô.',
-    phone: '0905112233',
-    callLabel: 'Gọi An Phát',
-    productTags: ['durian'],
-    distanceKm: 14.5,
-  },
-];
 
 type FilterSheetKind = 'product' | 'radius' | 'advanced';
 
@@ -145,29 +34,6 @@ function FontText({ children, style, type = 'bodySm', ...props }: React.Componen
   );
 }
 
-
-function Chip({ children, selected, icon, onPress, accessibilityLabel, tone = 'default' }: {
-  children: string;
-  selected?: boolean;
-  icon?: IconName;
-  onPress: () => void;
-  accessibilityLabel?: string;
-  tone?: 'default' | 'orange';
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? children}
-      accessibilityState={{ selected: Boolean(selected) }}
-      hitSlop={4}
-      onPress={onPress}
-      style={({ pressed }) => [styles.filterChip, selected ? styles.filterChipSelected : styles.filterChipIdle, tone === 'orange' && !selected && styles.filterChipOrange, pressed && styles.pressed]}>
-      {icon && <Icon name={icon} size={16} color={selected ? COLORS.onPrimary : tone === 'orange' ? COLORS.tertiaryCopy : COLORS.secondary} />}
-      <FontText type="labelMd" style={[styles.filterChipText, { color: selected ? COLORS.onPrimary : COLORS.onSurfaceVariant }]}>{children}</FontText>
-      {!icon && <Icon name="expand_more" size={16} color={selected ? COLORS.onPrimary : COLORS.onSurfaceVariant} />}
-    </Pressable>
-  );
-}
 
 function SafetyTip() {
   return (
@@ -184,7 +50,7 @@ function SafetyTip() {
   );
 }
 
-function PriceWell({ price }: { price: Price }) {
+function PriceWell({ price }: { price: BuyerPrice }) {
   return (
     <View style={styles.priceWell}>
       <View style={styles.priceLabelRow}>
@@ -200,7 +66,19 @@ function PriceWell({ price }: { price: Price }) {
   );
 }
 
-function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (buyerName: string) => void }) {
+function TrustCopy({ text, highlight }: { text: string; highlight?: string }) {
+  if (!highlight || !text.includes(highlight)) return <>{text}</>;
+  const [before, after] = text.split(highlight);
+  return (
+    <>
+      {before}
+      <FontText type="bodySm" style={styles.trustStrong}>{highlight}</FontText>
+      {after}
+    </>
+  );
+}
+
+function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryEntry; onQuote: (buyerName: string) => void }) {
   const callBuyer = () => { void Linking.openURL(`tel:${buyer.phone}`).catch(() => undefined); };
 
   return (
@@ -229,7 +107,7 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (bu
         <View style={styles.trustStrip}>
           <Icon name={buyer.trustIcon} size={18} color={buyer.trustTone === 'orange' ? COLORS.tertiaryCopy : COLORS.secondary} />
           <FontText type="bodySm" numberOfLines={1} style={styles.trustText}>
-            {buyer.id === 'b1' ? <>Bạn đã bán thành công <FontText type="bodySm" style={styles.trustStrong}>14.2 tấn</FontText> với đại lý này</> : buyer.trust}
+            <TrustCopy text={buyer.trust ?? ''} highlight={buyer.trustHighlight} />
           </FontText>
         </View>
       )}
@@ -273,6 +151,19 @@ function BuyerCard({ buyer, onQuote }: { buyer: BuyerDirectoryCard; onQuote: (bu
   );
 }
 
+const PRODUCT_OPTIONS = [
+  ['all', 'Tất cả mặt hàng'],
+  ['coffee', 'Cà phê Robusta'],
+  ['pepper', 'Tiêu đen'],
+  ['durian', 'Sầu riêng'],
+] as const;
+
+const RADIUS_OPTIONS = [
+  [null, 'Tất cả khu vực'],
+  [15, 'Bán kính: < 15km'],
+  [10, 'Bán kính: < 10km'],
+] as const;
+
 function FilterSheet({ kind, productFilter, radiusFilter, verifiedOnly, highestPrice, onClose, onProductChange, onRadiusChange, onVerifiedChange, onHighestPriceChange, onReset }: {
   kind: FilterSheetKind;
   productFilter: string | null;
@@ -287,30 +178,40 @@ function FilterSheet({ kind, productFilter, radiusFilter, verifiedOnly, highestP
   onReset: () => void;
 }) {
   const title = kind === 'product' ? 'Chọn mặt hàng' : kind === 'radius' ? 'Bán kính thu mua' : 'Bộ lọc chuyên sâu';
-  const insets = useSafeAreaInsets();
   return (
-    <Modal transparent animationType="slide" visible onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.modalRoot}>
-        <Pressable accessibilityLabel="Đóng bộ lọc" style={styles.modalBackdrop} onPress={onClose} />
-        <View style={[styles.sheet, { paddingBottom: 20 + insets.bottom }]}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.sheetHeader}><FontText type="headlineSm" style={styles.sheetTitle}>{title}</FontText><Pressable accessibilityRole="button" accessibilityLabel="Đóng bộ lọc" hitSlop={2} onPress={onClose} style={styles.sheetClose}><Icon name="close" size={20} color={COLORS.onSurfaceVariant} /></Pressable></View>
-          {kind === 'product' && <View style={styles.optionList}>{[['all', 'Tất cả mặt hàng'], ['coffee', 'Cà phê Robusta'], ['pepper', 'Tiêu đen'], ['durian', 'Sầu riêng']].map(([value, label]) => {
-            const selected = value === 'all' ? productFilter == null : productFilter === value;
-            return <Pressable key={value} accessibilityRole="button" accessibilityState={{ selected }} onPress={() => { onProductChange(value === 'all' ? null : value); onClose(); }} style={[styles.option, selected && styles.optionSelected]}><FontText type="bodySm" style={styles.optionText}>{label}</FontText>{selected && <Icon name="check_circle" size={20} color={COLORS.secondary} />}</Pressable>;
-          })}</View>}
-          {kind === 'radius' && <View style={styles.optionList}>{[[null, 'Tất cả khu vực'], [15, 'Bán kính: < 15km'], [10, 'Bán kính: < 10km']].map(([value, label]) => {
-            const selected = value === radiusFilter;
-            return <Pressable key={String(value)} accessibilityRole="button" accessibilityState={{ selected }} onPress={() => { onRadiusChange(value as number | null); onClose(); }} style={[styles.option, selected && styles.optionSelected]}><FontText type="bodySm" style={styles.optionText}>{label}</FontText>{selected && <Icon name="check_circle" size={20} color={COLORS.secondary} />}</Pressable>;
-          })}</View>}
-          {kind === 'advanced' && <View style={styles.optionList}>
-            <Pressable accessibilityRole="button" accessibilityState={{ selected: verifiedOnly }} onPress={() => onVerifiedChange(!verifiedOnly)} style={[styles.option, verifiedOnly && styles.optionSelected]}><View style={styles.optionLabel}><Icon name="check_circle" size={20} color={COLORS.secondary} /><FontText type="bodySm" style={styles.optionText}>Đã xác thực</FontText></View>{verifiedOnly && <Icon name="check_circle" size={20} color={COLORS.secondary} />}</Pressable>
-            <Pressable accessibilityRole="button" accessibilityState={{ selected: highestPrice }} onPress={() => onHighestPriceChange(!highestPrice)} style={[styles.option, highestPrice && styles.optionSelected]}><View style={styles.optionLabel}><Icon name="trending_up" size={20} color={COLORS.tertiaryCopy} /><FontText type="bodySm" style={styles.optionText}>Giá cao nhất</FontText></View>{highestPrice && <Icon name="check_circle" size={20} color={COLORS.secondary} />}</Pressable>
-            <Pressable accessibilityRole="button" onPress={onReset} style={styles.resetOption}><FontText type="labelMd" style={styles.resetText}>Xóa tất cả bộ lọc</FontText></Pressable>
-          </View>}
-        </View>
-      </KeyboardAvoidingView>
-    </Modal>
+    <BottomSheet title={title} closeLabel="Đóng bộ lọc" onClose={onClose}>
+      {kind === 'product' && (
+        <SheetOptions>
+          {PRODUCT_OPTIONS.map(([value, label]) => (
+            <SheetOption
+              key={value}
+              label={label}
+              selected={value === 'all' ? productFilter == null : productFilter === value}
+              onPress={() => { onProductChange(value === 'all' ? null : value); onClose(); }}
+            />
+          ))}
+        </SheetOptions>
+      )}
+      {kind === 'radius' && (
+        <SheetOptions>
+          {RADIUS_OPTIONS.map(([value, label]) => (
+            <SheetOption
+              key={String(value)}
+              label={label}
+              selected={value === radiusFilter}
+              onPress={() => { onRadiusChange(value); onClose(); }}
+            />
+          ))}
+        </SheetOptions>
+      )}
+      {kind === 'advanced' && (
+        <SheetOptions>
+          <SheetOption icon="check_circle" label="Đã xác thực" selected={verifiedOnly} onPress={() => onVerifiedChange(!verifiedOnly)} />
+          <SheetOption icon="trending_up" label="Giá cao nhất" selected={highestPrice} onPress={() => onHighestPriceChange(!highestPrice)} />
+          <SheetResetOption label="Xóa tất cả bộ lọc" onPress={onReset} />
+        </SheetOptions>
+      )}
+    </BottomSheet>
   );
 }
 
@@ -321,33 +222,22 @@ function QuotationSheet({ buyerName, onClose, onSubmit }: { buyerName: string; o
   const [note, setNote] = useState('');
   const [commodityOptionsOpen, setCommodityOptionsOpen] = useState(false);
   const options = ['Cà phê Robusta xô chín (Đã phơi giàn)', 'Cà phê Robusta tươi (Hái xô)', 'Tiêu đen chuẩn xuất khẩu', 'Sầu riêng Dona cắt vườn'];
-  const insets = useSafeAreaInsets();
 
   return (
-    <Modal transparent animationType="slide" visible onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.modalRoot}>
-        <Pressable accessibilityLabel="Đóng cửa sổ báo giá" style={styles.modalBackdrop} onPress={onClose} />
-        <View style={[styles.sheet, { paddingBottom: 20 + insets.bottom }]}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.sheetHeader}>
-            <View style={styles.sheetTitleCopy}><FontText type="labelSm" style={styles.quotationEyebrow}>CHÀO HÀNG TRỰC TIẾP</FontText><FontText type="headlineSm" numberOfLines={2} style={styles.sheetTitle}>{buyerName}</FontText></View>
-            <Pressable accessibilityRole="button" accessibilityLabel="Đóng báo giá" hitSlop={2} onPress={onClose} style={styles.sheetClose}><Icon name="close" size={20} color={COLORS.onSurfaceVariant} /></Pressable>
-          </View>
-          <ScrollView style={styles.quotationScroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-            <FontText type="labelMd" style={styles.fieldLabel}>Nông sản xuất bán</FontText>
-            <Pressable accessibilityRole="button" accessibilityLabel="Chọn nông sản xuất bán" onPress={() => setCommodityOptionsOpen((value) => !value)} style={styles.selectField}><FontText type="bodySm" numberOfLines={1} style={styles.selectText}>{commodity}</FontText><Icon name="expand_more" size={20} color={COLORS.outline} /></Pressable>
-            {commodityOptionsOpen && <View style={styles.selectOptions}>{options.map((option) => <Pressable key={option} accessibilityRole="button" onPress={() => { setCommodity(option); setCommodityOptionsOpen(false); }} style={styles.selectOption}><FontText type="bodySm" style={styles.optionText}>{option}</FontText></Pressable>)}</View>}
-            <View style={styles.formGrid}>
-              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Ước tính sản lượng</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Ước tính sản lượng" keyboardType="decimal-pad" onChangeText={setQuantity} placeholder="3.5" placeholderTextColor={COLORS.outline} style={styles.formInput} value={quantity} /><FontText type="labelMd" style={styles.inputSuffix}>Tấn</FontText></View></View>
-              <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Giá bạn mong muốn</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Giá bạn mong muốn" keyboardType="number-pad" onChangeText={setDesiredPrice} placeholder="121,000" placeholderTextColor={COLORS.outline} style={styles.formInput} value={desiredPrice} /><FontText type="labelSm" style={styles.inputSuffix}>₫/kg</FontText></View></View>
-            </View>
-            <FontText type="labelMd" style={styles.fieldLabel}>Ghi chú thêm</FontText>
-            <ThemedTextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
-          </ScrollView>
-          <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
+    <BottomSheet eyebrow="CHÀO HÀNG TRỰC TIẾP" title={buyerName} closeLabel="Đóng báo giá" onClose={onClose}>
+      <ScrollView style={styles.quotationScroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <FontText type="labelMd" style={styles.fieldLabel}>Nông sản xuất bán</FontText>
+        <Pressable accessibilityRole="button" accessibilityLabel="Chọn nông sản xuất bán" onPress={() => setCommodityOptionsOpen((value) => !value)} style={styles.selectField}><FontText type="bodySm" numberOfLines={1} style={styles.selectText}>{commodity}</FontText><Icon name="expand_more" size={20} color={COLORS.outline} /></Pressable>
+        {commodityOptionsOpen && <View style={styles.selectOptions}>{options.map((option) => <Pressable key={option} accessibilityRole="button" onPress={() => { setCommodity(option); setCommodityOptionsOpen(false); }} style={styles.selectOption}><FontText type="bodySm" style={styles.optionText}>{option}</FontText></Pressable>)}</View>}
+        <View style={styles.formGrid}>
+          <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Ước tính sản lượng</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Ước tính sản lượng" keyboardType="decimal-pad" onChangeText={setQuantity} placeholder="3.5" placeholderTextColor={COLORS.outline} style={styles.formInput} value={quantity} /><FontText type="labelMd" style={styles.inputSuffix}>Tấn</FontText></View></View>
+          <View style={styles.formFieldHalf}><FontText type="labelMd" style={styles.fieldLabel}>Giá bạn mong muốn</FontText><View style={styles.inputWithSuffix}><ThemedTextInput accessibilityLabel="Giá bạn mong muốn" keyboardType="number-pad" onChangeText={setDesiredPrice} placeholder="121,000" placeholderTextColor={COLORS.outline} style={styles.formInput} value={desiredPrice} /><FontText type="labelSm" style={styles.inputSuffix}>₫/kg</FontText></View></View>
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+        <FontText type="labelMd" style={styles.fieldLabel}>Ghi chú thêm</FontText>
+        <ThemedTextInput accessibilityLabel="Ghi chú thêm" onChangeText={setNote} placeholder="Vườn cách đường lớn 200m, xe tải 8T vào được..." placeholderTextColor={COLORS.outline} style={styles.noteInput} value={note} />
+      </ScrollView>
+      <View style={styles.modalActions}><Pressable accessibilityRole="button" onPress={onClose} style={styles.cancelButton}><FontText type="titleMd" style={styles.cancelButtonText}>Hủy</FontText></Pressable><Pressable accessibilityRole="button" onPress={onSubmit} style={styles.submitButton}><Icon name="send" size={18} color={COLORS.onPrimary} /><FontText type="titleMd" style={styles.submitButtonText}>Gửi ngay</FontText></Pressable></View>
+    </BottomSheet>
   );
 }
 
@@ -373,12 +263,12 @@ export function BuyerList() {
 
   const visibleBuyers = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase('vi');
-    const filtered = BUYER_CARDS.filter((buyer) => {
+    const filtered = BUYER_DIRECTORY.filter((buyer) => {
       const buyerText = [buyer.name, buyer.badge, buyer.trust, buyer.address, buyer.distance, buyer.policy, ...buyer.metadata, ...buyer.prices.flatMap((price) => [price.label, price.value, price.note])].filter(Boolean).join(' ').toLocaleLowerCase('vi');
       return (!needle || buyerText.includes(needle)) && (!productFilter || buyer.productTags.includes(productFilter)) && (radiusFilter == null || buyer.distanceKm < radiusFilter) && (!verifiedOnly || buyer.verified);
     });
     if (!highestPrice) return filtered;
-    const maxPrice = (buyer: BuyerDirectoryCard) => Math.max(...buyer.prices.map((price) => Number(price.value.replace(/,/g, ''))));
+    const maxPrice = (buyer: BuyerDirectoryEntry) => Math.max(...buyer.prices.map((price) => Number(price.value.replace(/,/g, ''))));
     return [...filtered].sort((a, b) => maxPrice(b) - maxPrice(a));
   }, [highestPrice, productFilter, query, radiusFilter, verifiedOnly]);
 
@@ -405,10 +295,10 @@ export function BuyerList() {
             <Pressable accessibilityRole="button" accessibilityLabel="Bộ lọc chuyên sâu" onPress={() => setSheet('advanced')} style={styles.filterButton}><Icon name="tune" size={20} color={filtersActive ? COLORS.secondary : COLORS.onSurface} /><View style={[styles.filterDot, !filtersActive && styles.hiddenDot]} /></Pressable>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow} style={styles.filterScroll}>
-            <Chip onPress={() => setSheet('product')} selected>{productFilter === 'pepper' ? 'Tiêu đen' : productFilter === 'durian' ? 'Sầu riêng' : 'Cà phê Robusta'}</Chip>
-            <Chip onPress={() => setSheet('radius')} selected={Boolean(radiusFilter)}>{radiusFilter ? `Bán kính: < ${radiusFilter}km` : 'Bán kính: < 15km'}</Chip>
-            <Chip onPress={() => setVerifiedOnly((value) => !value)} selected={verifiedOnly} icon="check_circle">Đã xác thực</Chip>
-            <Chip onPress={() => setHighestPrice((value) => !value)} selected={highestPrice} icon="trending_up" tone="orange">Giá cao nhất</Chip>
+            <Chip dropdown selected onPress={() => setSheet('product')} label={productFilter === 'pepper' ? 'Tiêu đen' : productFilter === 'durian' ? 'Sầu riêng' : 'Cà phê Robusta'} />
+            <Chip dropdown selected={Boolean(radiusFilter)} onPress={() => setSheet('radius')} label={radiusFilter ? `Bán kính: < ${radiusFilter}km` : 'Bán kính: < 15km'} />
+            <Chip icon="check_circle" selected={verifiedOnly} onPress={() => setVerifiedOnly((value) => !value)} label="Đã xác thực" />
+            <Chip icon="trending_up" selected={highestPrice} onPress={() => setHighestPrice((value) => !value)} label="Giá cao nhất" />
           </ScrollView>
           <SafetyTip />
           <View style={styles.buyerList}>{visibleBuyers.length === 0 ? <View style={styles.emptyState}><FontText type="bodySm" style={styles.emptyStateText}>Không có đại lý nào khớp bộ lọc.</FontText></View> : visibleBuyers.map((buyer) => <BuyerCard key={buyer.id} buyer={buyer} onQuote={setQuotationBuyer} />)}</View>
@@ -442,11 +332,6 @@ const styles = StyleSheet.create({
   hiddenDot: { opacity: 0 },
   filterScroll: { marginHorizontal: -16 },
   filterRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 2 },
-  filterChip: { minHeight: Layout.touchTarget, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  filterChipText: { fontWeight: '500' },
-  filterChipSelected: { backgroundColor: COLORS.secondary },
-  filterChipIdle: { backgroundColor: COLORS.surface },
-  filterChipOrange: { backgroundColor: COLORS.surface },
   safetyTip: { position: 'relative', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 16, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow, overflow: 'hidden', shadowColor: COLORS.shadow, shadowOpacity: 0.03, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
   safetyIconWell: { width: 32, height: 32, marginTop: 2, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.secondaryContainer },
   safetyCopy: { flex: 1, minWidth: 0, gap: 2 },
@@ -506,22 +391,7 @@ const styles = StyleSheet.create({
   inlineLinkText: { color: COLORS.secondary, fontWeight: '600' },
   linkSeparator: { color: COLORS.outline },
   policyLinkText: { color: COLORS.onSurfaceVariant, fontWeight: '500' },
-  modalRoot: { flex: 1, justifyContent: 'flex-end' },
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: COLORS.primaryScrim },
-  sheet: { width: '100%', maxWidth: 430, maxHeight: '92%', alignSelf: 'center', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOpacity: 0.16, shadowRadius: 16, shadowOffset: { width: 0, height: -4 }, elevation: 8 },
-  sheetHandle: { width: 40, height: 4, alignSelf: 'center', marginBottom: 12, borderRadius: 2, backgroundColor: COLORS.outline, opacity: 0.45 },
-  sheetHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 16 },
-  sheetTitleCopy: { flex: 1, gap: 4 },
-  sheetTitle: { color: COLORS.primary, fontWeight: '700' },
-  quotationEyebrow: { color: COLORS.secondary, fontWeight: '700', letterSpacing: 0.6 },
-  sheetClose: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.full, backgroundColor: COLORS.surfaceContainer },
-  optionList: { gap: 8 },
-  option: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },
-  optionSelected: { backgroundColor: COLORS.secondaryContainer },
-  optionLabel: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   optionText: { color: COLORS.onSurface },
-  resetOption: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 12 },
-  resetText: { color: COLORS.error, fontWeight: '600' },
   quotationScroll: { flexGrow: 0, maxHeight: 420, marginBottom: 12 },
   fieldLabel: { marginBottom: 4, color: COLORS.onSurface, fontWeight: '600' },
   selectField: { minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingHorizontal: 12, borderRadius: Radius.container, backgroundColor: COLORS.surfaceLow },

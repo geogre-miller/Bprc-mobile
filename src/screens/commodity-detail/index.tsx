@@ -6,6 +6,7 @@ import Svg, { Circle, Defs, LinearGradient, Line, Path, Stop } from 'react-nativ
 
 import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
+import { Chip } from '@/components/ui/chip';
 import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import type { Commodity } from '@/types/domain';
@@ -408,14 +409,16 @@ export function CommodityDetail({
               </ThemedText>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.sortRow}>
-              <SortChip
+              <Chip
+                size="sm"
                 label="Giá cao nhất"
                 icon="arrow_downward"
+                accessibilityLabel="Sắp xếp: Giá cao nhất"
                 selected={buyerSort === 'price'}
                 onPress={() => setBuyerSort('price')}
               />
-              <SortChip label="Gần tôi nhất" selected={buyerSort === 'nearby'} onPress={() => setBuyerSort('nearby')} />
-              <SortChip label="Đã xác thực" selected={buyerSort === 'verified'} onPress={() => setBuyerSort('verified')} />
+              <Chip size="sm" label="Gần tôi nhất" accessibilityLabel="Sắp xếp: Gần tôi nhất" selected={buyerSort === 'nearby'} onPress={() => setBuyerSort('nearby')} />
+              <Chip size="sm" label="Đã xác thực" accessibilityLabel="Sắp xếp: Đã xác thực" selected={buyerSort === 'verified'} onPress={() => setBuyerSort('verified')} />
             </ScrollView>
             {buyers.map((buyer) => (
               <BuyerCard
@@ -469,27 +472,6 @@ export function CommodityDetail({
         </View>
       </View>
     </SafeAreaView>
-  );
-}
-
-function SortChip({ label, icon, selected, onPress }: { label: string; icon?: IconName; selected: boolean; onPress: () => void }) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`Sắp xếp: ${label}`}
-      accessibilityState={{ selected }}
-      hitSlop={4}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.sortChip,
-        { backgroundColor: selected ? SCREEN_COLORS.secondary : SCREEN_COLORS.surfaceLow },
-        pressed && styles.pressed,
-      ]}>
-      {icon && <Icon name={icon} size={15} color={selected ? SCREEN_COLORS.onPrimary : SCREEN_COLORS.onSurfaceVariant} />}
-      <ThemedText type="labelSm" style={[styles.buttonLabel, { color: selected ? SCREEN_COLORS.onPrimary : SCREEN_COLORS.onSurfaceVariant }]}>
-        {label}
-      </ThemedText>
-    </Pressable>
   );
 }
 
@@ -617,7 +599,6 @@ const styles = StyleSheet.create({
   statValue: { fontWeight: '700' },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.two, paddingHorizontal: Spacing.one },
   sortRow: { gap: Spacing.two, paddingVertical: Spacing.half },
-  sortChip: { minHeight: 32, paddingHorizontal: 12, borderRadius: Radius.full, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.one },
   buyerCard: { marginBottom: Spacing.one },
   buyerHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: Spacing.two },
   buyerIdentity: { flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 },

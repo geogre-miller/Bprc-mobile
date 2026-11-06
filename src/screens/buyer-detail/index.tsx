@@ -1,11 +1,8 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   Image,
-  KeyboardAvoidingView,
   Linking,
-  Modal,
-  Platform,
   Pressable,
   ScrollView,
   Share,
@@ -16,6 +13,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/app-header';
+import { BottomSheet } from '@/components/ui/bottom-sheet';
+import { Card } from '@/components/ui/card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { LightPalette, Layout, Spacing } from '@/constants/theme';
@@ -26,8 +25,6 @@ import { Icon, type IconName } from '../home-dashboard/icons';
 
 const COLORS = LightPalette;
 
-const PHONE = '0914829374';
-
 type CommodityChoice = { id: 'coffee' | 'pepper'; label: string; price: number };
 
 const COMMODITY_CHOICES: CommodityChoice[] = [
@@ -36,10 +33,6 @@ const COMMODITY_CHOICES: CommodityChoice[] = [
 ];
 
 const formatNumber = (value: number) => value.toLocaleString('en-US');
-
-function Card({ children, style }: { children: ReactNode; style?: object }) {
-  return <View style={[styles.card, style]}>{children}</View>;
-}
 
 function TrustStat({ icon, value, label, color }: { icon: IconName; value: string; label: string; color: string }) {
   return (
@@ -180,7 +173,7 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   const estimate = useMemo(() => (Number(weight) || 0) * commodity.price, [commodity.price, weight]);
 
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/buyers'));
-  const callBuyer = () => Linking.openURL(`tel:${PHONE}`);
+  const callBuyer = () => Linking.openURL(`tel:${(buyer?.contactPhone ?? '').replace(/\s/g, '')}`);
   const shareBuyer = () => Share.share({
     title: 'Đại lý Toàn Thắng',
     message: 'Đại lý Toàn Thắng đang thu mua nông sản tại Đắk Lắk trên Mùa Vàng.',
@@ -325,62 +318,52 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
 
       </View>
 
-      <Modal visible={saleOpen} transparent animationType="slide" onRequestClose={() => setSaleOpen(false)}>
-        <KeyboardAvoidingView style={styles.modalRoot} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Đóng phiếu chốt giá" style={styles.scrim} onPress={() => setSaleOpen(false)} />
-          <View style={[styles.sheet, { paddingBottom: 16 + insets.bottom }]}>
-            <View style={styles.sheetHeader}>
-              <View>
-                <ThemedText type="headlineSm" style={styles.sheetTitle}>Tạo phiếu chốt giá</ThemedText>
-                <ThemedText type="labelSm" style={styles.sheetSubtitle}>Gửi trực tiếp đến Đại lý Toàn Thắng</ThemedText>
-              </View>
-              <Pressable accessibilityRole="button" accessibilityLabel="Đóng" onPress={() => setSaleOpen(false)} style={styles.sheetClose}>
-                <Icon name="close" size={18} color={COLORS.onSurfaceVariant} />
-              </Pressable>
-            </View>
-            <View style={styles.fieldGroup}>
-              <ThemedText type="labelMd" style={styles.fieldLabel}>Chọn nông sản xuất kho:</ThemedText>
-              <View accessibilityRole="tablist" style={styles.commodityRow}>
-                {COMMODITY_CHOICES.map((item) => {
-                  const selected = item.id === commodityId;
-                  return (
-                    <Pressable key={item.id} accessibilityRole="tab" accessibilityState={{ selected }} aria-selected={selected} onPress={() => setCommodityId(item.id)} style={[styles.commodityChip, selected && styles.commodityChipSelected]}>
-                      <ThemedText type="labelMd" style={[styles.commodityText, selected && styles.commodityTextSelected]}>{item.label}</ThemedText>
-                      {selected && <Icon name="check_circle" size={16} color={COLORS.onSecondaryContainer} />}
-                    </Pressable>
-                  );
-                })}
-              </View>
-            </View>
-            <View style={styles.fieldGroup}>
-              <View style={styles.inputHeader}>
-                <ThemedText type="labelMd" style={styles.fieldLabel}>Khối lượng bán (kg):</ThemedText>
-                <ThemedText type="labelSm" style={styles.availableText}>Có sẵn: 5,400 kg trong kho</ThemedText>
-              </View>
-              <View style={styles.inputWrap}>
-                <ThemedTextInput accessibilityLabel="Khối lượng bán" value={weight} onChangeText={setWeight} keyboardType="numeric" inputMode="numeric" style={styles.weightInput} />
-                <ThemedText type="labelMd" style={styles.inputUnit}>kg</ThemedText>
-              </View>
-            </View>
-            <View style={styles.estimateCard}>
-              <View>
-                <ThemedText type="labelSm" style={styles.mutedLabel}>Ước tính thành tiền:</ThemedText>
-                <ThemedText type="numericLg" style={styles.estimateValue}>{formatNumber(estimate)} ₫</ThemedText>
-              </View>
-              <View style={styles.currentBadge}><ThemedText type="labelSm" style={styles.updatedText}>Theo giá hiện tại</ThemedText></View>
-            </View>
-            <View style={styles.sheetActions}>
-              <Pressable accessibilityRole="button" accessibilityLabel="Hủy tạo phiếu" onPress={() => setSaleOpen(false)} style={styles.cancelButton}>
-                <ThemedText type="titleMd" style={styles.cancelText}>Hủy</ThemedText>
-              </Pressable>
-              <Pressable accessibilityRole="button" accessibilityLabel="Gửi yêu cầu chốt" onPress={submitSale} style={styles.submitButton}>
-                <Icon name="send" size={18} color={COLORS.onPrimary} />
-                <ThemedText type="titleMd" style={styles.submitText}>Gửi yêu cầu chốt</ThemedText>
-              </Pressable>
-            </View>
+      {saleOpen && (
+        <BottomSheet title="Tạo phiếu chốt giá" subtitle="Gửi trực tiếp đến Đại lý Toàn Thắng" closeLabel="Đóng phiếu chốt giá" onClose={() => setSaleOpen(false)}>
+          <View style={styles.sheetBody}>
+        <View style={styles.fieldGroup}>
+          <ThemedText type="labelMd" style={styles.fieldLabel}>Chọn nông sản xuất kho:</ThemedText>
+          <View accessibilityRole="tablist" style={styles.commodityRow}>
+            {COMMODITY_CHOICES.map((item) => {
+              const selected = item.id === commodityId;
+              return (
+                <Pressable key={item.id} accessibilityRole="tab" accessibilityState={{ selected }} aria-selected={selected} onPress={() => setCommodityId(item.id)} style={[styles.commodityChip, selected && styles.commodityChipSelected]}>
+                  <ThemedText type="labelMd" style={[styles.commodityText, selected && styles.commodityTextSelected]}>{item.label}</ThemedText>
+                  {selected && <Icon name="check_circle" size={16} color={COLORS.onSecondaryContainer} />}
+                </Pressable>
+              );
+            })}
           </View>
-        </KeyboardAvoidingView>
-      </Modal>
+        </View>
+        <View style={styles.fieldGroup}>
+          <View style={styles.inputHeader}>
+            <ThemedText type="labelMd" style={styles.fieldLabel}>Khối lượng bán (kg):</ThemedText>
+            <ThemedText type="labelSm" style={styles.availableText}>Có sẵn: 5,400 kg trong kho</ThemedText>
+          </View>
+          <View style={styles.inputWrap}>
+            <ThemedTextInput accessibilityLabel="Khối lượng bán" value={weight} onChangeText={setWeight} keyboardType="numeric" inputMode="numeric" style={styles.weightInput} />
+            <ThemedText type="labelMd" style={styles.inputUnit}>kg</ThemedText>
+          </View>
+        </View>
+        <View style={styles.estimateCard}>
+          <View>
+            <ThemedText type="labelSm" style={styles.mutedLabel}>Ước tính thành tiền:</ThemedText>
+            <ThemedText type="numericLg" style={styles.estimateValue}>{formatNumber(estimate)} ₫</ThemedText>
+          </View>
+          <View style={styles.currentBadge}><ThemedText type="labelSm" style={styles.updatedText}>Theo giá hiện tại</ThemedText></View>
+        </View>
+        <View style={styles.sheetActions}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Hủy tạo phiếu" onPress={() => setSaleOpen(false)} style={styles.cancelButton}>
+            <ThemedText type="titleMd" style={styles.cancelText}>Hủy</ThemedText>
+          </Pressable>
+          <Pressable accessibilityRole="button" accessibilityLabel="Gửi yêu cầu chốt" onPress={submitSale} style={styles.submitButton}>
+            <Icon name="send" size={18} color={COLORS.onPrimary} />
+            <ThemedText type="titleMd" style={styles.submitText}>Gửi yêu cầu chốt</ThemedText>
+          </Pressable>
+        </View>
+          </View>
+        </BottomSheet>
+      )}
     </SafeAreaView>
   );
 }
@@ -405,8 +388,7 @@ const styles = StyleSheet.create({
   backText: { color: COLORS.onSurfaceVariant, fontWeight: '500' },
   topActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   topIconButton: { width: 40, height: 40, borderRadius: 8, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center' },
-  card: { borderRadius: 8, padding: 16, gap: 12, backgroundColor: COLORS.surfaceLowest, overflow: 'hidden', ...shadow },
-  buyerCard: { position: 'relative' },
+  buyerCard: { position: 'relative', overflow: 'hidden' },
   brandGlow: { position: 'absolute', width: 112, height: 112, borderRadius: 999, right: -32, top: -32, backgroundColor: COLORS.secondaryContainer },
   identityRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   portraitWrap: { width: 56, height: 56, borderRadius: 8, overflow: 'hidden', backgroundColor: COLORS.surfaceHigh },
@@ -488,13 +470,7 @@ const styles = StyleSheet.create({
   secondaryCtaText: { color: COLORS.primary, fontWeight: '600' },
   pressed: { opacity: 0.68 },
   ctaPressed: { opacity: 0.9, transform: [{ scale: 0.99 }] },
-  modalRoot: { flex: 1, justifyContent: 'flex-end' },
-  scrim: { ...StyleSheet.absoluteFill, backgroundColor: COLORS.surfaceScrim },
-  sheet: { width: '100%', maxWidth: 430, alignSelf: 'center', borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 16, gap: 12, backgroundColor: COLORS.surfaceLowest },
-  sheetHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  sheetTitle: { color: COLORS.primary, fontWeight: '600' },
-  sheetSubtitle: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
-  sheetClose: { width: 32, height: 32, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceContainer },
+  sheetBody: { gap: 12 },
   fieldGroup: { gap: 8 },
   fieldLabel: { color: COLORS.onSurface, fontWeight: '500' },
   commodityRow: { flexDirection: 'row', gap: 8 },

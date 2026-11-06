@@ -1,7 +1,6 @@
 import { Link } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -11,6 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
+import { BottomSheet, SheetOption, SheetOptions, SheetResetOption } from '@/components/ui/bottom-sheet';
+import { Chip } from '@/components/ui/chip';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -102,6 +103,19 @@ const MARKET_ROWS: MarketPriceRowData[] = [
 ];
 
 
+const PRODUCT_OPTIONS = [
+  ['all', 'Tất cả mặt hàng'],
+  ['coffee', 'Cà phê Robusta'],
+  ['pepper', 'Tiêu đen'],
+  ['durian', 'Sầu riêng'],
+] as const;
+
+const REGION_OPTIONS = [
+  ['all', 'Tất cả khu vực'],
+  ['Đắk Lắk', 'Khu vực: Đắk Lắk'],
+  ['Tây Nguyên', 'Khu vực: Tây Nguyên'],
+] as const;
+
 function FilterSheet({
   kind,
   productFilter,
@@ -128,115 +142,56 @@ function FilterSheet({
   const title = kind === 'product' ? 'Chọn mặt hàng' : kind === 'region' ? 'Chọn khu vực' : 'Bộ lọc chuyên sâu';
 
   return (
-    <Modal transparent animationType="slide" visible onRequestClose={onClose}>
-      <View style={styles.modalRoot}>
-        <Pressable style={styles.modalBackdrop} onPress={onClose} />
-        <View style={styles.sheet}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.sheetHeader}>
-            <ThemedText type="subtitle" style={{ color: SCREEN_COLORS.primary }}>
-              {title}
-            </ThemedText>
-            <Pressable accessibilityLabel="Đóng bộ lọc" onPress={onClose} style={styles.sheetClose}>
-              <Icon name="close" size={20} color={SCREEN_COLORS.textMuted} />
-            </Pressable>
-          </View>
+    <BottomSheet title={title} closeLabel="Đóng bộ lọc" onClose={onClose}>
+      {kind === 'product' && (
+        <SheetOptions>
+          {PRODUCT_OPTIONS.map(([value, label]) => (
+            <SheetOption
+              key={value}
+              label={label}
+              selected={value === 'all' ? productFilter == null : productFilter === value}
+              onPress={() => {
+                onProductChange(value === 'all' ? null : value);
+                onClose();
+              }}
+            />
+          ))}
+        </SheetOptions>
+      )}
 
-          {kind === 'product' && (
-            <View style={styles.optionList}>
-              {[
-                ['all', 'Tất cả mặt hàng'],
-                ['coffee', 'Cà phê Robusta'],
-                ['pepper', 'Tiêu đen'],
-                ['durian', 'Sầu riêng'],
-              ].map(([value, label]) => {
-                const selected = value === 'all' ? productFilter == null : productFilter === value;
-                return (
-                  <Pressable
-                    key={value}
-                    onPress={() => {
-                      onProductChange(value === 'all' ? null : value);
-                      onClose();
-                    }}
-                    style={[styles.option, selected && styles.optionSelected]}>
-                    <ThemedText type="small" style={{ color: SCREEN_COLORS.text }}>
-                      {label}
-                    </ThemedText>
-                    {selected && <Icon name="check_circle" size={20} color={SCREEN_COLORS.secondary} />}
-                  </Pressable>
-                );
-              })}
-            </View>
-          )}
+      {kind === 'region' && (
+        <SheetOptions>
+          {REGION_OPTIONS.map(([value, label]) => (
+            <SheetOption
+              key={value}
+              label={label}
+              selected={value === 'all' ? regionFilter == null : regionFilter === value}
+              onPress={() => {
+                onRegionChange(value === 'all' ? null : value);
+                onClose();
+              }}
+            />
+          ))}
+        </SheetOptions>
+      )}
 
-          {kind === 'region' && (
-            <View style={styles.optionList}>
-              {[
-                ['all', 'Tất cả khu vực'],
-                ['Đắk Lắk', 'Khu vực: Đắk Lắk'],
-                ['Tây Nguyên', 'Khu vực: Tây Nguyên'],
-              ].map(([value, label]) => {
-                const selected = value === 'all' ? regionFilter == null : regionFilter === value;
-                return (
-                  <Pressable
-                    key={value}
-                    onPress={() => {
-                      onRegionChange(value === 'all' ? null : value);
-                      onClose();
-                    }}
-                    style={[styles.option, selected && styles.optionSelected]}>
-                    <ThemedText type="small" style={{ color: SCREEN_COLORS.text }}>
-                      {label}
-                    </ThemedText>
-                    {selected && <Icon name="check_circle" size={20} color={SCREEN_COLORS.secondary} />}
-                  </Pressable>
-                );
-              })}
-            </View>
-          )}
-
-          {kind === 'advanced' && (
-            <View style={styles.optionList}>
-              <Pressable
-                onPress={() => onVerifiedChange(!verifiedOnly)}
-                style={[styles.option, verifiedOnly && styles.optionSelected]}>
-                <View style={styles.optionLabel}>
-                  <Icon name="check_circle" size={20} color={SCREEN_COLORS.secondary} />
-                  <ThemedText type="small" style={{ color: SCREEN_COLORS.text }}>
-                    Đã xác thực
-                  </ThemedText>
-                </View>
-                {verifiedOnly && <Icon name="check_circle" size={20} color={SCREEN_COLORS.secondary} />}
-              </Pressable>
-              <Pressable
-                onPress={() => onGainersChange(!gainersOnly)}
-                style={[styles.option, gainersOnly && styles.optionSelected]}>
-                <View style={styles.optionLabel}>
-                  <Icon name="trending_up" size={20} color={SCREEN_COLORS.secondary} />
-                  <ThemedText type="small" style={{ color: SCREEN_COLORS.text }}>
-                    Tăng nhiều nhất
-                  </ThemedText>
-                </View>
-                {gainersOnly && <Icon name="check_circle" size={20} color={SCREEN_COLORS.secondary} />}
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  onProductChange(null);
-                  onRegionChange(null);
-                  onVerifiedChange(false);
-                  onGainersChange(false);
-                  onClose();
-                }}
-                style={styles.resetOption}>
-                <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.error }}>
-                  Xóa tất cả bộ lọc
-                </ThemedText>
-              </Pressable>
-            </View>
-          )}
-        </View>
-      </View>
-    </Modal>
+      {kind === 'advanced' && (
+        <SheetOptions>
+          <SheetOption icon="check_circle" label="Đã xác thực" selected={verifiedOnly} onPress={() => onVerifiedChange(!verifiedOnly)} />
+          <SheetOption icon="trending_up" label="Tăng nhiều nhất" selected={gainersOnly} onPress={() => onGainersChange(!gainersOnly)} />
+          <SheetResetOption
+            label="Xóa tất cả bộ lọc"
+            onPress={() => {
+              onProductChange(null);
+              onRegionChange(null);
+              onVerifiedChange(false);
+              onGainersChange(false);
+              onClose();
+            }}
+          />
+        </SheetOptions>
+      )}
+    </BottomSheet>
   );
 }
 
@@ -329,38 +284,25 @@ export function MarketPrices() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.filterRow}
           style={styles.filterScroll}>
-          <Pressable onPress={() => setSheet('product')}>
-            <View style={[styles.filterPill, styles.activeFilterPill]}>
-              <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.onPrimary }}>
-                {productFilterLabel}
-              </ThemedText>
-              <Icon name="expand_more" size={16} color={SCREEN_COLORS.onPrimary} />
-            </View>
-          </Pressable>
-          <Pressable onPress={() => setSheet('region')}>
-            <View style={[styles.filterPill, { backgroundColor: SCREEN_COLORS.surface }]}>
-              <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.textMuted }}>
-                {regionFilter ? `Khu vực: ${regionFilter}` : 'Khu vực: Đắk Lắk'}
-              </ThemedText>
-              <Icon name="expand_more" size={16} color={SCREEN_COLORS.textMuted} />
-            </View>
-          </Pressable>
-          <Pressable onPress={() => setVerifiedOnly((value) => !value)}>
-            <View style={[styles.filterPill, verifiedOnly && styles.selectedLightPill, { backgroundColor: SCREEN_COLORS.surface }]}>
-              <Icon name="check_circle" size={16} color={SCREEN_COLORS.secondary} />
-              <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.textMuted }}>
-                Đã xác thực
-              </ThemedText>
-            </View>
-          </Pressable>
-          <Pressable onPress={() => setGainersOnly((value) => !value)}>
-            <View style={[styles.filterPill, gainersOnly && styles.selectedLightPill, { backgroundColor: SCREEN_COLORS.surface }]}>
-              <Icon name="trending_up" size={16} color={SCREEN_COLORS.secondary} />
-              <ThemedText type="labelMd" style={{ color: SCREEN_COLORS.textMuted }}>
-                Tăng nhiều nhất
-              </ThemedText>
-            </View>
-          </Pressable>
+          <Chip dropdown selected label={productFilterLabel} onPress={() => setSheet('product')} />
+          <Chip
+            dropdown
+            selected={regionFilter != null}
+            label={regionFilter ? `Khu vực: ${regionFilter}` : 'Khu vực: Đắk Lắk'}
+            onPress={() => setSheet('region')}
+          />
+          <Chip
+            icon="check_circle"
+            selected={verifiedOnly}
+            label="Đã xác thực"
+            onPress={() => setVerifiedOnly((value) => !value)}
+          />
+          <Chip
+            icon="trending_up"
+            selected={gainersOnly}
+            label="Tăng nhiều nhất"
+            onPress={() => setGainersOnly((value) => !value)}
+          />
         </ScrollView>
 
         <View style={[styles.bulletin, { backgroundColor: SCREEN_COLORS.primaryContainer }]}>
@@ -538,25 +480,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingBottom: 2,
   },
-  filterPill: {
-    height: 36,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 16,
-    borderRadius: Radius.container,
-    shadowColor: SCREEN_COLORS.shadow,
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 1,
-  },
-  activeFilterPill: {
-    backgroundColor: SCREEN_COLORS.secondary,
-  },
-  selectedLightPill: {
-    backgroundColor: SCREEN_COLORS.secondaryContainer,
-  },
   bulletin: {
     height: 48,
     minHeight: 48,
@@ -657,71 +580,5 @@ const styles = StyleSheet.create({
     borderRadius: Radius.container,
     paddingHorizontal: 16,
     paddingVertical: Spacing.two,
-  },
-  modalRoot: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  modalBackdrop: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: SCREEN_COLORS.primaryScrim,
-  },
-  sheet: {
-    backgroundColor: SCREEN_COLORS.surface,
-    borderTopLeftRadius: Radius.sheet,
-    borderTopRightRadius: Radius.sheet,
-    paddingHorizontal: Spacing.three,
-    paddingTop: 12,
-    paddingBottom: 24,
-    shadowColor: SCREEN_COLORS.shadow,
-    shadowOpacity: 0.14,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: -4 },
-    elevation: 8,
-  },
-  sheetHandle: {
-    alignSelf: 'center',
-    width: 40,
-    height: 4,
-    borderRadius: Radius.full,
-    backgroundColor: SCREEN_COLORS.surfaceHigh,
-    marginBottom: 12,
-  },
-  sheetHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  sheetClose: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  optionList: {
-    gap: 4,
-  },
-  option: {
-    minHeight: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 12,
-    borderRadius: Radius.container,
-  },
-  optionSelected: {
-    backgroundColor: SCREEN_COLORS.secondaryContainer,
-  },
-  optionLabel: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  resetOption: {
-    minHeight: 48,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-    marginTop: 4,
   },
 });

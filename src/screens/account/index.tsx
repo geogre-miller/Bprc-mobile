@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import {
   Alert,
   Image,
@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/app-header';
+import { Card } from '@/components/ui/card';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
@@ -58,10 +59,6 @@ function SupportRow({ icon, title, description, onPress, accent, isLast }: Suppo
       <Icon name="chevron_right" size={20} color={COLORS.outline} />
     </Pressable>
   );
-}
-
-function Card({ children, style }: { children: ReactNode; style?: object }) {
-  return <ThemedView style={[styles.card, style]}>{children}</ThemedView>;
 }
 
 export function Account() {
@@ -454,14 +451,6 @@ const styles = StyleSheet.create({
     paddingTop: Layout.screenMargin,
     paddingBottom: BottomTabInset + Spacing.four,
     gap: Layout.sectionGap,
-  },
-  card: {
-    width: '100%',
-    borderRadius: Radius.container,
-    padding: Spacing.three,
-    backgroundColor: COLORS.surfaceLowest,
-    ...cardShadow,
-    gap: 12,
   },
   identityRow: {
     flexDirection: 'row',
