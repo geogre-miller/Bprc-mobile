@@ -23,6 +23,7 @@ import { formatVnd } from '@/utils/format-price';
 
 import { COMMODITY_ICON } from '../home-dashboard/commodity-price-row';
 import { Icon, type IconName } from '../home-dashboard/icons';
+import { buildJournalHref } from '../selling-journal/journal-link';
 import { addStock, removeStock, setStock, type StockInput } from './inventory-ops';
 import { StockSheet } from './stock-sheet';
 
@@ -309,16 +310,14 @@ export function Inventory() {
   const sellItem = (index: number) => {
     const current = items[index];
     if (!current) return;
-    const price = rows[index]?.marketPrice;
-    router.push({
-      pathname: '/journal',
-      params: {
+    router.push(
+      buildJournalHref({
         commodity: current.commodity,
-        stock: String(current.quantity),
-        ...(price != null ? { price: String(price) } : {}),
-        ...(current.unitCost != null ? { unitCost: String(current.unitCost) } : {}),
-      },
-    });
+        stock: current.quantity,
+        price: rows[index]?.marketPrice,
+        unitCost: current.unitCost,
+      }),
+    );
   };
 
   const recordSale = () => {

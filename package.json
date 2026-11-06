@@ -55,7 +55,8 @@
     "stitch:cache": "node ./scripts/stitch/cache.mjs",
     "stitch:freshness": "node ./scripts/stitch/artifact-freshness.mjs",
     "qa:capture": "node ./scripts/qa/capture-route.mjs",
-    "qa:diff": "node ./scripts/qa/visual-diff.mjs"
+    "qa:diff": "node ./scripts/qa/visual-diff.mjs",
+    "test": "node --test ./scripts/qa/*.test.mjs"
   },
   "private": true
 }

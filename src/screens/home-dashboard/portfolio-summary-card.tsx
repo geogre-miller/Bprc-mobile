@@ -97,7 +97,7 @@ export function PortfolioSummaryCard({
                 style={[styles.button, { backgroundColor: pressed ? theme.primaryPressed : theme.primary }]}>
                 <Icon name="add_circle" size={18} color={theme.onPrimary} />
                 <ThemedText type="titleMd" style={{ color: theme.onPrimary }}>
-                  Bán nông sản
+                  Tìm người mua
                 </ThemedText>
               </ThemedView>
             )}

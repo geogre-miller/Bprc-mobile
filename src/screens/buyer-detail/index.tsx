@@ -21,6 +21,7 @@ import { getBuyer } from '@/data/mock-data';
 import type { BuyerProfile } from '@/types/domain';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
+import { buildJournalHref } from '../selling-journal/journal-link';
 
 
 const COLORS = LightPalette;
@@ -183,14 +184,9 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   // The journal records the sale; it takes the buyer and the first priced commodity as defaults.
   const startSale = () => {
     const first = quotes.find((quote) => quote.commodity);
-    router.push({
-      pathname: '/journal',
-      params: {
-        buyerId: buyer.id,
-        buyerName: buyer.name,
-        ...(first?.commodity ? { commodity: first.commodity, price: String(first.price) } : {}),
-      },
-    });
+    router.push(
+      buildJournalHref({ buyerId: buyer.id, buyerName: buyer.name, commodity: first?.commodity, price: first?.price }),
+    );
   };
 
   return (
@@ -341,9 +337,9 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
                 <ThemedText type="titleMd" style={styles.primaryCtaText} numberOfLines={1}>Gọi {buyer.name}</ThemedText>
               </Pressable>
             )}
-            <Pressable accessibilityRole="button" accessibilityLabel="Tạo phiếu bán cho đại lý này" onPress={startSale} style={({ pressed }) => [styles.secondaryCta, pressed && styles.pressed]}>
+            <Pressable accessibilityRole="button" accessibilityLabel="Ghi nhận bán cho đại lý này" onPress={startSale} style={({ pressed }) => [styles.secondaryCta, pressed && styles.pressed]}>
               <Icon name="post_add" size={20} color={COLORS.secondary} />
-              <ThemedText type="titleMd" style={styles.secondaryCtaText}>Tạo phiếu bán cho đại lý này</ThemedText>
+              <ThemedText type="titleMd" style={styles.secondaryCtaText}>Ghi nhận bán cho đại lý này</ThemedText>
             </Pressable>
           </View>
         </ScrollView>

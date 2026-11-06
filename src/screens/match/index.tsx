@@ -1,5 +1,5 @@
-import { Link } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -9,7 +9,11 @@ import { usePersistedState } from '@/hooks/use-persisted-state';
 import type { SellingIntent } from '@/types/domain';
 import { formatVnd } from '@/utils/format-price';
 
+import { buildJournalHref } from '../selling-journal/journal-link';
+import { rankOffers } from './offers';
+
 export function Match({ id }: { id?: string }) {
+  const router = useRouter();
   const [intents, , isLoaded] = usePersistedState<SellingIntent[]>('selling-intents', []);
   const intent = intents.find((item) => item.id === id);
 
@@ -18,31 +22,26 @@ export function Match({ id }: { id?: string }) {
   if (!intent) {
     return (
       <ThemedView style={styles.empty}>
-        <ThemedText themeColor="textSecondary">Không tìm thấy ý định bán này.</ThemedText>
+        <ThemedText themeColor="textSecondary">Không tìm thấy mục này. Có thể bạn đã xóa nó.</ThemedText>
       </ThemedView>
     );
   }
 
   const label = COMMODITIES.find((c) => c.id === intent.commodity)?.label ?? intent.commodity;
 
-  const offers = BUYERS.filter((buyer) => buyer.commodities.includes(intent.commodity))
-    .map((buyer) => {
-      const price = PRICE_OBSERVATIONS.find(
-        (o) => o.buyerId === buyer.id && o.commodity === intent.commodity,
-      )?.pricePerUnit;
-      const demand = BUYING_DEMANDS.find((d) => d.buyerId === buyer.id && d.commodity === intent.commodity);
-      const effectivePrice = price ?? demand?.pricePerUnit;
-      if (effectivePrice == null) return null;
-      return { buyer, price: effectivePrice, demand, estimatedValue: effectivePrice * intent.quantity };
-    })
-    .filter((row): row is NonNullable<typeof row> => row !== null)
-    .sort((a, b) => b.price - a.price);
+  const offers = rankOffers(intent, BUYERS, PRICE_OBSERVATIONS, BUYING_DEMANDS, new Date());
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <ThemedText themeColor="textSecondary">
         {label} · {intent.quantity} {intent.unit}
       </ThemedText>
+
+      {offers.length > 0 && (
+        <ThemedText type="small" themeColor="textSecondary">
+          Gọi đầu mối để chốt giá, rồi bấm Ghi nhận bán để ghi vào sổ khi bán xong.
+        </ThemedText>
+      )}
 
       {offers.length === 0 && (
         <ThemedText themeColor="textSecondary" style={styles.sectionTitle}>
@@ -51,30 +50,49 @@ export function Match({ id }: { id?: string }) {
       )}
 
       {offers.map(({ buyer, price, demand, estimatedValue }, index) => (
-        <Link key={buyer.id} href={{ pathname: '/buyer/[id]', params: { id: buyer.id } }} asChild>
-          <Pressable>
-            <ThemedView type="backgroundElement" style={styles.card}>
-              <ThemedText type="smallBold">
-                {index === 0 ? '★ ' : ''}
-                {buyer.name}
-              </ThemedText>
-              <ThemedText>{formatVnd(price)}/kg</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                Ước tính thu về {formatVnd(estimatedValue)}
-              </ThemedText>
-              {demand?.remainingQuantity != null && (
-                <ThemedText type="small" themeColor="textSecondary">
-                  Còn cần {demand.remainingQuantity} {demand.unit}
+        <ThemedView key={buyer.id} type="backgroundElement" style={styles.card}>
+          <Link href={{ pathname: '/buyer/[id]', params: { id: buyer.id } }} asChild>
+            <Pressable accessibilityRole="link" accessibilityLabel={`Xem hồ sơ ${buyer.name}`}>
+              <View style={styles.cardCopy}>
+                <ThemedText type="smallBold">
+                  {index === 0 ? '★ ' : ''}
+                  {buyer.name}
                 </ThemedText>
-              )}
-              {buyer.verified && (
+                <ThemedText>{formatVnd(price)}/kg</ThemedText>
                 <ThemedText type="small" themeColor="textSecondary">
-                  Đã xác minh
+                  Ước tính thu về {formatVnd(estimatedValue)}
                 </ThemedText>
-              )}
-            </ThemedView>
+                {demand?.remainingQuantity != null && (
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Còn cần {demand.remainingQuantity} {demand.unit}
+                  </ThemedText>
+                )}
+                {buyer.verified && (
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Đã xác minh
+                  </ThemedText>
+                )}
+              </View>
+            </Pressable>
+          </Link>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Ghi nhận bán ${label} cho ${buyer.name}`}
+            onPress={() =>
+              router.push(
+                buildJournalHref({
+                  commodity: intent.commodity,
+                  price,
+                  weight: intent.quantity,
+                  buyerId: buyer.id,
+                  buyerName: buyer.name,
+                }),
+              )
+            }
+            style={styles.recordButton}>
+            <ThemedText type="linkPrimary">Ghi nhận bán</ThemedText>
           </Pressable>
-        </Link>
+        </ThemedView>
       ))}
     </ScrollView>
   );
@@ -93,6 +111,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginTop: Spacing.three,
+  },
+  cardCopy: {
+    gap: Spacing.half,
+  },
+  recordButton: {
+    minHeight: Layout.touchTarget,
+    justifyContent: 'center',
   },
   card: {
     borderRadius: Spacing.three,

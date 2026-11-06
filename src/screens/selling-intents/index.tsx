@@ -44,20 +44,20 @@ export function SellingIntents() {
     setQuantity('');
     setDesiredPrice('');
     setError(null);
-    setNotice('Đã lưu ý định bán. Bấm "So sánh đầu mối" để xem ai trả giá cao nhất.');
+    setNotice('Đã lưu. Bấm So sánh đầu mối để xem ai trả giá cao nhất.');
   };
 
   const removeIntent = (id: string) => {
     setIntents((current) => current.filter((intent) => intent.id !== id));
     setConfirmingId(null);
-    setNotice('Đã xóa ý định bán.');
+    setNotice('Đã xóa.');
   };
 
   if (!isLoaded) return null;
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
-      <ThemedText themeColor="textSecondary">Đăng nông sản bạn muốn bán để so sánh các đầu mối.</ThemedText>
+      <ThemedText themeColor="textSecondary">Cho biết mặt hàng và số kg bạn định bán. Ứng dụng xếp các đầu mối theo giá để bạn chọn người mua.</ThemedText>
       {notice && (
         <ThemedText type="small" accessibilityRole="alert" style={{ color: theme.primary }}>
           {notice}
@@ -99,7 +99,7 @@ export function SellingIntents() {
             ) : (
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`Xóa ý định bán ${label}`}
+                accessibilityLabel={`Xóa ${label} khỏi danh sách tìm người mua`}
                 onPress={() => setConfirmingId(intent.id)}
                 style={styles.textAction}>
                 <ThemedText type="small" themeColor="textSecondary">
@@ -112,7 +112,7 @@ export function SellingIntents() {
       })}
 
       <ThemedText type="headlineSm" accessibilityRole="header" style={styles.sectionTitle}>
-        Thêm ý định bán
+        Bạn định bán gì?
       </ThemedText>
       <ThemedView style={styles.commodityPicker}>
         {COMMODITIES.map((option) => (

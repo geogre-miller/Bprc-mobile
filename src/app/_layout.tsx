@@ -36,9 +36,9 @@ export default function RootLayout() {
           headerBackTitleStyle: { fontFamily: FontFamily.publicSansMedium },
         }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="journal" options={{ headerShown: true, title: 'Tạo giao dịch bán' }} />
+        <Stack.Screen name="journal" options={{ headerShown: true, title: 'Ghi nhận bán' }} />
         <Stack.Screen name="demands" options={{ headerShown: true, title: 'Đang cần mua' }} />
-        <Stack.Screen name="selling-intents" options={{ headerShown: true, title: 'Ý định bán' }} />
+        <Stack.Screen name="selling-intents" options={{ headerShown: true, title: 'Tìm người mua' }} />
         <Stack.Screen name="match/[id]" options={{ headerShown: true, title: 'So sánh đầu mối' }} />
         <Stack.Screen name="buyer-dashboard" options={{ headerShown: true, title: 'Kênh đầu mối' }} />
         <Stack.Screen

@@ -12,6 +12,7 @@ import { COMMODITIES, getBuyer, PRICE_OBSERVATIONS } from '@/data/mock-data';
 import type { Commodity } from '@/types/domain';
 
 import { Icon, type IconName } from '../home-dashboard/icons';
+import { buildJournalHref } from '../selling-journal/journal-link';
 
 type Timeframe = '1N' | '7N' | '1T' | '3T' | '1Năm';
 type BuyerSort = 'price' | 'nearby' | 'verified';
@@ -108,7 +109,7 @@ const BUYER_CARDS: BuyerCardData[] = [
       { icon: 'location_on', text: 'Km 14, Quốc lộ 14, TX. Buôn Hồ (cách 3.8 km)' },
       { icon: 'scale', text: 'Thu mua tối thiểu: 500 kg • Cân điện tử chuẩn' },
     ],
-    primaryAction: 'Chốt bán ngay',
+    primaryAction: 'Ghi nhận bán',
     primaryIcon: 'handshake',
     secondaryAction: 'Gọi trực tiếp',
     secondaryIcon: 'call',
@@ -167,14 +168,15 @@ export function CommodityDetail({
   }, [buyerSort]);
 
   const goBackToMarket = () => (router.canGoBack() ? router.back() : router.replace('/market'));
-  const goToSell = (buyer?: BuyerCardData) => router.push({
-    pathname: '/journal',
-    params: {
-      commodity: commodity ?? 'coffee',
-      price: String(buyer?.price ?? displayPrice),
-      ...(buyer ? { buyerId: buyer.id, buyerName: buyer.name } : {}),
-    },
-  });
+  const goToSell = (buyer?: BuyerCardData) =>
+    router.push(
+      buildJournalHref({
+        commodity: commodity ?? 'coffee',
+        price: buyer?.price ?? displayPrice,
+        buyerId: buyer?.id,
+        buyerName: buyer?.name,
+      }),
+    );
   const shareMarket = () =>
     Share.share({
       title: `Giá ${label}`,
@@ -456,19 +458,19 @@ export function CommodityDetail({
         <View style={[styles.fixedFooter, { paddingBottom: insets.bottom }]}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Tạo phiếu bán ${label.toLowerCase()} ngay`}
+            accessibilityLabel={`Ghi nhận bán ${label.toLowerCase()}`}
             onPress={() => goToSell()}
             style={({ pressed }) => [styles.sellCta, { backgroundColor: SCREEN_COLORS.primaryContainer }, pressed && styles.ctaPressed]}>
             <View style={styles.sellCopy}>
               <ThemedText type="titleMd" style={[styles.bold, { color: SCREEN_COLORS.onPrimary }]}>
-                Tạo phiếu bán {label.toLowerCase()} ngay
+                Ghi nhận bán {label.toLowerCase()}
               </ThemedText>
               <ThemedText type="labelSm" style={{ color: SCREEN_COLORS.secondaryContainer }}>
-                Khóa giá chốt {formatCommodityPrice(displayPrice)} ₫ trong 2 giờ
+                Ghi vào sổ theo giá {formatCommodityPrice(displayPrice)} ₫/kg
               </ThemedText>
             </View>
             <View style={styles.sellButtonLabel}>
-              <ThemedText type="labelMd" style={[styles.buttonLabel, { color: SCREEN_COLORS.onPrimary }]}>Bán</ThemedText>
+              <ThemedText type="labelMd" style={[styles.buttonLabel, { color: SCREEN_COLORS.onPrimary }]}>Ghi sổ</ThemedText>
               <Icon name="arrow_forward" size={18} color={SCREEN_COLORS.onPrimary} />
             </View>
           </Pressable>

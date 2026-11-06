@@ -1,21 +1,17 @@
-import { Link } from 'expo-router';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
+import { freshnessMessage } from './freshness';
 import { Icon } from './icons';
 
 /** Price freshness. Stale prices are called out, never shown as current. Region lives in the header. */
 export function FreshnessBar({ updatedLabel, stale }: { updatedLabel?: string; stale: boolean }) {
   const theme = useTheme();
-  const freshness = !updatedLabel
-    ? 'Chưa có dữ liệu giá'
-    : stale
-      ? `Giá chưa cập nhật hôm nay (lần cuối ${updatedLabel})`
-      : `Giá cập nhật ${updatedLabel}`;
+  const freshness = freshnessMessage(updatedLabel, stale);
 
   return (
     <ThemedView
@@ -26,15 +22,6 @@ export function FreshnessBar({ updatedLabel, stale }: { updatedLabel?: string; s
           {freshness}
         </ThemedText>
       </View>
-      {/* ponytail: no region picker screen exists yet, so this points at account settings. */}
-      <Link href="/account" asChild>
-        <Pressable accessibilityRole="button" accessibilityLabel="Đổi vùng" style={styles.action}>
-          <ThemedText type="labelMd" style={{ color: theme.accent }}>
-            Đổi vùng
-          </ThemedText>
-          <Icon name="tune" size={16} color={theme.accent} />
-        </Pressable>
-      </Link>
     </ThemedView>
   );
 }
@@ -43,11 +30,11 @@ const styles = StyleSheet.create({
   bar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     gap: Spacing.two,
     borderRadius: Radius.container,
-    paddingLeft: 12,
-    paddingVertical: Spacing.one,
+    minHeight: 44,
+    paddingHorizontal: 12,
+    paddingVertical: Spacing.two,
   },
   left: {
     flexDirection: 'row',
@@ -57,12 +44,5 @@ const styles = StyleSheet.create({
   },
   text: {
     flexShrink: 1,
-  },
-  action: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    paddingHorizontal: 12,
   },
 });

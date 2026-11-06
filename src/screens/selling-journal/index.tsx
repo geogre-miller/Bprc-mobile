@@ -12,6 +12,7 @@ import { Icon, type IconName } from '@/screens/home-dashboard/icons';
 import type { Commodity, SellingJournalEntry } from '@/types/domain';
 import { formatVnd } from '@/utils/format-price';
 
+import { readJournalPrefill } from './journal-link';
 import { useSaleLedger } from './use-sale-ledger';
 
 const COLORS = LightPalette;
@@ -179,22 +180,10 @@ function DropdownField({
 
 export function SellingJournal() {
   const theme = useTheme();
-  const params = useLocalSearchParams<{
-    commodity?: string;
-    stock?: string;
-    price?: string;
-    unitCost?: string;
-    buyerId?: string;
-    buyerName?: string;
-  }>();
+  const rawParams = useLocalSearchParams<Record<string, string | string[]>>();
+  const params = useMemo(() => readJournalPrefill(rawParams), [rawParams]);
   const { entries, inventory, isLoaded, recordSale, removeEntry } = useSaleLedger();
   const saleOptions = useMemo(() => {
-    const readNumber = (value: string | undefined, fallback: number) => {
-      const number = Number(value);
-      return typeof value === 'string' && value.trim() !== '' && Number.isFinite(number) && number >= 0
-        ? number
-        : fallback;
-    };
     const options: SaleCommodityOption[] = [
       ...SALE_COMMODITIES,
       ...COMMODITIES.filter((commodity) => !SALE_COMMODITIES.some((option) => option.id === commodity.id)).map((commodity) => ({
@@ -213,31 +202,31 @@ export function SellingJournal() {
       const costed = held.find((item) => item.unitCost != null && item.quantity > 0);
       const selected = option.id === params.commodity;
       // First render happens before storage has loaded (inventory is null); the link's stock bridges it.
-      const stock = selected && inventory == null ? readNumber(params.stock, savedStock) : savedStock;
+      const stock = selected && inventory == null ? (params.stock ?? savedStock) : savedStock;
       const knownCost = costed?.unitCost ?? option.unitCost;
       return {
         ...option,
         stock,
         label: option.label.replace(/\(Tồn:.*\)/, `(Tồn: ${formatQuantity(stock)} kg)`),
-        marketPrice: selected ? readNumber(params.price, option.marketPrice) : option.marketPrice,
-        unitCost: selected ? readNumber(params.unitCost, knownCost) : knownCost,
+        marketPrice: selected ? (params.price ?? option.marketPrice) : option.marketPrice,
+        unitCost: selected ? (params.unitCost ?? knownCost) : knownCost,
       };
     });
-  }, [inventory, params.commodity, params.stock, params.price, params.unitCost]);
+  }, [inventory, params]);
   const initialOption = saleOptions.find((option) => option.id === params.commodity) ?? saleOptions[0];
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/inventory'));
   const [commodity, setCommodity] = useState<Commodity>(initialOption.id);
   const [buyerOptions, setBuyerOptions] = useState(() => {
-    if (typeof params.buyerId !== 'string' || !params.buyerId || typeof params.buyerName !== 'string' || !params.buyerName.trim()) {
-      return DEFAULT_BUYERS;
-    }
-    const selected = { id: params.buyerId, name: params.buyerName.trim(), label: params.buyerName.trim() };
+    if (!params.buyer) return DEFAULT_BUYERS;
+    const selected = { id: params.buyer.id, name: params.buyer.name, label: params.buyer.name };
     return [selected, ...DEFAULT_BUYERS.filter((buyer) => buyer.id !== selected.id)];
   });
   const [buyerId, setBuyerId] = useState<string | undefined>(() =>
-    buyerOptions.find((buyer) => buyer.id === params.buyerId)?.id ?? (params.commodity ? undefined : DEFAULT_BUYERS[0].id),
+    buyerOptions.find((buyer) => buyer.id === params.buyer?.id)?.id ?? (params.commodity ? undefined : DEFAULT_BUYERS[0].id),
   );
   const [weightInput, setWeightInput] = useState(() => {
+    // The planned kg from a selling intent wins. The save check still stops it going over stock.
+    if (params.weight != null) return String(params.weight);
     if (params.commodity && params.stock != null) return String(initialOption.stock);
     return '1200';
   });
