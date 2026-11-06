@@ -13,8 +13,9 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { LightPalette, Layout, Spacing } from '@/constants/theme';
@@ -202,29 +203,9 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
   }
 
   return (
-    <View style={styles.screen}>
-      <View style={[styles.shell, { paddingTop: insets.top }]}>
-        <View style={styles.header}>
-          <View style={styles.brand}>
-            <Image accessibilityLabel="Biểu trưng Mùa Vàng" source={require('@/assets/images/nongsan-pro-logo.png')} resizeMode="contain" style={styles.brandLogo} />
-            <View style={styles.brandCopy}>
-              <ThemedText type="titleMd" style={styles.brandTitle}>Mùa Vàng</ThemedText>
-              <View style={styles.regionRow}>
-                <Icon name="location_on" size={14} color={COLORS.secondary} />
-                <ThemedText type="labelSm" style={styles.regionText}>Tây Nguyên • Đắk Lắk</ThemedText>
-              </View>
-            </View>
-          </View>
-          <View style={styles.headerActions}>
-            <Pressable accessibilityRole="button" accessibilityLabel="Thông báo" onPress={() => router.push('/alerts')} style={({ pressed }) => [styles.notificationButton, pressed && styles.pressed]}>
-              <Icon name="notifications" size={22} color={COLORS.onSurfaceVariant} />
-              <View style={styles.notificationDot} />
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="Mở trang cá nhân" onPress={() => router.push('/account')} style={({ pressed }) => pressed && styles.pressed}>
-              <Image accessibilityLabel="Ảnh đại diện nông hộ" source={require('@/assets/images/nongsan-pro-profile.png')} style={styles.headerAvatar} />
-            </Pressable>
-          </View>
-        </View>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <View style={styles.shell}>
+        <AppHeader />
 
         <ScrollView style={styles.scrollView} contentContainerStyle={[styles.content, { paddingBottom: 148 + insets.bottom }]} showsVerticalScrollIndicator={false}>
           <View style={styles.topNavigation}>
@@ -400,7 +381,7 @@ export function BuyerDetail({ buyerId }: { buyerId?: string }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -417,17 +398,6 @@ const styles = StyleSheet.create({
   shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: COLORS.background },
   loading: { flex: 1, backgroundColor: COLORS.background },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.background, padding: 24 },
-  header: { height: 64, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.background, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
-  brandLogo: { width: 36, height: 32, borderRadius: 4 },
-  brandCopy: { flexShrink: 1 },
-  brandTitle: { color: COLORS.primary, fontWeight: '600', lineHeight: 20 },
-  regionRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  regionText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  notificationButton: { width: 44, height: 44, borderRadius: 8, backgroundColor: COLORS.surfaceLow, alignItems: 'center', justifyContent: 'center' },
-  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: 999, backgroundColor: COLORS.error, borderColor: COLORS.background, borderWidth: 2 },
-  headerAvatar: { width: 34, height: 34, borderRadius: 999 },
   scrollView: { flex: 1, backgroundColor: COLORS.background },
   content: { paddingHorizontal: Layout.screenMargin, paddingTop: Spacing.two, gap: Layout.sectionGap },
   topNavigation: { minHeight: 56, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

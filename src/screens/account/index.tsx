@@ -1,4 +1,3 @@
-import { Link } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import {
   Alert,
@@ -11,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
@@ -95,54 +95,7 @@ export function Account() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]} edges={['top']}>
       <View style={[styles.shell, { backgroundColor: theme.background }]}>
         <ThemedView style={[styles.header, { backgroundColor: theme.background }]}>
-          <View style={styles.headerRow}>
-            <View style={styles.brand}>
-              <Image
-                accessibilityLabel="Biểu trưng Mùa Vàng"
-                source={require('@/assets/images/nongsan-pro-logo.png')}
-                resizeMode="contain"
-                style={styles.brandLogo}
-              />
-              <View style={styles.brandCopy}>
-                <ThemedText type="titleMd" style={styles.brandTitle} numberOfLines={1}>
-                  Mùa Vàng
-                </ThemedText>
-                <View style={styles.regionLine}>
-                  <Icon name="location_on" size={14} color={COLORS.secondary} />
-                  <ThemedText type="labelSm" style={styles.regionText} numberOfLines={1}>
-                    Tây Nguyên • Đắk Lắk
-                  </ThemedText>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.headerActions}>
-              <Link href="/alerts" asChild>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Thông báo"
-                  style={({ pressed }) => pressed && styles.pressed}>
-                  <View style={styles.notificationButton}>
-                    <Icon name="notifications" size={22} color={COLORS.onSurfaceVariant} />
-                    <View style={styles.notificationDot} />
-                  </View>
-                </Pressable>
-              </Link>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Mở trang cá nhân"
-                accessibilityState={{ selected: true }}
-                onPress={() => undefined}
-                style={({ pressed }) => [styles.avatarButton, pressed && styles.pressed]}>
-                <Image
-                  accessibilityLabel="Ảnh đại diện của Chú Năm"
-                  source={require('@/assets/images/nongsan-pro-profile.png')}
-                  resizeMode="cover"
-                  style={styles.headerAvatar}
-                />
-              </Pressable>
-            </View>
-          </View>
+          <AppHeader accountSelected />
           <View style={styles.titleRow}>
             <ThemedText type="subtitle" accessibilityRole="header" style={styles.screenTitle}>
               Cá Nhân
@@ -468,82 +421,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 4,
     elevation: 2,
-  },
-  headerRow: {
-    height: 64,
-    paddingHorizontal: Spacing.three,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
-  },
-  brand: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-    minWidth: 0,
-  },
-  brandLogo: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.base,
-  },
-  brandCopy: {
-    flexShrink: 1,
-    minWidth: 0,
-  },
-  brandTitle: {
-    color: COLORS.primary,
-    fontWeight: '600',
-    lineHeight: 20,
-  },
-  regionLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    minWidth: 0,
-  },
-  regionText: {
-    color: COLORS.onSurfaceVariant,
-    fontWeight: '600',
-    flexShrink: 1,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: Radius.container,
-    backgroundColor: COLORS.surfaceLow,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  notificationDot: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: Radius.full,
-    backgroundColor: COLORS.error,
-    borderWidth: 2,
-    borderColor: COLORS.background,
-  },
-  avatarButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.sheet,
   },
   titleRow: {
     minHeight: 28,

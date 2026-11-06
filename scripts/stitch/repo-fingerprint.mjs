@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { asArray, fingerprintFiles, parseArgs, printJson, readJson, requiredArg, writeJson } from "../agents/lib/common.mjs";
+import { asArray, fingerprintFiles, parseArgs, printJson, readJson, writeJson } from "../agents/lib/common.mjs";
 import { validateArtifact } from "../agents/lib/artifact-validation.mjs";
 
 try {

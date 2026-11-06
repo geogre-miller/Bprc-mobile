@@ -1,6 +1,5 @@
 import { Link } from 'expo-router';
-import { Image } from 'expo-image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -14,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { BottomTabInset, Layout, LightPalette, Radius } from '@/constants/theme';
@@ -145,42 +145,6 @@ function FontText({ children, style, type = 'bodySm', ...props }: React.Componen
   );
 }
 
-function BuyerDirectoryHeader() {
-  return (
-    <View style={styles.header}>
-      <View style={styles.brand}>
-        <Image
-          source={require('@/assets/images/nongsan-pro-logo.png')}
-          contentFit="contain"
-          accessibilityLabel="Logo Mùa Vàng"
-          style={styles.logo}
-        />
-        <View style={styles.brandCopy}>
-          <FontText type="titleMd" style={styles.brandTitle} numberOfLines={1}>Mùa Vàng</FontText>
-          <View style={styles.regionRow}>
-            <Icon name="location_on" size={14} color={COLORS.secondary} />
-            <FontText type="labelSm" style={styles.regionText} numberOfLines={1}>Tây Nguyên • Đắk Lắk</FontText>
-          </View>
-        </View>
-      </View>
-      <View style={styles.headerActions}>
-        <Link href="/alerts" asChild>
-          <Pressable accessibilityRole="button" accessibilityLabel="Thông báo" style={styles.touchTarget}>
-            <View style={styles.notificationButton}>
-              <Icon name="notifications" size={22} color={COLORS.onSurfaceVariant} />
-              <View style={styles.notificationDot} />
-            </View>
-          </Pressable>
-        </Link>
-        <Link href="/account" asChild>
-          <Pressable accessibilityRole="button" accessibilityLabel="Mở trang cá nhân" style={styles.avatarButton}>
-            <Image source={require('@/assets/images/nongsan-pro-profile.png')} contentFit="cover" accessibilityLabel="Ảnh đại diện" style={styles.avatar} />
-          </Pressable>
-        </Link>
-      </View>
-    </View>
-  );
-}
 
 function Chip({ children, selected, icon, onPress, accessibilityLabel, tone = 'default' }: {
   children: string;
@@ -419,7 +383,13 @@ export function BuyerList() {
   }, [highestPrice, productFilter, query, radiusFilter, verifiedOnly]);
 
   const filtersActive = Boolean(query.trim() || productFilter || radiusFilter || verifiedOnly || highestPrice);
-  const showToast = (message: string) => { setToast(message); setTimeout(() => setToast(null), 2800); };
+  const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(toastTimer.current), []);
+  const showToast = (message: string) => {
+    clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(null), 2800);
+  };
   const reportIssue = () => Alert.alert('Báo cáo sai phạm', 'Cảm ơn bạn. Đội ngũ Mùa Vàng sẽ kiểm tra thông tin này.');
   const showPolicy = () => Alert.alert('Điều khoản thu mua', 'Điều khoản thu mua và bảo vệ giao dịch sẽ được cập nhật trong phiên bản tiếp theo.');
 
@@ -427,7 +397,7 @@ export function BuyerList() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.shell}>
-        <BuyerDirectoryHeader />
+        <AppHeader />
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={styles.titleRow}><View style={styles.titleCopy}><Icon name="verified_user" size={22} color={COLORS.secondary} /><FontText type="subtitle" accessibilityRole="header" style={styles.screenTitle}>Thương lái & Đại lý thu mua</FontText></View><View style={styles.openBadge}><View style={styles.openDot} /><FontText type="labelSm" style={styles.openBadgeText}>38 đại lý mở kho</FontText></View></View>
           <View style={styles.searchRow}>
@@ -456,19 +426,6 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: COLORS.background },
   loadingScreen: { flex: 1, backgroundColor: COLORS.background },
   shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: COLORS.background },
-  header: { height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: COLORS.borderSubtle, shadowColor: COLORS.shadow, shadowOpacity: 0.04, shadowRadius: 8, shadowOffset: { width: 0, height: 1 }, elevation: 1 },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1 },
-  logo: { width: 32, height: 32 },
-  brandCopy: { flexShrink: 1 },
-  brandTitle: { color: COLORS.primary, fontWeight: '600', lineHeight: 22 },
-  regionRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  regionText: { color: COLORS.onSurfaceVariant, fontWeight: '600' },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  touchTarget: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  notificationButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.surfaceLow },
-  notificationDot: { position: 'absolute', top: 10, right: 10, width: 8, height: 8, borderRadius: 4, borderWidth: 2, borderColor: COLORS.background, backgroundColor: COLORS.error },
-  avatarButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  avatar: { width: 32, height: 32, borderRadius: Radius.full, shadowColor: COLORS.shadow, shadowOpacity: 0.1, shadowRadius: 3, shadowOffset: { width: 0, height: 1 } },
   content: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: BottomTabInset + 88, gap: 16 },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 },
   titleCopy: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 6 },

@@ -1,4 +1,3 @@
-import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { BottomTabInset, LightPalette, Radius, Spacing } from '@/constants/theme';
@@ -101,52 +101,6 @@ const MARKET_ROWS: MarketPriceRowData[] = [
   },
 ];
 
-function MarketHeader() {
-  const theme = useTheme();
-
-  return (
-    <View style={[styles.header, { borderBottomColor: theme.borderSubtle }]}>
-      <View style={styles.brand}>
-        <Image
-          source={require('@/assets/images/nongsan-pro-logo.png')}
-          contentFit="contain"
-          accessibilityLabel="Logo Mùa Vàng"
-          style={styles.logo}
-        />
-        <View>
-          <ThemedText type="titleMd" style={{ color: SCREEN_COLORS.primary }}>
-            Mùa Vàng
-          </ThemedText>
-          <View style={styles.regionRow}>
-            <Icon name="location_on" size={14} color={SCREEN_COLORS.secondary} />
-            <ThemedText type="labelSm" style={{ color: SCREEN_COLORS.textMuted }}>
-              Tây Nguyên • Đắk Lắk
-            </ThemedText>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.headerActions}>
-        <Pressable accessibilityLabel="Thông báo">
-          <View style={[styles.notificationButton, { backgroundColor: SCREEN_COLORS.surfaceLow }]}>
-            <Icon name="notifications" size={22} color={SCREEN_COLORS.textMuted} />
-            <View style={styles.notificationDot} />
-          </View>
-        </Pressable>
-        <Link href="/account" asChild>
-          <Pressable accessibilityLabel="Cá nhân">
-            <Image
-              source={require('@/assets/images/nongsan-pro-profile.png')}
-              contentFit="cover"
-              accessibilityLabel="Ảnh đại diện"
-              style={styles.avatar}
-            />
-          </Pressable>
-        </Link>
-      </View>
-    </View>
-  );
-}
 
 function FilterSheet({
   kind,
@@ -338,7 +292,7 @@ export function MarketPrices() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: SCREEN_COLORS.background }]} edges={['top']}>
-      <MarketHeader />
+      <AppHeader />
 
       <ScrollView
         contentContainerStyle={styles.content}
@@ -519,57 +473,6 @@ export function MarketPrices() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-  },
-  header: {
-    height: 64,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.three,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  brand: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  logo: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.container,
-  },
-  regionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: Radius.container,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  notificationDot: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: Radius.full,
-    borderWidth: 2,
-    borderColor: SCREEN_COLORS.background,
-    backgroundColor: SCREEN_COLORS.error,
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.full,
   },
   content: {
     gap: 12,

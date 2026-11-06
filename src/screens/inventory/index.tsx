@@ -1,4 +1,4 @@
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   Image,
@@ -9,8 +9,9 @@ import {
   type ImageSourcePropType,
 } from 'react-native';
 import { SymbolView } from 'expo-symbols';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { LightPalette, Radius, Spacing, Layout } from '@/constants/theme';
@@ -383,54 +384,9 @@ export function Inventory() {
 
   return (
     <ThemedView style={[styles.screen, { backgroundColor: theme.background }]}>
-      <Stack.Screen options={{ headerShown: false, title: 'Inventory' }} />
 
-      <View style={[styles.shell, { backgroundColor: COLORS.background }]}>
-        <View style={[styles.headerOuter, { paddingTop: insets.top, backgroundColor: COLORS.background }]}>
-          <View style={styles.headerInner}>
-            <View style={styles.brand}>
-              <Image
-                accessibilityLabel="Biểu trưng Mùa Vàng"
-                source={require('@/assets/images/nongsan-pro-logo.png')}
-                resizeMode="contain"
-                style={styles.brandLogo}
-              />
-              <View style={styles.brandCopy}>
-                <ThemedText type="titleMd" style={styles.brandTitle} numberOfLines={1}>
-                  Mùa Vàng
-                </ThemedText>
-                <View style={styles.regionRow}>
-                  <ScreenIcon name="location_on" size={14} color={COLORS.secondary} />
-                  <ThemedText type="labelSm" style={styles.regionText} numberOfLines={1}>
-                    Tây Nguyên • Đắk Lắk
-                  </ThemedText>
-                </View>
-              </View>
-            </View>
-            <View style={styles.headerActions}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Thông báo"
-                onPress={() => router.push('/alerts')}
-                style={({ pressed }) => [styles.notificationButton, pressed && styles.pressed]}>
-                <ScreenIcon name="notifications" size={22} color={COLORS.onSurfaceVariant} />
-                <View style={styles.notificationDot} />
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Mở trang cá nhân"
-                onPress={() => router.push('/account')}
-                style={({ pressed }) => [styles.avatarButton, pressed && styles.pressed]}>
-                <Image
-                  accessibilityLabel="Ảnh đại diện của Chú Năm"
-                  source={require('@/assets/images/nongsan-pro-profile.png')}
-                  resizeMode="cover"
-                  style={styles.headerAvatar}
-                />
-              </Pressable>
-            </View>
-          </View>
-        </View>
+      <SafeAreaView edges={['top']} style={[styles.shell, { backgroundColor: COLORS.background }]}>
+        <AppHeader />
 
         <ScrollView
           style={styles.scroll}
@@ -573,7 +529,7 @@ export function Inventory() {
           </ThemedText>
         </ScrollView>
 
-      </View>
+      </SafeAreaView>
     </ThemedView>
   );
 }
@@ -595,86 +551,6 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 430,
     alignSelf: 'center',
-  },
-  headerOuter: {
-    zIndex: 2,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  headerInner: {
-    height: 64,
-    paddingHorizontal: Spacing.three,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
-  },
-  brand: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-    flexShrink: 1,
-  },
-  brandLogo: {
-    width: 32,
-    height: 32,
-    borderRadius: 4,
-  },
-  brandCopy: {
-    minWidth: 0,
-    flexShrink: 1,
-    gap: 0,
-  },
-  brandTitle: {
-    color: COLORS.primary,
-    fontWeight: '600',
-  },
-  regionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    flexShrink: 1,
-  },
-  regionText: {
-    color: COLORS.onSurfaceVariant,
-    fontWeight: '600',
-    flexShrink: 1,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: Radius.container,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.surfaceLow,
-  },
-  notificationDot: {
-    position: 'absolute',
-    top: 10,
-    right: 11,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.error,
-  },
-  avatarButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    overflow: 'hidden',
-  },
-  headerAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
   },
   scroll: {
     flex: 1,

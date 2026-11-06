@@ -464,3 +464,10 @@ The design system adopts a soft, disciplined shape language `roundedness: 1`). E
 ### Navigation Bar
 
 - **Bottom Bar:** 64px fixed height with a subtle `outline-variant` `#C1C8C2` top boundary line. Canvas uses `surface-container-lowest` `#FFFFFF`. Icons are dual-tone 24px glyphs: 1.75px stroke in `on-surface-variant` `#414844` when inactive, and `primary-container` `#1B4332` with a 4px bottom dot when active.
+
+### Top App Bar
+- **Two roles, two type styles.** The brand row (logo, "Mùa Vàng", region) is an identity element: `titleMd` (Public Sans SemiBold 16/22) in `primary`, `labelSm` for the region. A page title is a heading: Manrope SemiBold 18 (`headline-sm`). The native stack header uses the Manrope 18 style from the root `screenOptions`. The difference between the two is intentional.
+- **One component.** Tab root screens and the tab detail screens (commodity, buyer) render `AppHeader` from `src/components/app-header.tsx`. Do not copy the brand row into a screen. A screen that needs a different region line passes `region`; the account screen passes `accountSelected`.
+- **Metrics.** Minimum height 64px (it grows with large text, brand text scales up to 1.3x), horizontal padding `Layout.screenMargin`, hairline bottom border `borderSubtle`, no shadow. Logo 32px, avatar 32px, bell icon 22px. Bell and avatar each sit in a `Layout.touchTarget` (44px) touch area.
+- **Safe area.** The screen owns the top inset with `SafeAreaView edges={['top']}`. The header never reads insets.
+- **Pushed routes** (`journal`, `demands`, `selling-intents`, `match/[id]`, `buyer-dashboard`, `buyer-demand-form`) keep the native header so back gestures, transitions and platform conventions stay intact. Do not hide it inside a screen with `Stack.Screen options={{ headerShown: false }}`; configure it in `src/app/_layout.tsx`.

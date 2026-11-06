@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
@@ -208,7 +207,6 @@ function DropdownField({
 
 export function SellingJournal() {
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{
     commodity?: string;
     stock?: string;
@@ -428,7 +426,7 @@ export function SellingJournal() {
   };
 
   if (!isLoaded || !inventoryLoaded) {
-    return <ThemedView style={[styles.screen, { backgroundColor: theme.surface }]}><Stack.Screen options={{ headerShown: false }} /></ThemedView>;
+    return <ThemedView style={[styles.screen, { backgroundColor: theme.surface }]} />;
   }
 
   const marginText = `${Math.abs(metrics.margin).toFixed(1)}%`;
@@ -436,40 +434,10 @@ export function SellingJournal() {
 
   return (
     <ThemedView style={[styles.screen, { backgroundColor: theme.surface }]}>
-      <Stack.Screen options={{ headerShown: false }} />
-      <View style={[styles.screenHeader, { paddingTop: insets.top, backgroundColor: theme.surface }]}>
-        <View style={styles.screenHeaderRow}>
-          <Pressable
-            testID="saleBackButton"
-            accessibilityRole="button"
-            accessibilityLabel="Quay lại"
-            onPress={goBack}
-            style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
-            <Icon name="arrow_back" size={24} color={COLORS.onSurface} />
-          </Pressable>
-          <View style={styles.headerBrand}>
-            <Image
-              accessibilityLabel="Biểu trưng Mùa Vàng"
-              source={require('@/assets/images/nongsan-pro-logo.png')}
-              resizeMode="contain"
-              style={styles.headerLogo}
-            />
-            <ThemedText type="titleMd" style={styles.screenTitle} numberOfLines={1}>
-              Tạo Giao Dịch Bán
-            </ThemedText>
-          </View>
-          <Image
-            accessibilityLabel="Ảnh đại diện của Chú Năm"
-            source={require('@/assets/images/nongsan-pro-profile.png')}
-            resizeMode="cover"
-            style={styles.headerProfile}
-          />
-        </View>
-      </View>
       <ScrollView
         testID="saleScreenScroll"
         style={styles.scroll}
-        contentContainerStyle={[styles.content, { paddingTop: insets.top + 64 }]}
+        contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <View style={styles.shell}>
@@ -960,62 +928,6 @@ function MetricRow({ icon, label, value, valueColor }: { icon: IconName; label: 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-  },
-  screenHeader: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 20,
-    alignItems: 'center',
-    shadowColor: '#000000',
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 1,
-  },
-  screenHeaderRow: {
-    width: '100%',
-    maxWidth: 430,
-    height: 64,
-    paddingHorizontal: Spacing.three,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: Radius.base,
-    backgroundColor: COLORS.surfaceContainerLow,
-  },
-  headerBrand: {
-    flex: 1,
-    minWidth: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  screenTitle: {
-    flex: 1,
-    fontWeight: '600',
-    color: COLORS.onSurface,
-  },
-  headerLogo: {
-    width: 32,
-    height: 32,
-  },
-  headerProfile: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.full,
-    shadowColor: '#000000',
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 1,
   },
   scroll: {
     flex: 1,

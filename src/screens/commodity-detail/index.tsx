@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Image, Linking, Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, LinearGradient, Line, Path, Stop } from 'react-native-svg';
 
+import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { COMMODITIES, PRICE_OBSERVATIONS } from '@/data/mock-data';
@@ -173,47 +174,9 @@ export function CommodityDetail({
     });
 
   return (
-    <View style={styles.screen}>
-      <View style={[styles.shell, { paddingTop: insets.top }]}>
-        <View style={styles.header}>
-          <View style={styles.brand}>
-            <Image
-              accessibilityLabel="Biểu trưng Mùa Vàng"
-              source={require('@/assets/images/nongsan-pro-logo.png')}
-              resizeMode="contain"
-              style={styles.brandLogo}
-            />
-            <View>
-              <ThemedText type="titleMd" style={[styles.brandTitle, { color: SCREEN_COLORS.primary }]}>
-                Mùa Vàng
-              </ThemedText>
-              <View style={styles.inlineRow}>
-                <Icon name="location_on" size={14} color={SCREEN_COLORS.secondary} />
-                <ThemedText type="labelSm" style={{ color: SCREEN_COLORS.onSurfaceVariant }}>
-                  Tây Nguyên • Đắk Lắk
-                </ThemedText>
-              </View>
-            </View>
-          </View>
-          <View style={styles.headerActions}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Thông báo"
-              hitSlop={4}
-              onPress={() => router.push('/alerts')}
-              style={({ pressed }) => [styles.iconButton, { backgroundColor: SCREEN_COLORS.surfaceLow }, pressed && styles.pressed]}>
-              <Icon name="notifications" size={22} color={SCREEN_COLORS.onSurfaceVariant} />
-              <View style={styles.notificationDot} />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Mở trang cá nhân"
-              hitSlop={6}
-              onPress={() => router.push('/account')}>
-              <Image source={require('@/assets/images/nongsan-pro-profile.png')} style={styles.profileImage} />
-            </Pressable>
-          </View>
-        </View>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <View style={styles.shell}>
+        <AppHeader />
 
         <ScrollView
           style={styles.scrollView}
@@ -505,7 +468,7 @@ export function CommodityDetail({
           </Pressable>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -617,14 +580,7 @@ const cardShadow = {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: SCREEN_COLORS.background },
   shell: { flex: 1, width: '100%', maxWidth: 430, alignSelf: 'center', backgroundColor: SCREEN_COLORS.background },
-  header: { height: 64, paddingHorizontal: Spacing.three, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 0, backgroundColor: SCREEN_COLORS.background, shadowColor: SCREEN_COLORS.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, zIndex: 3 },
-  brand: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, flexShrink: 1 },
-  brandLogo: { width: 36, height: 32, borderRadius: Radius.base },
-  brandTitle: { lineHeight: 20 },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
-  profileImage: { width: 34, height: 34, borderRadius: Radius.full },
   iconButton: { width: 44, height: 44, borderRadius: Radius.container, alignItems: 'center', justifyContent: 'center' },
-  notificationDot: { position: 'absolute', top: 10, right: 9, width: 8, height: 8, borderRadius: Radius.full, backgroundColor: SCREEN_COLORS.error, borderColor: SCREEN_COLORS.background, borderWidth: 2 },
   alertDot: { position: 'absolute', top: 9, right: 8, width: 8, height: 8, borderRadius: Radius.full, backgroundColor: SCREEN_COLORS.secondary, borderWidth: 2 },
   scrollView: { flex: 1, backgroundColor: SCREEN_COLORS.background },
   content: { paddingHorizontal: Spacing.three, paddingTop: Spacing.five, paddingBottom: 140, gap: Spacing.three },
