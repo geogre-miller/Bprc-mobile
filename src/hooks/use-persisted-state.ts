@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+/** AsyncStorage key for a `usePersistedState` key, for code that must write several keys together. */
+export const persistedStorageKey = (key: string) => `rayGia:${key}`;
+
 /** Local-only persistence until accounts/backend exist, swap for a server sync later. */
 export function usePersistedState<T>(key: string, initialValue: T) {
   const [value, setValue] = useState(initialValue);
   const [isLoaded, setIsLoaded] = useState(false);
-  const storageKey = `rayGia:${key}`;
+  const storageKey = persistedStorageKey(key);
   // Latest value, so the updater stays pure and the write happens outside it.
   const valueRef = useRef(value);
 

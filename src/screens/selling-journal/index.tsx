@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -8,11 +7,12 @@ import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { LightPalette, Radius, Spacing } from '@/constants/theme';
 import { BUYERS, COMMODITIES, PRICE_OBSERVATIONS, latestObservation } from '@/data/mock-data';
-import { usePersistedState } from '@/hooks/use-persisted-state';
 import { useTheme } from '@/hooks/use-theme';
 import { Icon, type IconName } from '@/screens/home-dashboard/icons';
-import type { Commodity, FarmerInventoryItem, SellingJournalEntry } from '@/types/domain';
+import type { Commodity, SellingJournalEntry } from '@/types/domain';
 import { formatVnd } from '@/utils/format-price';
+
+import { DEFAULT_INVENTORY, useSaleLedger } from './use-sale-ledger';
 
 const COLORS = LightPalette;
 
@@ -82,15 +82,6 @@ const DEFAULT_BUYERS: SaleBuyerOption[] = [
 ];
 
 const DEFAULT_DATE = '2024-10-24';
-const JOURNAL_STORAGE_KEY = 'rayGia:selling-journal';
-const INVENTORY_STORAGE_KEY = 'rayGia:inventory';
-
-const DEFAULT_INVENTORY: FarmerInventoryItem[] = [
-  { commodity: 'coffee', quantity: 2500, unit: 'kg' },
-  { commodity: 'pepper', quantity: 800, unit: 'kg' },
-  { commodity: 'fruit', quantity: 1200, unit: 'kg' },
-  { commodity: 'rice', quantity: 5000, unit: 'kg' },
-];
 
 function parseNumeric(value: string): number {
   const parsed = Number(value.replace(/[^\d.-]/g, ''));
@@ -105,25 +96,6 @@ function formatQuantity(value: number): string {
   return Math.round(value).toLocaleString('en-US');
 }
 
-function reconcileInventory(
-  items: FarmerInventoryItem[],
-  commodity: Commodity,
-  quantity: number,
-  fallbackStock: number,
-): FarmerInventoryItem[] {
-  const hasMatchingItem = items.some((item) => item.commodity === commodity && item.unit === 'kg');
-  if (!hasMatchingItem) {
-    return [...items, { commodity, quantity: Math.max(0, fallbackStock - quantity), unit: 'kg' }];
-  }
-
-  let remaining = quantity;
-  return items.map((item) => {
-    if (item.commodity !== commodity || item.unit !== 'kg' || remaining <= 0) return item;
-    const deduction = Math.min(Math.max(0, item.quantity), remaining);
-    remaining -= deduction;
-    return { ...item, quantity: Math.max(0, item.quantity - deduction) };
-  });
-}
 
 function commodityLabel(commodity: Commodity): string {
   return (
@@ -215,7 +187,7 @@ export function SellingJournal() {
     buyerId?: string;
     buyerName?: string;
   }>();
-  const [inventory, setInventory, inventoryLoaded] = usePersistedState<FarmerInventoryItem[] | null>('inventory', null);
+  const { entries, inventory, isLoaded, recordSale, removeEntry } = useSaleLedger();
   const saleOptions = useMemo(() => {
     const readNumber = (value: string | undefined, fallback: number) => {
       const number = Number(value);
@@ -253,7 +225,6 @@ export function SellingJournal() {
   }, [inventory, params.commodity, params.stock, params.price, params.unitCost]);
   const initialOption = saleOptions.find((option) => option.id === params.commodity) ?? saleOptions[0];
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/inventory'));
-  const [entries, setEntries, isLoaded] = usePersistedState<SellingJournalEntry[]>('selling-journal', []);
   const [commodity, setCommodity] = useState<Commodity>(initialOption.id);
   const [buyerOptions, setBuyerOptions] = useState(() => {
     if (typeof params.buyerId !== 'string' || !params.buyerId || typeof params.buyerName !== 'string' || !params.buyerName.trim()) {
@@ -393,25 +364,10 @@ export function SellingJournal() {
       soldAt: new Date().toISOString(),
     };
 
-    const nextEntries = [savedEntry, ...entries];
-    const nextInventory = reconcileInventory(inventory ?? DEFAULT_INVENTORY, commodity, rawWeight, selectedCommodity.stock);
-
     setSaving(true);
     setToastVisible(false);
     try {
-      await AsyncStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(nextEntries));
-      try {
-        await AsyncStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(nextInventory));
-      } catch {
-        try {
-          await AsyncStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(entries));
-        } catch {
-          // Keep the failure visible even if the best-effort journal rollback is unavailable.
-        }
-        throw new Error('inventory-persistence-failed');
-      }
-      setEntries(nextEntries);
-      setInventory(nextInventory);
+      await recordSale({ entry: savedEntry, commodity, quantity: rawWeight, fallbackStock: selectedCommodity.stock });
       setValidationError(null);
       setToastVisible(true);
     } catch {
@@ -421,11 +377,7 @@ export function SellingJournal() {
     }
   };
 
-  const removeEntry = (id: string) => {
-    setEntries((current) => current.filter((entry) => entry.id !== id));
-  };
-
-  if (!isLoaded || !inventoryLoaded) {
+  if (!isLoaded) {
     return <ThemedView style={[styles.screen, { backgroundColor: theme.surface }]} />;
   }
 
